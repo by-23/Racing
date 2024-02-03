@@ -11,6 +11,8 @@ namespace Ilumisoft.SkillDrive
         [FormerlySerializedAs("playerCamPos")] [SerializeField]
         private Transform camPosition;
 
+        [SerializeField] internal Camera playerCam;
+
         [SerializeField] VehicleStats stats = new VehicleStats();
 
         [SerializeField] VehiclePhysics physics = new VehiclePhysics();

@@ -812,7 +812,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 215607763}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
@@ -1927,7 +1927,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 714226612}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
@@ -3166,7 +3166,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1277524609
 Transform:
   m_ObjectHideFlags: 0
@@ -4585,6 +4585,7 @@ GameObject:
   - component: {fileID: 1661969984}
   - component: {fileID: 1661969983}
   - component: {fileID: 1661969985}
+  - component: {fileID: 1661969986}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -4604,6 +4605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 032f2f3e9f7fcf749b719f916a704ec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 5258304601143362738, guid: 32f57a23e09f5de4f82166c51517da71, type: 3}
   networkManager: {fileID: 60303853}
   players:
     _serializedList: []
@@ -4645,6 +4647,21 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   moveTime: 1
   easing: 10
+--- !u!114 &1661969986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661969982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c4badd579641f49568c17300bdc632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initPoolSize: 10
+  objectToPool: {fileID: 889656915153686933, guid: f7960b60e5f98ca4f9813d58661e2c17,
+    type: 3}
 --- !u!1 &1672994125
 GameObject:
   m_ObjectHideFlags: 0
@@ -4957,7 +4974,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1674214647}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
@@ -6303,7 +6320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2067338739
 Transform:
   m_ObjectHideFlags: 0
@@ -6327,7 +6344,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2067338738}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 

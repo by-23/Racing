@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &393953875910053117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 216915908272921039}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &216915908272921039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393953875910053117}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.3, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5258304601143362748}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3548052236334173091
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,6 +342,7 @@ GameObject:
   - component: {fileID: 5258304601143362751}
   - component: {fileID: 3146370620714226454}
   - component: {fileID: -6740686236232666754}
+  - component: {fileID: -8994376879330275554}
   m_Layer: 2
   m_Name: Vehicle
   m_TagString: Player
@@ -335,6 +367,7 @@ Transform:
   - {fileID: 1491180397578105081}
   - {fileID: 6862645239812705374}
   - {fileID: 1484199506421111236}
+  - {fileID: 216915908272921039}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5258304601143362750
@@ -397,6 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camPosition: {fileID: 1484199506421111236}
+  playerCam: {fileID: 8893452383023279556}
   stats:
     MaxSpeed: 50
     Acceleration: 20
@@ -473,6 +507,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-8994376879330275554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5258304601143362737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8c0a7a5feeadb341b6a7e6d4d51385d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 4781171831956608945, guid: f7960b60e5f98ca4f9813d58661e2c17,
+    type: 3}
+  muzzleVelocity: 1200
+  muzzlePosition: {fileID: 216915908272921039}
+  cooldownWindow: 1
+  objectPool: {fileID: 0}
 --- !u!1 &5453531126806156378
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,6 +899,10 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4826471523880308777}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a143135be3953454fb2e8716b4dc1b0e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 324672852194791015}
     - targetCorrespondingSourceObject: {fileID: -1256910858214205310, guid: a143135be3953454fb2e8716b4dc1b0e,
         type: 3}
       insertIndex: -1
@@ -895,6 +951,33 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.308025
   m_Center: {x: 0.10815475, y: 0, z: 0}
+--- !u!1 &3964848665967948662 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a143135be3953454fb2e8716b4dc1b0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4306726620225228327}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &324672852194791015
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964848665967948662}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 1, z: 3.5}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &4345455179768998348 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a143135be3953454fb2e8716b4dc1b0e,
