@@ -1,5 +1,5 @@
+using System;
 using AYellowpaper.SerializedCollections;
-using DesignPatterns.ObjectPool;
 using Ilumisoft.SkillDrive;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -18,8 +18,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private NetworkManager networkManager;
     [SerializedDictionary("id", "name")] public SerializedDictionary<int, GameObject> players;
 
-    private ObjectPool objectPool;
-
     public GameController()
     {
         Instance = this;
@@ -27,7 +25,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        objectPool = GetComponent<ObjectPool>();
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
         DontDestroyOnLoad(this);
@@ -39,7 +36,6 @@ public class GameController : MonoBehaviour
     {
         if (scene.buildIndex > 1 && !isMultiplayer)
         {
-            objectPool.SetupPool();
             Vehicle instantiatedPlayer = Instantiate(player, Vector3.zero, Quaternion.identity);
             instantiatedPlayer.playerCam.enabled = true;
             instantiatedPlayer.Rigidbody.isKinematic = false;
@@ -78,10 +74,14 @@ public class GameController : MonoBehaviour
         {
             foreach (var player in players.Values)
             {
-                objectPool.SetupPool();
                 player.gameObject.SetActive(true);
                 player.GetComponent<NetworkRigidbody>().enabled = true;
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

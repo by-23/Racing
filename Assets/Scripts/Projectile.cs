@@ -1,62 +1,99 @@
 using System;
-using System.Collections;
 using Ilumisoft.SkillDrive;
-using Unity.Services.Lobbies.Models;
-using UnityEditor;
+using NTC.Pool;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
-namespace DesignPatterns.ObjectPool
+public class Projectile : MonoBehaviour, IPoolable
 {
-    [RequireComponent(typeof(PooledObject))]
-    public class Projectile : MonoBehaviour
+    [SerializeField] private float speed;
+    [SerializeField] private float followSpeed;
+
+    [SerializeField] private float upwardsModifier = 5;
+
+    private Rigidbody rBody;
+    private Vehicle targetVehicle;
+    private bool hasTarget;
+    public float oscillationRange = 1f;
+    public float oscillationFrequency = 1f;
+    private float timeCounter = 0f;
+
+    public float explosionForce = 10f;
+    public float explosionRadius = 5f;
+
+
+    public Vehicle Owner { get; set; }
+
+    private void Awake()
     {
-        [SerializeField] private float speed;
-        [SerializeField] private float rotateSpeed;
-        [SerializeField] private float detectionRadius;
-        [SerializeField] private float timeoutDelay;
+        rBody = GetComponent<Rigidbody>();
+    }
 
-        private PooledObject pooledObject;
-
-        private Rigidbody rBody;
-        private bool isFoundTarget;
-        Vehicle targetVehicle;
-
-        private void Awake()
+    private void FixedUpdate()
+    {
+        if (hasTarget)
         {
-            pooledObject = GetComponent<PooledObject>();
-            rBody = GetComponent<Rigidbody>();
+            transform.rotation = Quaternion.LookRotation(targetVehicle.transform.position - transform.position);
+            timeCounter += Time.deltaTime;
+
+            float horizontalOscillation = Mathf.Sin(timeCounter * oscillationFrequency) * oscillationRange;
+
+            Vector3 movement = (transform.forward + new Vector3(horizontalOscillation, 0f, 0f)).normalized;
+
+            transform.Translate(movement * (followSpeed * Time.deltaTime), Space.World);
         }
 
-
-        private void OnDrawGizmos()
+        else
         {
-            // Проводим сферический рейкаст
-            RaycastHit hit;
-            if (Physics.SphereCast(transform.position, detectionRadius, transform.forward, out hit, Mathf.Infinity))
+            transform.Translate(transform.forward * (speed * Time.deltaTime), Space.World);
+        }
+    }
+
+    public void SetTarget(Vehicle foundedTarget)
+    {
+        if (!hasTarget && foundedTarget != Owner)
+        {
+            targetVehicle = foundedTarget;
+            hasTarget = true;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out Vehicle vehicle) && Owner != null && vehicle != Owner)
+        {
+            Explode();
+            NightPool.Despawn(this);
+        }
+    }
+
+    void Explode()
+    {
+        this.enabled = false;
+        this.GetComponent<Collider>().isTrigger = true;
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+
+        foreach (Collider collider in colliders)
+        {
+            Rigidbody rb = collider.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                // Можно также рисовать гизмо для визуализации попадания
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(transform.position + transform.forward * hit.distance, detectionRadius);
+                rb.AddExplosionForce(explosionForce, transform.position, explosionRadius, upwardsModifier);
             }
         }
 
-        public void Deactivate()
-        {
-            StartCoroutine(DeactivateRoutine(timeoutDelay));
-        }
+        // Destroy(gameObject);
+    }
 
-        IEnumerator DeactivateRoutine(float delay)
-        {
-            yield return new WaitForSeconds(delay);
+    public void OnSpawn()
+    {
+    }
 
-            // reset the moving Rigidbody
-
-            rBody.velocity = new Vector3(0f, 0f, 0f);
-            rBody.angularVelocity = new Vector3(0f, 0f, 0f);
-
-            // set inactive and return to pool
-            pooledObject.Release();
-            gameObject.SetActive(false);
-        }
+    public void OnDespawn()
+    {
+        hasTarget = false;
+        targetVehicle = null;
     }
 }

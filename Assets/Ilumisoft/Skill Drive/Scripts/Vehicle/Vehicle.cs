@@ -13,6 +13,8 @@ namespace Ilumisoft.SkillDrive
 
         [SerializeField] internal Camera playerCam;
 
+        [SerializeField] private TriggerCallBack triggerCallback;
+
         [SerializeField] VehicleStats stats = new VehicleStats();
 
         [SerializeField] VehiclePhysics physics = new VehiclePhysics();
@@ -33,6 +35,7 @@ namespace Ilumisoft.SkillDrive
         {
             Rigidbody = GetComponent<Rigidbody>();
             groundDetection.Initialize(this);
+            triggerCallback.OnTriggerEntered += OnTriggerEntered;
         }
 
         protected virtual void FixedUpdate()
@@ -51,17 +54,19 @@ namespace Ilumisoft.SkillDrive
         }
 
 
-        /// <summary>
-        /// Checks whether the vehicle is grounded or not
-        /// </summary>
+        private void OnTriggerEntered(Collider other)
+        {
+            if (other.TryGetComponent(out Projectile projectile))
+                projectile.SetTarget(this);
+        }
+
+
         protected virtual void PerformGroundCheck()
         {
             groundDetection.CheckGround();
         }
 
-        /// <summary>
-        /// Applies gravity to the vehicle
-        /// </summary>
+
         protected virtual void ApplyGravity()
         {
             float factor = groundDetection.IsGrounded ? physics.Gravity : physics.FallGravity;
@@ -69,10 +74,6 @@ namespace Ilumisoft.SkillDrive
             Rigidbody.AddForce(-factor * Vector3.up, ForceMode.Acceleration);
         }
 
-        /// <summary>
-        /// Applies side friction to the vehicle. 
-        /// The amount of added force defines how much the vehicle drifts while turning.
-        /// </summary>
         protected virtual void ApplyLateralFriction()
         {
             if (IsGrounded)
@@ -114,9 +115,6 @@ namespace Ilumisoft.SkillDrive
             }
         }
 
-        /// <summary>
-        /// Add all required components automatically, when creating a new vehicle
-        /// </summary>
         public void Reset()
         {
             // Automatically add and setup a rigidbody if none exists
@@ -133,9 +131,12 @@ namespace Ilumisoft.SkillDrive
             }
         }
 
-        /// <summary>
-        /// Draw additional debug info in the scene view when the vehicle is selected
-        /// </summary>
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            triggerCallback.OnTriggerEntered += OnTriggerEntered;
+        }
+
         private void OnDrawGizmosSelected()
         {
             groundDetection.OnDrawGizmosSelected(this);
