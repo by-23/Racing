@@ -1,8 +1,6 @@
 using System;
 using AYellowpaper.SerializedCollections;
 using Ilumisoft.SkillDrive;
-using Unity.Netcode;
-using Unity.Netcode.Components;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,7 +13,6 @@ public class GameController : MonoBehaviour
     public static GameController Instance;
 
     [SerializeField] private Vehicle player;
-    [SerializeField] private NetworkManager networkManager;
     [SerializedDictionary("id", "name")] public SerializedDictionary<int, GameObject> players;
 
     public GameController()
@@ -30,7 +27,6 @@ public class GameController : MonoBehaviour
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
         DontDestroyOnLoad(this);
-        ListenNetworkEvents();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -44,34 +40,6 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void ListenNetworkEvents()
-    {
-        NetworkManager.Singleton.OnClientConnectedCallback += NewClientConnected;
-        NetworkManager.Singleton.OnServerStarted += OnServerStarted;
-        NetworkManager.Singleton.OnServerStopped += (bool success) => isMultiplayer = false;
-    }
-
-    private void OnServerStarted()
-    {
-        NetworkManager.Singleton.SceneManager.OnLoadComplete += StartGame;
-    }
-
-    private void NewClientConnected(ulong playerID)
-    {
-        if (isMultiplayer && networkManager.IsHost)
-        {
-            GameObject newPlayer = NetworkManager.Singleton.ConnectedClientsList[checked((int)playerID)].PlayerObject
-                .gameObject;
-            newPlayer.gameObject.SetActive(false);
-            newPlayer.GetComponent<NetworkRigidbody>().enabled = false;
-            newPlayer.GetComponent<NetworkObject>().transform.position =
-                new Vector3(Random.Range(0, 20), 0, Random.Range(0, 20));
-            DontDestroyOnLoad(newPlayer);
-            if (!players.ContainsKey((int)playerID))
-                players.Add(checked((int)playerID), newPlayer);
-        }
-    }
-
     void StartGame(ulong playerID, string sceneName, LoadSceneMode loadSceneMode)
     {
         if (SceneManager.GetActiveScene().buildIndex > 1)
@@ -79,7 +47,6 @@ public class GameController : MonoBehaviour
             foreach (var player in players.Values)
             {
                 player.gameObject.SetActive(true);
-                player.GetComponent<NetworkRigidbody>().enabled = true;
             }
         }
     }
@@ -87,6 +54,5 @@ public class GameController : MonoBehaviour
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        NetworkManager.Singleton.SceneManager.OnLoadComplete -= StartGame;
     }
 }

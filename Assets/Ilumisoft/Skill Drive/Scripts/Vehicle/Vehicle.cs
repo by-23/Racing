@@ -1,12 +1,11 @@
 ﻿using System;
 using Cinemachine;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Ilumisoft.SkillDrive
 {
-    public class Vehicle : NetworkBehaviour
+    public class Vehicle : MonoBehaviour
     {
         [FormerlySerializedAs("playerCamPos")] [SerializeField]
         private Transform camPosition;
@@ -40,8 +39,6 @@ namespace Ilumisoft.SkillDrive
 
         protected virtual void FixedUpdate()
         {
-            if (GameController.Instance.isMultiplayer && !IsOwner) return;
-
             PerformGroundCheck();
 
             ApplyGravity();
@@ -131,9 +128,8 @@ namespace Ilumisoft.SkillDrive
             }
         }
 
-        public override void OnDestroy()
+        private void OnDestroy()
         {
-            base.OnDestroy();
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
         }
 

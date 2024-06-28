@@ -1,10 +1,9 @@
 using System;
 using Unity.Mathematics;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class CameraFollow : NetworkBehaviour
+public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target; // Цель, за которой следит камера
     [SerializeField] private float distance = 5;
@@ -19,8 +18,6 @@ public class CameraFollow : NetworkBehaviour
     private void Start()
     {
         camera = GetComponent<Camera>();
-        if (IsOwner)
-            camera.enabled = true;
     }
 
     void LateUpdate()

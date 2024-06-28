@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -41,11 +40,6 @@ namespace Ilumisoft.SkillDrive
             yield return PlayTimelineAndWait();
 
             SceneManager.LoadScene(index);
-            if (GameController.Instance.isMultiplayer)
-            {
-                NetworkManager.Singleton.SceneManager.LoadScene(SceneManager.GetSceneByBuildIndex(index).name,
-                    LoadSceneMode.Single);
-            }
         }
 
         IEnumerator PlayTimelineAndWait()

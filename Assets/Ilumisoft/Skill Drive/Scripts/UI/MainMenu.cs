@@ -1,7 +1,6 @@
 ﻿using Ilumisoft.SkillDrive.LevelSelection;
 using System;
 using System.Collections;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -49,15 +48,7 @@ namespace Ilumisoft.SkillDrive.UI
 
         private void OnMultiplayerPlayButtonClick()
         {
-            if (NetworkManager.Singleton.IsServer && NetworkManager.Singleton.ConnectedClientsList.Count > 1)
-            {
-                StopAllCoroutines();
-                StartCoroutine(LoadCoroutine());
-            }
-            else
-            {
-                print("To play multiplayer must be minimum 2 people");
-            }
+           
         }
 
         public override void Show()
