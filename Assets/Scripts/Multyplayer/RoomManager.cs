@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Ilumisoft.SkillDrive;
 using UnityEngine;
 using Photon.Pun;
 using Ilumisoft.SkillDrive.UI;
+using UnityEngine.Serialization;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    public static RoomManager Instance;
+
     [SerializeField] private GameObject player;
-    [Space]
-    [SerializeField] SpawnPoints spawnPoints;
+    [Space] [SerializeField] SpawnPoints spawnPoints;
     [SerializeField] MainMenu mainMenu;
 
     private void OnValidate()
@@ -18,6 +21,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
             spawnPoints = FindObjectOfType<SpawnPoints>();
         }
     }
+
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         DontDestroyOnLoad(this);
@@ -25,11 +35,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
         DontDestroyOnLoad(this);
-        mainMenu.playButton.onClick.AddListener(OnPlayButtonClicked);
     }
 
 
-    private void OnPlayButtonClicked()
+    private void StartGame()
     {
         Vector3 currentSpawnPoint = Vector3.zero;
 
@@ -43,7 +52,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         GameObject instantiatedPlayer = PhotonNetwork.Instantiate(player.name, currentSpawnPoint, Quaternion.identity);
+        instantiatedPlayer.GetComponent<Vehicle>().SetLocalPlayer();
     }
+
     public override void OnConnectedToMaster()
     {
         base.OnConnectedToMaster();
@@ -54,12 +65,23 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
-        PhotonNetwork.JoinOrCreateRoom("Room", null, null);
         Debug.Log("Connected to Lobby");
     }
+
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
         Debug.Log("Connected to Room");
+        StartGame();
+    }
+
+    public void CreateRoom(string name)
+    {
+        PhotonNetwork.CreateRoom(name);
+    }
+
+    public void JoinRoomByName(string roomName)
+    {
+        PhotonNetwork.JoinRoom(roomName);
     }
 }

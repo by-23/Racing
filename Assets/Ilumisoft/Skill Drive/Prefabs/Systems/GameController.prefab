@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 6246214652830603187}
   - component: {fileID: 4820472400563388748}
   - component: {fileID: 1386954587729972546}
+  - component: {fileID: 2545123944653421841}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -161,9 +162,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fe468f59717034f8d93da30aa0a930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomNameToJoin: Room
   player: {fileID: 5258304601143362737, guid: 32f57a23e09f5de4f82166c51517da71, type: 3}
-  spawnPoints: {fileID: 0}
+  spawnPoints: {fileID: 8572411976688345118}
   mainMenu: {fileID: 0}
+--- !u!114 &2545123944653421841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197925563622929721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a553fe9cfb9ae1b43af9c28ed991830c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomListParent: {fileID: 0}
+  roomListItemPrefab: {fileID: 7303722514736938074, guid: 548fc98a53c456f489a3f71f0ec627a7,
+    type: 3}
 --- !u!1 &2084535182853314173
 GameObject:
   m_ObjectHideFlags: 0

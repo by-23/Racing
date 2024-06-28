@@ -1,8 +1,11 @@
 ﻿using Ilumisoft.SkillDrive.LevelSelection;
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 namespace Ilumisoft.SkillDrive.UI
 {
@@ -14,7 +17,9 @@ namespace Ilumisoft.SkillDrive.UI
 
         [SerializeField] public Button playButton;
 
-        [SerializeField] Button multiplayerPlayButton;
+        [SerializeField] public Button CreateLobbyButton;
+
+        [SerializeField] TextMeshProUGUI NewLobbyName;
 
         [SerializeField] GameObject zoomInCam = null;
 
@@ -25,10 +30,8 @@ namespace Ilumisoft.SkillDrive.UI
 
         private IEnumerator Start()
         {
-            LevelSelectionManager.LastLevel = -1;
-
             playButton.onClick.AddListener(OnPlayButtonClicked);
-            multiplayerPlayButton.onClick.AddListener(OnMultiplayerPlayButtonClicked);
+            CreateLobbyButton.onClick.AddListener(OnCreateLobbyButtonClicked);
 
             yield return null;
 
@@ -41,9 +44,17 @@ namespace Ilumisoft.SkillDrive.UI
             StartCoroutine(LoadCoroutine());
         }
 
-        private void OnMultiplayerPlayButtonClicked()
+        private void OnCreateLobbyButtonClicked()
         {
-           
+            if (NewLobbyName.text.Length > 4)
+            {
+                RoomManager.Instance.CreateRoom(NewLobbyName.text);
+                OnPlayButtonClicked();
+            }
+            else
+            {
+                print("Please enter a name for the lobby");
+            }
         }
 
         public override void Show()

@@ -7,8 +7,7 @@ namespace Ilumisoft.SkillDrive
 {
     public class Vehicle : NetworkBehaviour
     {
-        [FormerlySerializedAs("playerCamPos")] [SerializeField]
-        private Transform camPosition;
+        private bool isLocalPlayer;
 
         [SerializeField] internal Camera playerCam;
 
@@ -19,6 +18,7 @@ namespace Ilumisoft.SkillDrive
         [SerializeField] VehiclePhysics physics = new VehiclePhysics();
 
         [SerializeField] VehicleGroundDetection groundDetection = new VehicleGroundDetection();
+
         public VehicleStats FinalStats => stats;
         public Rigidbody Rigidbody { get; private set; }
         public bool IsGrounded => groundDetection.IsGrounded;
@@ -37,17 +37,26 @@ namespace Ilumisoft.SkillDrive
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
         }
 
+        public void SetLocalPlayer()
+        {
+            isLocalPlayer = true;
+            playerCam.gameObject.SetActive(true);
+        }
+
         protected virtual void FixedUpdate()
         {
-            PerformGroundCheck();
+            if (isLocalPlayer)
+            {
+                PerformGroundCheck();
 
-            ApplyGravity();
+                ApplyGravity();
 
-            ApplyLateralFriction();
+                ApplyLateralFriction();
 
-            ApplySteering();
+                ApplySteering();
 
-            ApplyAcceleration();
+                ApplyAcceleration();
+            }
         }
 
 

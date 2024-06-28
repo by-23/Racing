@@ -9,9 +9,17 @@ using UnityEngine.Serialization;
 
 public class RoomList : MonoBehaviourPunCallbacks
 {
+    public static RoomList Instance;
+
     [Header("UI")] public Transform roomListParent;
     public GameObject roomListItemPrefab;
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
+
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private IEnumerator Start()
     {
@@ -60,7 +68,7 @@ public class RoomList : MonoBehaviourPunCallbacks
         UpdaterUI();
     }
 
-    void UpdaterUI()
+    public void UpdaterUI()
     {
         foreach (Transform roomItem in roomListParent)
         {
@@ -70,8 +78,8 @@ public class RoomList : MonoBehaviourPunCallbacks
         foreach (var room in cachedRoomList)
         {
             GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
-            roomItem.GetComponent<RoomItem>().name.text = room.Name;
-            roomItem.GetComponent<RoomItem>().playerCount.text = room.PlayerCount + "/4";
+            roomItem.GetComponent<RoomItemButton>().name.text = room.Name;
+            roomItem.GetComponent<RoomItemButton>().playerCount.text = room.PlayerCount + "/4";
         }
     }
 }

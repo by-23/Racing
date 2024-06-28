@@ -338,6 +338,7 @@ GameObject:
   - component: {fileID: 5258304601143362748}
   - component: {fileID: 5621587647595207486}
   - component: {fileID: 2386511303802147821}
+  - component: {fileID: 5246477212978115914}
   - component: {fileID: 6770855557389433054}
   - component: {fileID: 5253408621274272394}
   - component: {fileID: 1223146999798732763}
@@ -419,6 +420,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &5246477212978115914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5258304601143362737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1603160362
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &6770855557389433054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -720,7 +741,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6862645239812705374
 Transform:
   m_ObjectHideFlags: 0
