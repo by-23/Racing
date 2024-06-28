@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Ilumisoft.SkillDrive.UI
@@ -13,9 +12,7 @@ namespace Ilumisoft.SkillDrive.UI
 
         [SerializeField] Selectable selectable = null;
 
-        SceneLoader sceneLoader;
-
-        [SerializeField] Button playButton;
+        [SerializeField] public Button playButton;
 
         [SerializeField] Button multiplayerPlayButton;
 
@@ -30,23 +27,21 @@ namespace Ilumisoft.SkillDrive.UI
         {
             LevelSelectionManager.LastLevel = -1;
 
-            playButton.onClick.AddListener(OnPlayButtonClick);
-            multiplayerPlayButton.onClick.AddListener(OnMultiplayerPlayButtonClick);
-
-            sceneLoader = FindObjectOfType<SceneLoader>();
+            playButton.onClick.AddListener(OnPlayButtonClicked);
+            multiplayerPlayButton.onClick.AddListener(OnMultiplayerPlayButtonClicked);
 
             yield return null;
 
             zoomInCam.SetActive(true);
         }
 
-        private void OnPlayButtonClick()
+        private void OnPlayButtonClicked()
         {
             StopAllCoroutines();
             StartCoroutine(LoadCoroutine());
         }
 
-        private void OnMultiplayerPlayButtonClick()
+        private void OnMultiplayerPlayButtonClicked()
         {
            
         }
@@ -73,10 +68,6 @@ namespace Ilumisoft.SkillDrive.UI
             yield return new WaitForSecondsRealtime(0.25f);
 
             confirmAudioSource.Play();
-
-            yield return new WaitForSecondsRealtime(1.25f);
-
-            sceneLoader.LoadScene(1);
         }
     }
 }

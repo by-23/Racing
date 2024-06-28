@@ -1,11 +1,11 @@
 ﻿using System;
-using Cinemachine;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Ilumisoft.SkillDrive
 {
-    public class Vehicle : MonoBehaviour
+    public class Vehicle : NetworkBehaviour
     {
         [FormerlySerializedAs("playerCamPos")] [SerializeField]
         private Transform camPosition;
