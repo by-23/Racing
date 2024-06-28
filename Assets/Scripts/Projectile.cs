@@ -30,6 +30,14 @@ public class Projectile : MonoBehaviour, IPoolable
         rBody = GetComponent<Rigidbody>();
     }
 
+    private void Update()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            Explode();
+        }
+    }
+
     private void FixedUpdate()
     {
         if (hasTarget)

@@ -11,7 +11,8 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 
 [RequireComponent(typeof(UnityTransport))]
-public class RelayManager : MonoBehaviour {
+public class RelayManager : MonoBehaviour
+{
 
     public static RelayManager singleton;
 
@@ -19,10 +20,12 @@ public class RelayManager : MonoBehaviour {
 
     private UnityTransport transport;
 
-    private void Awake() {
+    private void Awake()
+    {
         RelayManager.singleton = this;
         transport = GetComponent<UnityTransport>();
-        if (transport == null) {
+        if (transport == null)
+        {
             Debug.LogError("Unity transport missing");
         }
     }
@@ -34,6 +37,7 @@ public class RelayManager : MonoBehaviour {
         Debug.Log("Join Code: " + joinCode);
         transport.SetHostRelayData(a.RelayServer.IpV4, (ushort)a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData);
         NetworkManager.Singleton.StartHost();
+        print("Host started");
         return joinCode;
     }
 
@@ -47,8 +51,10 @@ public class RelayManager : MonoBehaviour {
         return joinCode;
     }
 
-    public async Task JoinGame(string joinCode) {
-        if (joinCode == "") {
+    public async Task JoinGame(string joinCode)
+    {
+        if (joinCode == "")
+        {
             Debug.LogError("Join code rempty, cannot join game");
             return;
         }

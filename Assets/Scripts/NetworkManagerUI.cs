@@ -24,23 +24,55 @@ public class NetworkManagerUI : Singleton<NetworkManagerUI>
     {
         hostButton.onClick.AddListener(StartHost);
         clientButton.onClick.AddListener(StartClient);
-        await UnityServices.InitializeAsync();
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        try
+        {
+            await UnityServices.InitializeAsync();
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Произошла ошибка: {ex.Message}");
+        }
     }
 
-    private void StartHost()
+    private async void StartHost()
     {
-       var taskLobby = LobbyManager.singleton.CreateLobby(HostLobbyText.text);
+        try
+        {
+            lobby = await LobbyManager.singleton.CreateLobby(HostLobbyText.text);
+            if (lobby != null)
+            {
+                HostLobbyText.text = lobby.LobbyCode;
+            }
+            else
+            {
+                Debug.LogError("Ошибка при создании лобби");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Ошибка при создании лобби: {ex.Message}");
+        }
     }
 
     public void SetLobby(Lobby newLobby)
     {
+        if (newLobby == null)
+        {
+            Debug.LogError("Попытка установить лобби с null значением");
+            return;
+        }
         lobby = newLobby;
         HostLobbyText.text = lobby.LobbyCode;
     }
 
     private void StartClient()
     {
+        if (string.IsNullOrEmpty(ClientLobbyText.text))
+        {
+            Debug.LogError("Попытка присоединиться к лобби без указания кода лобби");
+            return;
+        }
         LobbyManager.singleton.JoinLobby(ClientLobbyText.text);
     }
 }

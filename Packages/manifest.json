@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.nighttraincode.nightpool": "https://github.com/MeeXaSiK/NightPool.git",
+    "com.singularitygroup.hotreload": "git+https://gitlab.hotreload.net/root/hot-reload-releases.git",
     "com.unity.adaptiveperformance.google.android": "1.2.1",
     "com.unity.adaptiveperformance.samsung.android": "5.0.0",
     "com.unity.ai.navigation": "1.1.5",

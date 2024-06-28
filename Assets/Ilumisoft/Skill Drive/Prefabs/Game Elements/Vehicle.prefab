@@ -813,9 +813,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c792571a014b9e94e84df65ee550fc48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1484199506421111236}
-  smoothing: 5
-  offset: {x: 0, y: 0, z: 0}
+  target: {fileID: 5258304601143362748}
+  distance: 5
+  distanceSmoothing: 5
+  offset: {x: 0, y: 30, z: -5}
 --- !u!1001 &4306726620225228327
 PrefabInstance:
   m_ObjectHideFlags: 0

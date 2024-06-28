@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour
         Instance = this;
     }
 
+    //Тут проблема в том, что isMultiplayer нигде не меняется на true. Нужно найти где делать true.
+
     private void Start()
     {
         Application.targetFrameRate = 60;
@@ -45,12 +47,13 @@ public class GameController : MonoBehaviour
     private void ListenNetworkEvents()
     {
         NetworkManager.Singleton.OnClientConnectedCallback += NewClientConnected;
-        NetworkManager.Singleton.OnServerStarted += () =>
-        {
-            isMultiplayer = true;
-            NetworkManager.Singleton.SceneManager.OnLoadComplete += StartGame;
-        };
+        NetworkManager.Singleton.OnServerStarted += OnServerStarted;
         NetworkManager.Singleton.OnServerStopped += (bool success) => isMultiplayer = false;
+    }
+
+    private void OnServerStarted()
+    {
+        NetworkManager.Singleton.SceneManager.OnLoadComplete += StartGame;
     }
 
     private void NewClientConnected(ulong playerID)
@@ -64,7 +67,8 @@ public class GameController : MonoBehaviour
             newPlayer.GetComponent<NetworkObject>().transform.position =
                 new Vector3(Random.Range(0, 20), 0, Random.Range(0, 20));
             DontDestroyOnLoad(newPlayer);
-            players.Add(checked((int)playerID), newPlayer);
+            if (!players.ContainsKey((int)playerID))
+                players.Add(checked((int)playerID), newPlayer);
         }
     }
 
@@ -83,5 +87,6 @@ public class GameController : MonoBehaviour
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        NetworkManager.Singleton.SceneManager.OnLoadComplete -= StartGame;
     }
 }
