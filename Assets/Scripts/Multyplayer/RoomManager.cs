@@ -63,6 +63,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinRoom(roomName);
     }
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        // Обработка нового игрока в комнате
+        Debug.Log($"Player {newPlayer.NickName} joined the room");
+    }
 
     public override void OnJoinedRoom()
     {
@@ -75,8 +81,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
             spawnPoints = JsonConvert.DeserializeObject<List<SpawnPoint>>(json);
         }
 
-        StartGame();
         isOnline = true;
+        StartGame();
     }
 
     public void StartGame()
@@ -98,6 +104,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (spawnPointSelected && isOnline)
         {
+            instantiatedPlayer = PhotonNetwork.Instantiate(player.name, currentSpawnPoint, Quaternion.identity);
+
             Hashtable props = new Hashtable
             {
                 {
@@ -106,10 +114,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                         new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
                 }
             };
-            print(props);
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-
-            instantiatedPlayer = PhotonNetwork.Instantiate(player.name, currentSpawnPoint, Quaternion.identity);
         }
         else
         {
@@ -117,6 +122,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         instantiatedPlayer.GetComponent<Vehicle>().SetLocalPlayer();
+    }
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+        // Обработка выхода игрока из комнаты
+        Debug.Log($"Player {otherPlayer.NickName} left the room");
     }
 
     public override void OnDisconnected(DisconnectCause cause)
