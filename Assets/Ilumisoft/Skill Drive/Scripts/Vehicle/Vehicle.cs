@@ -36,13 +36,13 @@ namespace Ilumisoft.SkillDrive
         {
             Rigidbody = GetComponent<Rigidbody>();
             joystick = Joystick.Instance;
-            AccelerationButtons.Instance.vehicle = this;
             groundDetection.Initialize(this);
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
         }
 
         public void SetLocalPlayer()
         {
+            AccelerationButtons.Instance.vehicle = this;
             isLocalPlayer = true;
             playerCam.gameObject.SetActive(true);
         }

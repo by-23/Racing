@@ -124,7 +124,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         instantiatedPlayer.GetComponent<Vehicle>().SetLocalPlayer();
 
-        Joystick.gameObject.SetActive(true);
+        // Joystick.gameObject.SetActive(true);
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
