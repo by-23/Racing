@@ -1,11 +1,11 @@
 using System;
 using Ilumisoft.SkillDrive;
-using NTC.Pool;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class Projectile : MonoBehaviour, IPoolable
+public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float followSpeed;
@@ -71,9 +71,15 @@ public class Projectile : MonoBehaviour, IPoolable
     {
         if (other.TryGetComponent(out Vehicle vehicle) && Owner != null && vehicle != Owner)
         {
-            Explode();
-            NightPool.Despawn(this);
+            this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All);
+            Destroy(this);
         }
+    }
+
+    [PunRPC]
+    void ExplodeRPC()
+    {
+        Explode();
     }
 
     void Explode()
@@ -92,7 +98,7 @@ public class Projectile : MonoBehaviour, IPoolable
             }
         }
 
-        // Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     public void OnSpawn()

@@ -1,5 +1,6 @@
 using Ilumisoft.SkillDrive;
-using NTC.Pool;
+using Photon.Pun;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Attack : MonoBehaviour
@@ -20,12 +21,11 @@ public class Attack : MonoBehaviour
     {
         if (Input.GetButton("Fire1") && Time.time > nextTimeToShoot)
         {
-            Projectile newProjectile = NightPool.Spawn(projectile);
-            newProjectile.Owner = vehicle;
+            GameObject newProjectile = PhotonNetwork.Instantiate("Projectile", transform.position, quaternion.identity);
+            newProjectile.GetComponent<Projectile>().Owner = vehicle;
             var newProjectileTransform = newProjectile.transform;
             newProjectileTransform.position = muzzlePosition.position;
             newProjectileTransform.rotation = muzzlePosition.rotation;
-            // NightPool.Despawn(newProjectile, despawnDelay);
             nextTimeToShoot = Time.time + cooldownWindow;
         }
     }
