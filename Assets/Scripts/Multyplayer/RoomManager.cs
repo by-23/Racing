@@ -13,7 +13,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private GameObject player;
     [Space] [SerializeField] List<SpawnPoint> spawnPoints;
-    [SerializeField] MainMenu mainMenu;
+    [SerializeField] private Canvas Joystick;
 
     public bool isOnline;
 
@@ -63,6 +63,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinRoom(roomName);
     }
+
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
@@ -122,7 +123,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         instantiatedPlayer.GetComponent<Vehicle>().SetLocalPlayer();
+
+        Joystick.gameObject.SetActive(true);
     }
+
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);

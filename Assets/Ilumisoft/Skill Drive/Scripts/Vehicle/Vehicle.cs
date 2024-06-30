@@ -19,6 +19,8 @@ namespace Ilumisoft.SkillDrive
 
         [SerializeField] VehicleGroundDetection groundDetection = new VehicleGroundDetection();
 
+        private Joystick joystick;
+
         public VehicleStats FinalStats => stats;
         public Rigidbody Rigidbody { get; private set; }
         public bool IsGrounded => groundDetection.IsGrounded;
@@ -30,9 +32,11 @@ namespace Ilumisoft.SkillDrive
             get => (Mathf.Abs(ForwardSpeed) > 0.1f) ? ForwardSpeed / FinalStats.MaxSpeed : 0.0f;
         }
 
-        void Awake()
+        protected virtual void Awake()
         {
             Rigidbody = GetComponent<Rigidbody>();
+            joystick = Joystick.Instance;
+            AccelerationButtons.Instance.vehicle = this;
             groundDetection.Initialize(this);
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
         }
@@ -55,7 +59,7 @@ namespace Ilumisoft.SkillDrive
 
                 ApplySteering();
 
-                ApplyAcceleration();
+                // ApplyAcceleration();
             }
         }
 
@@ -98,42 +102,49 @@ namespace Ilumisoft.SkillDrive
         {
             if (IsGrounded && CanMove)
             {
-                float steeringPower = UnityEngine.Input.GetAxis("Horizontal") * FinalStats.SteeringPower;
+                float steeringPower;
+#if UNITY_STANDALONE || UNITY_WEBGL
+        // Используем стандартное управление для ПК
+        steeringPower = UnityEngine.Input.GetAxis("Horizontal") * FinalStats.SteeringPower;
+#elif UNITY_ANDROID || UNITY_IOS
+                // Используем джойстик для мобильных устройств
+                steeringPower = joystick.Horizontal * FinalStats.SteeringPower;
+#endif
 
                 float speedFactor = ForwardSpeed * 0.075f;
-
                 steeringPower = Mathf.Clamp(steeringPower * speedFactor, -FinalStats.SteeringPower,
                     FinalStats.SteeringPower);
-
                 float rotationTorque = steeringPower - Rigidbody.angularVelocity.y;
-
                 Rigidbody.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
             }
         }
 
-        protected virtual void ApplyAcceleration()
+        public virtual void ApplyAcceleration(float accelerationInput)
         {
             if (IsGrounded && CanMove)
             {
-                // Вычисляем силу, основанную на вводе пользователя
-                var force = FinalStats.Acceleration * UnityEngine.Input.GetAxis("Vertical");
+                float forceMagnitude = 0f; // Инициализируем переменную для хранения величины силы
 
-                // Проверяем, не превышает ли текущая скорость максимально допустимую
-                if (Mathf.Abs(ForwardSpeed) < FinalStats.MaxSpeed)
+#if UNITY_STANDALONE || UNITY_WEBGL
+        // Используем стандартное управление для ПК
+        forceMagnitude = FinalStats.Acceleration * UnityEngine.Input.GetAxis("Vertical");
+#elif UNITY_ANDROID || UNITY_IOS
+                // Используем джойстик для мобильных устройств
+                forceMagnitude = accelerationInput * FinalStats.Acceleration;
+#endif
+
+                // Применяем силу для ускорения
+                Rigidbody.AddForce(transform.forward * forceMagnitude, ForceMode.Acceleration);
+
+                // Опционально: ограничение максимальной скорости и плавное торможение
+                var currentSpeed = Rigidbody.velocity.magnitude;
+                var maxSpeed = FinalStats.MaxSpeed;
+                if (currentSpeed > maxSpeed)
                 {
-                    Rigidbody.AddForce(transform.forward * force, ForceMode.Acceleration);
-                }
-                else
-                {
-                    // Опционально: можно применить небольшое торможение, если скорость превышена
-                    // Это создаст более плавное ограничение скорости, но может потребоваться дополнительная настройка
-                    var excessSpeed = Mathf.Abs(ForwardSpeed) - FinalStats.MaxSpeed;
-                    if (excessSpeed > 0)
-                    {
-                        // Применяем обратную силу для уменьшения скорости
-                        Rigidbody.AddForce(-transform.forward * (force * (excessSpeed / FinalStats.MaxSpeed)),
-                            ForceMode.Acceleration);
-                    }
+                    // Применяем обратную силу для уменьшения скорости до максимально допустимой
+                    var excessSpeed = currentSpeed - maxSpeed;
+                    Rigidbody.AddForce(-transform.forward * (forceMagnitude * (excessSpeed / maxSpeed)),
+                        ForceMode.Acceleration);
                 }
             }
         }
