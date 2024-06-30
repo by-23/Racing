@@ -21,7 +21,12 @@ public class Attack : MonoBehaviour
     {
         if (Input.GetButton("Fire1") && Time.time > nextTimeToShoot)
         {
-            GameObject newProjectile = PhotonNetwork.Instantiate("Projectile", transform.position, quaternion.identity);
+            GameObject newProjectile = null;
+            if (RoomManager.Instance.isOnline)
+                newProjectile = PhotonNetwork.Instantiate("Projectile", transform.position, quaternion.identity);
+            else
+                newProjectile = Instantiate(projectile.gameObject);
+
             newProjectile.GetComponent<Projectile>().Owner = vehicle;
             var newProjectileTransform = newProjectile.transform;
             newProjectileTransform.position = muzzlePosition.position;

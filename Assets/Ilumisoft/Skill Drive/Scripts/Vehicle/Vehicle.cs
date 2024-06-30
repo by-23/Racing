@@ -115,9 +115,26 @@ namespace Ilumisoft.SkillDrive
         {
             if (IsGrounded && CanMove)
             {
+                // Вычисляем силу, основанную на вводе пользователя
                 var force = FinalStats.Acceleration * UnityEngine.Input.GetAxis("Vertical");
 
-                Rigidbody.AddForce(transform.forward * force, ForceMode.Acceleration);
+                // Проверяем, не превышает ли текущая скорость максимально допустимую
+                if (Mathf.Abs(ForwardSpeed) < FinalStats.MaxSpeed)
+                {
+                    Rigidbody.AddForce(transform.forward * force, ForceMode.Acceleration);
+                }
+                else
+                {
+                    // Опционально: можно применить небольшое торможение, если скорость превышена
+                    // Это создаст более плавное ограничение скорости, но может потребоваться дополнительная настройка
+                    var excessSpeed = Mathf.Abs(ForwardSpeed) - FinalStats.MaxSpeed;
+                    if (excessSpeed > 0)
+                    {
+                        // Применяем обратную силу для уменьшения скорости
+                        Rigidbody.AddForce(-transform.forward * (force * (excessSpeed / FinalStats.MaxSpeed)),
+                            ForceMode.Acceleration);
+                    }
+                }
             }
         }
 

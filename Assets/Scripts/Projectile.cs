@@ -71,7 +71,12 @@ public class Projectile : MonoBehaviour
     {
         if (other.TryGetComponent(out Vehicle vehicle) && Owner != null && vehicle != Owner)
         {
-            this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All);
+            
+            if (!RoomManager.Instance.isOnline)
+                Explode();
+            else
+                this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All);
+
             Destroy(this);
         }
     }
