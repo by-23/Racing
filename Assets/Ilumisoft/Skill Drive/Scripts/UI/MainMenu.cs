@@ -40,8 +40,8 @@ namespace Ilumisoft.SkillDrive.UI
 
         private void OnPlayButtonClicked()
         {
-            StopAllCoroutines();
             StartCoroutine(LoadCoroutine());
+            RoomManager.Instance.StartGame();
         }
 
         private void OnCreateLobbyButtonClicked()
@@ -49,7 +49,8 @@ namespace Ilumisoft.SkillDrive.UI
             if (NewLobbyName.text.Length > 4)
             {
                 RoomManager.Instance.CreateRoom(NewLobbyName.text);
-                OnPlayButtonClicked();
+                RoomManager.Instance.isOnline = true;
+                StartCoroutine(LoadCoroutine());
             }
             else
             {
@@ -74,6 +75,7 @@ namespace Ilumisoft.SkillDrive.UI
 
         IEnumerator LoadCoroutine()
         {
+            StopAllCoroutines();
             playCam.SetActive(true);
 
             yield return new WaitForSecondsRealtime(0.25f);

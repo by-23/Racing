@@ -12,8 +12,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public static RoomManager Instance;
 
     [SerializeField] private GameObject player;
-    [Space][SerializeField] List<SpawnPoint> spawnPoints;
+    [Space] [SerializeField] List<SpawnPoint> spawnPoints;
     [SerializeField] MainMenu mainMenu;
+
+    public bool isOnline;
 
 
     private void Awake()
@@ -43,6 +45,25 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("Connected to Lobby");
     }
 
+    public void CreateRoom(string name)
+    {
+        RoomOptions roomOptions = new RoomOptions();
+        JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+        roomOptions.CustomRoomProperties = new Hashtable
+        {
+            { "spawnPoints", JsonConvert.SerializeObject(spawnPoints, settings) }
+        };
+        PhotonNetwork.CreateRoom(name, roomOptions);
+    }
+
+    public void JoinRoomByName(string roomName)
+    {
+        PhotonNetwork.JoinRoom(roomName);
+    }
+
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
@@ -55,31 +76,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         StartGame();
+        isOnline = true;
     }
 
-    public void CreateRoom(string name)
-    {
-        RoomOptions roomOptions = new RoomOptions();
-        JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        };
-        roomOptions.CustomRoomProperties = new Hashtable
-    {
-        { "spawnPoints", JsonConvert.SerializeObject(spawnPoints, settings) }
-    };
-        PhotonNetwork.CreateRoom(name, roomOptions);
-    }
-
-    public void JoinRoomByName(string roomName)
-    {
-        PhotonNetwork.JoinRoom(roomName);
-    }
-
-    private void StartGame()
+    public void StartGame()
     {
         Vector3 currentSpawnPoint = Vector3.zero;
         bool spawnPointSelected = false;
+        GameObject instantiatedPlayer;
 
         foreach (var spawnPoint in spawnPoints)
         {
@@ -92,20 +96,35 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (spawnPointSelected)
+        if (spawnPointSelected && isOnline)
         {
-            GameObject instantiatedPlayer = PhotonNetwork.Instantiate(player.name, currentSpawnPoint, Quaternion.identity);
-            instantiatedPlayer.GetComponent<Vehicle>().SetLocalPlayer();
-
-            // Обновляем свойство комнаты с новым списком spawnPoints
             Hashtable props = new Hashtable
-        {
-            { "spawnPoints", JsonConvert.SerializeObject(spawnPoints, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }) }
-        };
+            {
+                {
+                    "spawnPoints",
+                    JsonConvert.SerializeObject(spawnPoints,
+                        new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
+                }
+            };
+            print(props);
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+
+            instantiatedPlayer = PhotonNetwork.Instantiate(player.name, currentSpawnPoint, Quaternion.identity);
         }
+        else
+        {
+            instantiatedPlayer = Instantiate(player, currentSpawnPoint, Quaternion.identity);
+        }
+
+        instantiatedPlayer.GetComponent<Vehicle>().SetLocalPlayer();
     }
 
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        base.OnDisconnected(cause);
+        Debug.Log("Disconnected from server for reason: " + cause.ToString());
+        isOnline = false;
+    }
 
     [System.Serializable]
     public class SpawnPoint
