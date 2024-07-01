@@ -6,32 +6,33 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
     [SerializeField] private Projectile projectile;
-
     [SerializeField] private Transform muzzlePosition;
-
-    [SerializeField] float cooldownWindow = 0.1f;
-
     [SerializeField] private Vehicle vehicle;
-
     [SerializeField] private float despawnDelay = 20;
+    [SerializeField] private float fireRate = 1f; // Задержка между выстрелами в секундах
 
-    private float nextTimeToShoot;
+    private float nextTimeToShoot = 0f;
 
-    private void Update()
+    public void TryFire()
     {
-        if (Input.GetButton("Fire1") && Time.time > nextTimeToShoot)
+        if (Time.time >= nextTimeToShoot)
         {
-            GameObject newProjectile = null;
-            if (RoomManager.Instance.isOnline)
-                newProjectile = PhotonNetwork.Instantiate("Projectile", transform.position, quaternion.identity);
-            else
-                newProjectile = Instantiate(projectile.gameObject);
-
-            newProjectile.GetComponent<Projectile>().Owner = vehicle;
-            var newProjectileTransform = newProjectile.transform;
-            newProjectileTransform.position = muzzlePosition.position;
-            newProjectileTransform.rotation = muzzlePosition.rotation;
-            nextTimeToShoot = Time.time + cooldownWindow;
+            Fire();
+            nextTimeToShoot = Time.time + fireRate; // Обновляем время следующего выстрела
         }
+    }
+
+    private void Fire()
+    {
+        GameObject newProjectile = null;
+        if (RoomManager.Instance.isOnline)
+            newProjectile = PhotonNetwork.Instantiate("Projectile", transform.position, quaternion.identity);
+        else
+            newProjectile = Instantiate(projectile.gameObject);
+
+        newProjectile.GetComponent<Projectile>().Owner = vehicle;
+        var newProjectileTransform = newProjectile.transform;
+        newProjectileTransform.position = muzzlePosition.position;
+        newProjectileTransform.rotation = muzzlePosition.rotation;
     }
 }

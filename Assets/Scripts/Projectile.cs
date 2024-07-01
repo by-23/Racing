@@ -1,12 +1,14 @@
 using System;
+using System.Collections;
 using Ilumisoft.SkillDrive;
 using Photon.Pun;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 public class Projectile : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem explosionFXPrefab;
     [SerializeField] private float speed;
     [SerializeField] private float followSpeed;
 
@@ -71,13 +73,10 @@ public class Projectile : MonoBehaviour
     {
         if (other.TryGetComponent(out Vehicle vehicle) && Owner != null && vehicle != Owner)
         {
-            
             if (!RoomManager.Instance.isOnline)
                 Explode();
             else
                 this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All);
-
-            Destroy(this);
         }
     }
 
@@ -87,8 +86,18 @@ public class Projectile : MonoBehaviour
         Explode();
     }
 
-    void Explode()
+    private void Explode()
     {
+        GameObject newExplosionFX;
+        if (RoomManager.Instance.isOnline)
+            newExplosionFX = PhotonNetwork.Instantiate("CFXR Explosion Smoke 2 Solo (HDR)", transform.position,
+                quaternion.identity);
+        else
+            newExplosionFX = Instantiate(explosionFXPrefab.gameObject);
+        newExplosionFX.transform.position = transform.position;
+        explosionFXPrefab.gameObject.SetActive(true);
+        // explosionFX.Play();
+
         this.enabled = false;
         this.GetComponent<Collider>().isTrigger = true;
 

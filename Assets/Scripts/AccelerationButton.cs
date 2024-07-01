@@ -3,11 +3,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class AccelerationButtons : Singleton<AccelerationButtons>
+public class FunctionalButtons : Singleton<FunctionalButtons>
 {
     public Vehicle vehicle;
+    public Attack attack;
     public Button gasButton;
     public Button brakeButton;
+    public Button fireButton;
 
     private bool isAccelerating = false;
     private float accelerationAmount = 0f;
@@ -46,5 +48,10 @@ public class AccelerationButtons : Singleton<AccelerationButtons>
         {
             vehicle.ApplyAcceleration(amount);
         }
+    }
+
+    public void FirePressed()
+    {
+        attack.TryFire();
     }
 }

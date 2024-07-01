@@ -11,6 +11,8 @@ namespace Ilumisoft.SkillDrive
 
         [SerializeField] internal Camera playerCam;
 
+        [SerializeField] private Attack attack;
+
         [SerializeField] private TriggerCallBack triggerCallback;
 
         [SerializeField] VehicleStats stats = new VehicleStats();
@@ -42,7 +44,8 @@ namespace Ilumisoft.SkillDrive
 
         public void SetLocalPlayer()
         {
-            AccelerationButtons.Instance.vehicle = this;
+            FunctionalButtons.Instance.vehicle = this;
+            FunctionalButtons.Instance.attack = attack;
             isLocalPlayer = true;
             playerCam.gameObject.SetActive(true);
         }
@@ -58,8 +61,6 @@ namespace Ilumisoft.SkillDrive
                 ApplyLateralFriction();
 
                 ApplySteering();
-
-                // ApplyAcceleration();
             }
         }
 

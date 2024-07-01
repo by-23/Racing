@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1883042892
+  GlobalObjectIdHash: 1603160362
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -454,6 +454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCam: {fileID: 8893452383023279556}
+  attack: {fileID: 5253408621274272394}
   triggerCallback: {fileID: 6653942222750869005}
   stats:
     MaxSpeed: 50
@@ -483,9 +484,9 @@ MonoBehaviour:
   projectile: {fileID: 4960673026342986844, guid: f7960b60e5f98ca4f9813d58661e2c17,
     type: 3}
   muzzlePosition: {fileID: 216915908272921039}
-  cooldownWindow: 0.2
   vehicle: {fileID: 6770855557389433054}
   despawnDelay: 10
+  fireRate: 1
 --- !u!114 &8509353251912187489
 MonoBehaviour:
   m_ObjectHideFlags: 0
