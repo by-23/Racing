@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "com.nighttraincode.nightpool": "https://github.com/MeeXaSiK/NightPool.git",
-    "com.singularitygroup.hotreload": "git+https://gitlab.hotreload.net/root/hot-reload-releases.git",
+    "com.nighttraincode.nightpool": "file:H:/Unity/Плагины/NightPool",
+    "com.singularitygroup.hotreload": "file:H:/Unity/Плагины/HotReload",
     "com.unity.adaptiveperformance.google.android": "1.2.1",
     "com.unity.adaptiveperformance.samsung.android": "5.0.0",
     "com.unity.ai.navigation": "1.1.5",
@@ -10,7 +10,7 @@
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.inputsystem": "1.7.0",
-    "com.unity.netcode.gameobjects": "1.7.1",
+    "com.unity.netcode.gameobjects": "1.9.1",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.postprocessing": "3.4.0",
     "com.unity.recorder": "4.0.3",

@@ -24,7 +24,6 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
 
     public void OnPointerDownCustom(Button button)
     {
-        Debug.Log("OnPointerDownCustom");
         if (button == gasButton)
         {
             isAccelerating = true;

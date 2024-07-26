@@ -125,14 +125,9 @@ namespace Ilumisoft.SkillDrive
             if (IsGrounded && CanMove)
             {
                 float forceMagnitude = 0f; // Инициализируем переменную для хранения величины силы
-
-#if UNITY_STANDALONE || UNITY_WEBGL
-        // Используем стандартное управление для ПК
-        forceMagnitude = FinalStats.Acceleration * UnityEngine.Input.GetAxis("Vertical");
-#elif UNITY_ANDROID || UNITY_IOS
+                
                 // Используем джойстик для мобильных устройств
                 forceMagnitude = accelerationInput * FinalStats.Acceleration;
-#endif
 
                 // Применяем силу для ускорения
                 Rigidbody.AddForce(transform.forward * forceMagnitude, ForceMode.Acceleration);
