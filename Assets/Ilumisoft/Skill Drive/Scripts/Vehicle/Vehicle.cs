@@ -1,13 +1,13 @@
-﻿using System;
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Photon.Pun;
 
 namespace Ilumisoft.SkillDrive
 {
     public class Vehicle : NetworkBehaviour
     {
         private bool isLocalPlayer;
+        private Joystick joystick;
 
         [SerializeField] internal Camera playerCam;
 
@@ -21,15 +21,15 @@ namespace Ilumisoft.SkillDrive
 
         [SerializeField] VehicleGroundDetection groundDetection = new VehicleGroundDetection();
 
-        private Joystick joystick;
-
+        public HealthController healthController;
         public VehicleStats FinalStats => stats;
         public Rigidbody Rigidbody { get; private set; }
         public bool IsGrounded => groundDetection.IsGrounded;
-        public bool CanMove { get; set; } = true;
+        public bool CanMove = true;
         public float ForwardSpeed => Vector3.Dot(Rigidbody.velocity, transform.forward);
 
         public float NormalizedForwardSpeed
+
         {
             get => (Mathf.Abs(ForwardSpeed) > 0.1f) ? ForwardSpeed / FinalStats.MaxSpeed : 0.0f;
         }
@@ -40,20 +40,55 @@ namespace Ilumisoft.SkillDrive
             joystick = Joystick.Instance;
             groundDetection.Initialize(this);
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
+            healthController = GetComponent<HealthController>();
+            healthController.OnDeath += OnDeath;
+        }
+
+        private void OnDeath()
+        {
+            CanMove = false;
+        }
+
+        private void ResetCarPosition()
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            CanMove = true;
+            healthController.Heal(100);
         }
 
         public void SetLocalPlayer()
         {
             FunctionalButtons.Instance.vehicle = this;
             FunctionalButtons.Instance.attack = attack;
+            FunctionalButtons.Instance.ListenToHealthController(healthController);
             isLocalPlayer = true;
+            gameObject.name = "Local Player";
             playerCam.gameObject.SetActive(true);
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                // Отправляем данные другим игрокам
+                stream.SendNext(CanMove);
+            }
+            else
+            {
+                // Получаем данные от других игроков
+                CanMove = (bool)stream.ReceiveNext();
+            }
         }
 
         protected virtual void FixedUpdate()
         {
             if (isLocalPlayer)
             {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.R))
+                {
+                    ResetCarPosition();
+                }
+
                 PerformGroundCheck();
 
                 ApplyGravity();
@@ -105,8 +140,8 @@ namespace Ilumisoft.SkillDrive
             {
                 float steeringPower;
 #if UNITY_STANDALONE || UNITY_WEBGL
-        // Используем стандартное управление для ПК
-        steeringPower = UnityEngine.Input.GetAxis("Horizontal") * FinalStats.SteeringPower;
+                // Используем стандартное управление для ПК
+                steeringPower = UnityEngine.Input.GetAxis("Horizontal") * FinalStats.SteeringPower;
 #elif UNITY_ANDROID || UNITY_IOS
                 // Используем джойстик для мобильных устройств
                 steeringPower = joystick.Horizontal * FinalStats.SteeringPower;
@@ -125,7 +160,7 @@ namespace Ilumisoft.SkillDrive
             if (IsGrounded && CanMove)
             {
                 float forceMagnitude = 0f; // Инициализируем переменную для хранения величины силы
-                
+
                 // Используем джойстик для мобильных устройств
                 forceMagnitude = accelerationInput * FinalStats.Acceleration;
 
@@ -164,6 +199,7 @@ namespace Ilumisoft.SkillDrive
         private void OnDestroy()
         {
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
+            healthController.OnDeath -= OnDeath;
         }
 
         private void OnDrawGizmosSelected()

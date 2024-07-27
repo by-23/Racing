@@ -112,6 +112,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
+        targetVehicle.healthController.TakeDamage(50);
         Destroy(gameObject);
     }
 

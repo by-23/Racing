@@ -1,7 +1,9 @@
+using System;
 using Ilumisoft.SkillDrive;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class FunctionalButtons : Singleton<FunctionalButtons>
 {
@@ -10,9 +12,17 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
     public Button gasButton;
     public Button brakeButton;
     public Button fireButton;
+    public Slider healthSlider;
 
     private bool isAccelerating = false;
     private float accelerationAmount = 0f;
+    private HealthController healthController;
+
+    public void ListenToHealthController(HealthController healthController)
+    {
+        this.healthController = healthController;
+        healthController.OnHealthChanged += OnHealthChanged;
+    }
 
     void Update()
     {
@@ -20,6 +30,12 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
         {
             ApplyAcceleration(accelerationAmount);
         }
+    }
+
+    public void OnHealthChanged(float health)
+    {
+        Debug.LogError(health / 100);
+        healthSlider.value = health / 100;
     }
 
     public void OnPointerDownCustom(Button button)
@@ -52,5 +68,10 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
     public void FirePressed()
     {
         attack.TryFire();
+    }
+
+    private void OnDestroy()
+    {
+        healthController.OnHealthChanged -= OnHealthChanged;
     }
 }

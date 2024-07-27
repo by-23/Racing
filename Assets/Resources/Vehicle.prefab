@@ -71,7 +71,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3548052236334173091}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 2848009547644038990, guid: 57fecff18d40d214d9c2e9f1922430f7,
     type: 2}
@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 8509353251912187489}
   - component: {fileID: 1223146999798732763}
   - component: {fileID: 7189354700656231406}
-  - component: {fileID: 6364064703924453583}
+  - component: {fileID: 3201112110289227850}
   m_Layer: 2
   m_Name: Vehicle
   m_TagString: Player
@@ -433,7 +433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1603160362
+  GlobalObjectIdHash: 1883042892
+  InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -469,6 +470,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 256
     RaycastDist: 0.25
+  healthController: {fileID: 0}
+  CanMove: 1
 --- !u!114 &5253408621274272394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,6 +486,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 4960673026342986844, guid: f7960b60e5f98ca4f9813d58661e2c17,
     type: 3}
+  photonView: {fileID: 0}
   muzzlePosition: {fileID: 216915908272921039}
   vehicle: {fileID: 6770855557389433054}
   despawnDelay: 10
@@ -508,6 +512,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 1223146999798732763}
   - {fileID: 7189354700656231406}
+  - {fileID: 3201112110289227850}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -543,7 +548,7 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 10
---- !u!114 &6364064703924453583
+--- !u!114 &3201112110289227850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -552,9 +557,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5258304601143362737}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f283e72d9d706499887d2718b7d169, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b394cfdf6167bc4f9595489845ce5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 100
 --- !u!1 &5453531126806156378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,10 +1031,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 6
-  m_Height: 6
+  m_Radius: 3
+  m_Height: 18
   m_Direction: 2
-  m_Center: {x: 0, y: 0.5, z: -6}
+  m_Center: {x: 0, y: 0.5, z: -3}
 --- !u!114 &6653942222750869005
 MonoBehaviour:
   m_ObjectHideFlags: 0
