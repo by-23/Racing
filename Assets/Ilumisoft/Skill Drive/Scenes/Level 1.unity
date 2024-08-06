@@ -31008,7 +31008,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpoints: []
-  totalLaps: 3
+  totalLaps: 5
 --- !u!4 &716045581
 Transform:
   m_ObjectHideFlags: 0

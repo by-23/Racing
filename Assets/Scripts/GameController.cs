@@ -1,13 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviourPunCallbacks
 {
     private int totalCheckpoints;
     private int currentCheckpointIndex = 0;
-    private int currentLap = 0;
+    private Dictionary<int, int> playerLaps = new Dictionary<int, int>();
+    private int currentPlayerId;
 
     [SerializeField] private List<Checkpoint> checkpoints;
     [SerializeField] private int totalLaps = 3;
@@ -32,7 +34,7 @@ public class GameController : MonoBehaviour
     {
     }
 
-    public void PlayerPassedCheckpoint(int checkpointIndex)
+    public void PlayerPassedCheckpoint(int playerId, int checkpointIndex)
     {
         if (checkpointIndex == currentCheckpointIndex)
         {
@@ -40,18 +42,47 @@ public class GameController : MonoBehaviour
             if (currentCheckpointIndex >= totalCheckpoints)
             {
                 currentCheckpointIndex = 0;
-                PlayerCompletedLap();
+                PlayerCompletedLap(playerId);
+                currentPlayerId = playerId;
             }
         }
     }
 
-    private void PlayerCompletedLap()
+    private void PlayerCompletedLap(int playerId)
     {
-        Debug.Log(currentLap);
-        currentLap++;
+        if (!playerLaps.ContainsKey(playerId))
+        {
+            playerLaps[playerId] = 0;
+        }
+
+        playerLaps[playerId]++;
+        int currentLap = playerLaps[playerId];
+
+        photonView.RPC("UpdateLapCount", RpcTarget.All, playerId, currentLap);
         if (currentLap >= totalLaps)
         {
             OnAllLapsCompleted();
+        }
+    }
+
+    [PunRPC]
+    private void UpdateLapCount(int playerId, int lapCount)
+    {
+        if (currentPlayerId == playerId)
+        {
+            if (playerLaps.ContainsKey(currentPlayerId))
+            {
+                playerLaps[currentPlayerId] = lapCount;
+                foreach (var player in playerLaps)
+                {
+                    Debug.LogError($"Player {player.Key} completed {player.Value} laps.");
+                }
+                // Здесь можно обновить UI или другие элементы, чтобы отобразить количество кругов для каждого игрока
+            }
+            else
+            {
+                Debug.LogError($"Player ID {currentPlayerId} not found.");
+            }
         }
     }
 
