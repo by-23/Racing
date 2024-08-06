@@ -34,7 +34,6 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
 
     public void OnHealthChanged(float health)
     {
-        Debug.LogError(health / 100);
         healthSlider.value = health / 100;
     }
 
@@ -72,6 +71,6 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
 
     private void OnDestroy()
     {
-        healthController.OnHealthChanged -= OnHealthChanged;
+        if (healthController != null) healthController.OnHealthChanged -= OnHealthChanged;
     }
 }

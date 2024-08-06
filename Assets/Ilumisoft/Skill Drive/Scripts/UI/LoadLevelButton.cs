@@ -9,8 +9,7 @@ namespace Ilumisoft.SkillDrive.UI
     [RequireComponent(typeof(Button))]
     public class LoadLevelButton : MonoBehaviour
     {
-        [SerializeField]
-        int index = 1;
+        [SerializeField] int index = 1;
 
         Button button = null;
 
@@ -29,7 +28,6 @@ namespace Ilumisoft.SkillDrive.UI
         {
             if (sceneLoader != null)
             {
-                GameManager.IsRetry = false;
                 sceneLoader.LoadScene(index);
             }
             else

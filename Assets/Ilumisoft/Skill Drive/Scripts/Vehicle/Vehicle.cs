@@ -44,6 +44,32 @@ namespace Ilumisoft.SkillDrive
             healthController.OnDeath += OnDeath;
         }
 
+        protected virtual void FixedUpdate()
+        {
+            if (isLocalPlayer)
+            {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.R))
+                {
+                    ResetCarPosition();
+                }
+
+                PerformGroundCheck();
+
+                ApplyGravity();
+
+                ApplyLateralFriction();
+
+                ApplySteering();
+            }
+        }
+
+
+        private void OnTriggerEntered(Collider other)
+        {
+            if (other.TryGetComponent(out Projectile projectile))
+                projectile.SetTarget(this);
+        }
+
         private void OnDeath()
         {
             CanMove = false;
@@ -79,33 +105,6 @@ namespace Ilumisoft.SkillDrive
                 CanMove = (bool)stream.ReceiveNext();
             }
         }
-
-        protected virtual void FixedUpdate()
-        {
-            if (isLocalPlayer)
-            {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.R))
-                {
-                    ResetCarPosition();
-                }
-
-                PerformGroundCheck();
-
-                ApplyGravity();
-
-                ApplyLateralFriction();
-
-                ApplySteering();
-            }
-        }
-
-
-        private void OnTriggerEntered(Collider other)
-        {
-            if (other.TryGetComponent(out Projectile projectile))
-                projectile.SetTarget(this);
-        }
-
 
         protected virtual void PerformGroundCheck()
         {

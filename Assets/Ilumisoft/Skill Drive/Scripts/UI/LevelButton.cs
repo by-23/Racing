@@ -7,11 +7,9 @@ namespace Ilumisoft.SkillDrive.UI
     [RequireComponent(typeof(Button))]
     public class LevelButton : MonoBehaviour
     {
-        [SerializeField]
-        TMPro.TextMeshProUGUI text = null;
+        [SerializeField] TMPro.TextMeshProUGUI text = null;
 
-        [SerializeField]
-        Image lockImage = null;
+        [SerializeField] Image lockImage = null;
 
         int sceneIndex = 0;
 
@@ -41,12 +39,10 @@ namespace Ilumisoft.SkillDrive.UI
             lockImage.gameObject.SetActive(isLocked);
 
             button.interactable = !isLocked;
-
         }
 
         private void OnClick()
         {
-            GameManager.IsRetry = false;
             sceneLoader.LoadScene(sceneIndex);
         }
 

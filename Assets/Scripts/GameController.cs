@@ -1,54 +1,67 @@
-// using System;
-// using AYellowpaper.SerializedCollections;
-// using Ilumisoft.SkillDrive;
-// using UnityEngine;
-// using UnityEngine.Events;
-// using UnityEngine.SceneManagement;
-// using Random = UnityEngine.Random;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
-// public class GameController : MonoBehaviour
-// {
-//     public bool isMultiplayer { get; private set; }
-//     public static GameController Instance;
+public class GameController : MonoBehaviour
+{
+    private int totalCheckpoints;
+    private int currentCheckpointIndex = 0;
+    private int currentLap = 0;
 
-//     [SerializeField] private Vehicle player;
-//     [SerializedDictionary("id", "name")] public SerializedDictionary<int, GameObject> players;
+    [SerializeField] private List<Checkpoint> checkpoints;
+    [SerializeField] private int totalLaps = 3;
 
-//     public GameController()
-//     {
-//         Instance = this;
-//     }
-//     private void Start()
-//     {
-//         Application.targetFrameRate = 60;
-//         QualitySettings.vSyncCount = 0;
-//         DontDestroyOnLoad(this);
-//         SceneManager.sceneLoaded += OnSceneLoaded;
-//     }
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
+        DontDestroyOnLoad(this);
 
-//     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-//     {
-//         if (scene.buildIndex > 1 && !isMultiplayer)
-//         {
-//             Vehicle instantiatedPlayer = Instantiate(player, Vector3.zero, Quaternion.identity);
-//             instantiatedPlayer.playerCam.enabled = true;
-//             instantiatedPlayer.Rigidbody.isKinematic = false;
-//         }
-//     }
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
-//     void StartGame()
-//     {
-//         if (SceneManager.GetActiveScene().buildIndex > 1)
-//         {
-//             foreach (var player in players.Values)
-//             {
-//                 player.gameObject.SetActive(true);
-//             }
-//         }
-//     }
+        checkpoints.AddRange(FindObjectsOfType<Checkpoint>());
+        totalCheckpoints = checkpoints.Count;
+        foreach (var checkpoint in checkpoints)
+        {
+            checkpoint.gameController = this;
+        }
+    }
 
-//     private void OnDestroy()
-//     {
-//         SceneManager.sceneLoaded -= OnSceneLoaded;
-//     }
-// }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+    }
+
+    public void PlayerPassedCheckpoint(int checkpointIndex)
+    {
+        if (checkpointIndex == currentCheckpointIndex)
+        {
+            currentCheckpointIndex++;
+            if (currentCheckpointIndex >= totalCheckpoints)
+            {
+                currentCheckpointIndex = 0;
+                PlayerCompletedLap();
+            }
+        }
+    }
+
+    private void PlayerCompletedLap()
+    {
+        Debug.Log(currentLap);
+        currentLap++;
+        if (currentLap >= totalLaps)
+        {
+            OnAllLapsCompleted();
+        }
+    }
+
+    private void OnAllLapsCompleted()
+    {
+        Debug.Log("Player completed a Level!");
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+}

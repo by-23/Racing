@@ -10,32 +10,17 @@ namespace Ilumisoft.SkillDrive.Effects
     [RequireComponent(typeof(AudioSource))]
     public class VehicleEngineAudioEffect : VehicleComponent
     {
-        GameManager gameManager;
+        [SerializeField] float minPitch = 0.25f;
 
-        [SerializeField]
-        float minPitch = 0.25f;
+        [SerializeField] float maxPitch = 1.1f;
 
-        [SerializeField]
-        float maxPitch = 1.1f;
-
-        [SerializeField]
-        float multiplier = 1.2f;
+        [SerializeField] float multiplier = 1.2f;
 
         AudioSource audioSource;
 
         private void Awake()
         {
-            gameManager = FindObjectOfType<GameManager>();
             audioSource = GetComponent<AudioSource>();
-        }
-
-        private void Start()
-        {
-            if (gameManager != null)
-            {
-                gameManager.OnComplete.AddListener(OnFinish);
-                gameManager.OnFail.AddListener(OnFinish);
-            }
         }
 
         private void OnFinish()

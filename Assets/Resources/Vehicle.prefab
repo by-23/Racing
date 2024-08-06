@@ -458,7 +458,7 @@ MonoBehaviour:
   attack: {fileID: 5253408621274272394}
   triggerCallback: {fileID: 6653942222750869005}
   stats:
-    MaxSpeed: 50
+    MaxSpeed: 200
     Acceleration: 20
     SteeringPower: 1.5
     Grip: 0.04
@@ -850,7 +850,7 @@ MonoBehaviour:
   target: {fileID: 5258304601143362748}
   distance: 5
   distanceSmoothing: 5
-  offset: {x: 0, y: 30, z: -5}
+  offset: {x: 0, y: 20, z: -20}
 --- !u!1001 &4306726620225228327
 PrefabInstance:
   m_ObjectHideFlags: 0

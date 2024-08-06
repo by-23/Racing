@@ -26,7 +26,6 @@ namespace Ilumisoft.SkillDrive.UI
         {
             if (sceneLoader != null)
             {
-                GameManager.IsRetry = true;
                 sceneLoader.LoadScene(gameObject.scene.buildIndex);
             }
             else

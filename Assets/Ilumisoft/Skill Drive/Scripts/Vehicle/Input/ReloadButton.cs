@@ -32,8 +32,6 @@ namespace Ilumisoft.SkillDrive.Input
 
         private void OnReload(InputAction.CallbackContext obj)
         {
-            GameManager.IsRetry = true;
-
             sceneLoader.LoadScene(gameObject.scene.buildIndex);
         }
     }
