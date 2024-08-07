@@ -8,35 +8,21 @@ public class Checkpoint : MonoBehaviour
 {
     public int checkpointIndex;
     public GameController gameController;
-    private Dictionary<int, bool> playerCheckpointStatus = new Dictionary<int, bool>();
+    internal bool isActivated;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             PhotonView photonView = other.GetComponentInParent<PhotonView>();
-            if (photonView != null)
+            if (photonView != null && !isActivated)
             {
-                int playerId = photonView.Owner.ActorNumber;
-
-                if (!playerCheckpointStatus.ContainsKey(playerId) || !playerCheckpointStatus[playerId])
+                // Проверка на соответствие текущего индекса контрольной точки
+                if (gameController.currentCheckpointIndex == checkpointIndex)
                 {
-                    playerCheckpointStatus[playerId] = true;
-                    gameController.PlayerPassedCheckpoint(playerId, checkpointIndex);
+                    isActivated = true;
+                    gameController.PlayerPassedCheckpoint(photonView.Owner.ActorNumber, checkpointIndex);
                 }
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            PhotonView photonView = other.GetComponentInParent<PhotonView>();
-            if (photonView != null)
-            {
-                int playerId = photonView.Owner.ActorNumber;
-                playerCheckpointStatus[playerId] = false;
             }
         }
     }

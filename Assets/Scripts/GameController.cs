@@ -7,7 +7,7 @@ using Photon.Realtime;
 public class GameController : MonoBehaviourPunCallbacks
 {
     private int totalCheckpoints;
-    private int currentCheckpointIndex = 0;
+    internal int currentCheckpointIndex = 0;
     private Dictionary<int, int> playerLaps = new Dictionary<int, int>();
     private int currentPlayerId;
 
@@ -50,6 +50,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     private void PlayerCompletedLap(int playerId)
     {
+        print(playerId);
         if (!playerLaps.ContainsKey(playerId))
         {
             playerLaps[playerId] = 0;
@@ -58,31 +59,30 @@ public class GameController : MonoBehaviourPunCallbacks
         playerLaps[playerId]++;
         int currentLap = playerLaps[playerId];
 
-        photonView.RPC("UpdateLapCount", RpcTarget.All, playerId, currentLap);
+        RoomManager.Instance.instantiatedPlayerInfoUIs[playerId].currentLap.text = currentLap.ToString();
+
         if (currentLap >= totalLaps)
         {
             OnAllLapsCompleted();
         }
+
+        foreach (var checkpoint in checkpoints)
+        {
+            checkpoint.isActivated = false;
+        }
     }
 
     [PunRPC]
-    private void UpdateLapCount(int playerId, int lapCount)
+    private void UpdateLapCount(int playerId, int currentLap)
     {
-        if (currentPlayerId == playerId)
+        if (playerLaps.ContainsKey(playerId))
         {
-            if (playerLaps.ContainsKey(currentPlayerId))
-            {
-                playerLaps[currentPlayerId] = lapCount;
-                foreach (var player in playerLaps)
-                {
-                    Debug.LogError($"Player {player.Key} completed {player.Value} laps.");
-                }
-                // Здесь можно обновить UI или другие элементы, чтобы отобразить количество кругов для каждого игрока
-            }
-            else
-            {
-                Debug.LogError($"Player ID {currentPlayerId} not found.");
-            }
+            playerLaps[playerId] = currentLap;
+            // Здесь можно обновить UI или другие элементы, чтобы отобразить количество кругов для каждого игрока
+        }
+        else
+        {
+            playerLaps.Add(playerId, currentLap);
         }
     }
 

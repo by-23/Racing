@@ -1,22 +1,27 @@
+using System.Collections;
 using Newtonsoft.Json;
 using Photon.Realtime;
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 using Ilumisoft.SkillDrive.UI;
 using System.Collections.Generic;
 using Ilumisoft.SkillDrive;
+using UnityEngine.Serialization;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager Instance;
-
-    [SerializeField] private GameObject player;
-    [Space] [SerializeField] List<SpawnPoint> spawnPoints;
-    [SerializeField] private Canvas Joystick;
-
     public bool isOnline;
+    public Dictionary<int, PlayerInfoUI> instantiatedPlayerInfoUIs = new Dictionary<int, PlayerInfoUI>();
 
+    [SerializeField] private GameObject playerPrefab;
+    [Space] [SerializeField] List<SpawnPoint> spawnPoints;
+    [SerializeField] private PlayerInfoUI playerInfoUIPrefab;
+
+    [SerializeField] private GameObject playerInfoListUI;
+    [SerializeField] private Canvas Joystick;
+    [SerializeField] private List<GameObject> playersList;
 
     private void Awake()
     {
@@ -69,7 +74,19 @@ public class RoomManager : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(newPlayer);
         // Обработка нового игрока в комнате
         Debug.Log($"Player {newPlayer.NickName} joined the room");
+
+        // Обновление UI для всех игроков
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            // var playerGameObject = GetPlayerGameObject(player);
+
+            // if (playerGameObject != null)
+            // {
+            //     UpdateUI(newPlayer.ActorNumber, playerGameObject.GetComponent<PlayerInfo>().PlayerName);
+            // }
+        }
     }
+
 
     public override void OnJoinedRoom()
     {
@@ -105,8 +122,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (spawnPointSelected && isOnline)
         {
-            instantiatedPlayer = PhotonNetwork.Instantiate(player.name, currentSpawnPoint, Quaternion.identity);
-
+            instantiatedPlayer = PhotonNetwork.Instantiate(playerPrefab.name, currentSpawnPoint, Quaternion.identity);
+           
             Hashtable props = new Hashtable
             {
                 {
@@ -119,12 +136,32 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            instantiatedPlayer = Instantiate(player, currentSpawnPoint, Quaternion.identity);
+            instantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
         }
 
         instantiatedPlayer.GetComponent<Vehicle>().SetLocalPlayer();
+        var actorNumber = instantiatedPlayer.GetComponent<PhotonView>().Owner.ActorNumber;
+        UpdateUI(actorNumber, instantiatedPlayer.GetComponent<PlayerInfo>().PlayerName);
+    }
 
-        // Joystick.gameObject.SetActive(true);
+    [PunRPC]
+    private void UpdatePlayerNameUI(int actorNumber, string name)
+    {
+        if (instantiatedPlayerInfoUIs.ContainsKey(actorNumber))
+        {
+            instantiatedPlayerInfoUIs[actorNumber].playerName.text = name;
+        }
+        else
+        {
+            var instantiatedPlayerInfoUI = Instantiate(playerInfoUIPrefab, playerInfoListUI.transform);
+            instantiatedPlayerInfoUIs.Add(actorNumber, instantiatedPlayerInfoUI);
+            instantiatedPlayerInfoUI.playerName.text = name;
+        }
+    }
+
+    private void UpdateUI(int actorNumber, string name)
+    {
+        photonView.RPC("UpdatePlayerNameUI", RpcTarget.All, actorNumber, name);
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)

@@ -340,6 +340,7 @@ GameObject:
   - component: {fileID: 2386511303802147821}
   - component: {fileID: 5246477212978115914}
   - component: {fileID: 6770855557389433054}
+  - component: {fileID: -6012972820063102021}
   - component: {fileID: 5253408621274272394}
   - component: {fileID: 8509353251912187489}
   - component: {fileID: 1223146999798732763}
@@ -472,6 +473,19 @@ MonoBehaviour:
     RaycastDist: 0.25
   healthController: {fileID: 0}
   CanMove: 1
+--- !u!114 &-6012972820063102021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5258304601143362737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13aac84682dba154fb9dedf0e17f7e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerName: 
 --- !u!114 &5253408621274272394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +524,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: -6012972820063102021}
   - {fileID: 1223146999798732763}
   - {fileID: 7189354700656231406}
   - {fileID: 3201112110289227850}
