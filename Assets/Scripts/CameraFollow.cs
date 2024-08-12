@@ -25,9 +25,8 @@ public class CameraFollow : MonoBehaviour
             var rotatedPosition = target.position - target.forward * distance + target.TransformDirection(offset);
             rotatedPosition.y = position.y;
             transform.position = Vector3.Lerp(transform.position, rotatedPosition, 1);
-            var rotation = Quaternion.LookRotation(target.position - position);
-            var rotatedRotation = Quaternion.LookRotation(target.position - rotatedPosition);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotatedRotation, 1);
+            var rotation = Quaternion.LookRotation(target.position - rotatedPosition);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1);
         }
     }
 

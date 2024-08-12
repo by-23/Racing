@@ -10,7 +10,6 @@ public class Attack : MonoBehaviour
     [SerializeField] private PhotonView photonView;
     [SerializeField] private Transform muzzlePosition;
     [SerializeField] private Vehicle vehicle;
-    [SerializeField] private float despawnDelay = 20;
     [SerializeField] private float fireRate = 1f; // Задержка между выстрелами в секундах
 
     private float nextTimeToShoot = 0f;
@@ -44,7 +43,7 @@ public class Attack : MonoBehaviour
             HandleProjectile(newProjectile.GetComponent<PhotonView>().ViewID);
         }
     }
-    
+
     [PunRPC]
     private void HandleProjectile(int viewID)
     {

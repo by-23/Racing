@@ -50,7 +50,6 @@ public class GameController : MonoBehaviourPunCallbacks
 
     private void PlayerCompletedLap(int playerId)
     {
-        print(playerId);
         if (!playerLaps.ContainsKey(playerId))
         {
             playerLaps[playerId] = 0;

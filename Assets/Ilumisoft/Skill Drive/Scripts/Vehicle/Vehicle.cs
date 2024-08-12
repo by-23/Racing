@@ -1,6 +1,8 @@
-﻿using Unity.Netcode;
+﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.Serialization;
 
 namespace Ilumisoft.SkillDrive
 {
@@ -10,17 +12,24 @@ namespace Ilumisoft.SkillDrive
         private Joystick joystick;
 
         [SerializeField] internal Camera playerCam;
-
         [SerializeField] private Attack attack;
-
         [SerializeField] private TriggerCallBack triggerCallback;
-
         [SerializeField] VehicleStats stats = new VehicleStats();
-
         [SerializeField] VehiclePhysics physics = new VehiclePhysics();
-
         [SerializeField] VehicleGroundDetection groundDetection = new VehicleGroundDetection();
-
+        [SerializeField] private Transform FLwheel;
+        [SerializeField] private Transform FRwheel;
+        [SerializeField] private Transform BLwheel;
+        [SerializeField] private Transform BRwheel;
+        [SerializeField] private Transform FLwheelPivot;
+        [SerializeField] private Transform FRwheelPivot;
+        [SerializeField] private Transform BLwheelPivot;
+        [SerializeField] private Transform BRwheelPivot;
+        [SerializeField] private float wheelsRotationSpeed = 100f;
+        [SerializeField] private float turnPercentage = 1f;
+        [SerializeField] private float turnSpeed = 20f;
+        
+        private float currentTurnAngle = 0f;
         public HealthController healthController;
         public VehicleStats FinalStats => stats;
         public Rigidbody Rigidbody { get; private set; }
@@ -63,6 +72,16 @@ namespace Ilumisoft.SkillDrive
             }
         }
 
+        private void Update()
+        {
+            if (isLocalPlayer)
+            {
+                float turnInput = UnityEngine.Input.GetAxisRaw("Horizontal");
+                TurnWheels(turnInput * 30f);
+                RotateWheels();
+            }
+        }
+
 
         private void OnTriggerEntered(Collider other)
         {
@@ -73,6 +92,26 @@ namespace Ilumisoft.SkillDrive
         private void OnDeath()
         {
             CanMove = false;
+        }
+
+        private void RotateWheels()
+        {
+            float rotationSpeed = ForwardSpeed * wheelsRotationSpeed * Time.deltaTime;
+            FLwheel.Rotate(Vector3.right, rotationSpeed);
+            FRwheel.Rotate(Vector3.right, rotationSpeed);
+            BLwheel.Rotate(Vector3.right, rotationSpeed);
+            BRwheel.Rotate(Vector3.right, rotationSpeed);
+        }
+
+        public void TurnWheels(float turnAngle)
+        {
+            float targetTurnAngle = turnAngle * turnPercentage;
+            currentTurnAngle = Mathf.Lerp(currentTurnAngle, targetTurnAngle, Time.deltaTime * turnSpeed);
+
+            FLwheelPivot.localRotation = Quaternion.Euler(0, currentTurnAngle, 0);
+            FRwheelPivot.localRotation = Quaternion.Euler(0, currentTurnAngle, 0);
+            BLwheelPivot.localRotation = Quaternion.Euler(0, -currentTurnAngle, 0);
+            BRwheelPivot.localRotation = Quaternion.Euler(0, -currentTurnAngle, 0);
         }
 
         private void ResetCarPosition()
@@ -145,7 +184,6 @@ namespace Ilumisoft.SkillDrive
                 // Используем джойстик для мобильных устройств
                 steeringPower = joystick.Horizontal * FinalStats.SteeringPower;
 #endif
-
                 float speedFactor = ForwardSpeed * 0.075f;
                 steeringPower = Mathf.Clamp(steeringPower * speedFactor, -FinalStats.SteeringPower,
                     FinalStats.SteeringPower);

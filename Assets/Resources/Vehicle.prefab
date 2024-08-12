@@ -392,10 +392,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.7
+  m_Radius: 0.5
   m_Height: 3.5
   m_Direction: 2
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0.6, z: 0}
 --- !u!54 &2386511303802147821
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -435,7 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1883042892
+  GlobalObjectIdHash: 1603160362
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -504,7 +504,6 @@ MonoBehaviour:
   photonView: {fileID: 0}
   muzzlePosition: {fileID: 216915908272921039}
   vehicle: {fileID: 6770855557389433054}
-  despawnDelay: 10
   fireRate: 1
 --- !u!114 &3201112110289227850
 MonoBehaviour:

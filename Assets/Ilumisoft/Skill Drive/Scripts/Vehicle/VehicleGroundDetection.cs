@@ -29,10 +29,11 @@ namespace Ilumisoft.SkillDrive
         public void CheckGround()
         {
             // Create a ray pointing downwards (relative to the vehicle)
-            Ray ray = new Ray(vehicle.transform.position, -vehicle.transform.up);
-
+            Ray ray = new Ray(vehicle.transform.position + vehicle.transform.up * 1f, -vehicle.transform.up);
+            var raycastHit = new RaycastHit();
             // If the ray hits a ground layer, the vehicle is grounded, otherwise not
-            IsGrounded = Physics.Raycast(ray, RaycastDist, GroundLayers);
+            IsGrounded = Physics.Raycast(ray, out raycastHit, RaycastDist, GroundLayers);
+            Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
         }
 
         /// <summary>

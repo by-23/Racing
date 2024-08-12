@@ -11,8 +11,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] private ParticleSystem explosionFXPrefab;
     [SerializeField] private float speed;
     [SerializeField] private float followSpeed;
-
-    [SerializeField] private float upwardsModifier = 5;
+    [SerializeField] private float lifetime = 15f;
+    [SerializeField] private float upwardsModifier = 5f;
 
     private Rigidbody rBody;
     private Vehicle targetVehicle;
@@ -30,6 +30,10 @@ public class Projectile : MonoBehaviour
     private void Awake()
     {
         rBody = GetComponent<Rigidbody>();
+    }
+    private void OnEnable()
+    {
+        StartCoroutine(DespawnAfterLifetime());
     }
 
     private void Update()
@@ -116,8 +120,18 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void OnSpawn()
+    private IEnumerator DespawnAfterLifetime()
     {
+        yield return new WaitForSeconds(lifetime);
+
+        if (RoomManager.Instance.isOnline)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void OnDespawn()
