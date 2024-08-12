@@ -1021,9 +1021,8 @@ namespace Photon.Pun
         static PhotonNetwork()
         {
 #if !UNITY_EDITOR
-            StaticReset();  // in builds, we just reset/init the client once
+            StaticReset(); // in builds, we just reset/init the client once
 #else
-
 #if UNITY_2019_4_OR_NEWER
             if (NetworkingClient == null)
             {
@@ -3380,7 +3379,6 @@ namespace Photon.Pun
 
 
 #if UNITY_EDITOR
-
         /// <summary>
         /// Finds the asset path base on its name or search query: https://docs.unity3d.com/ScriptReference/AssetDatabase.FindAssets.html
         /// </summary>

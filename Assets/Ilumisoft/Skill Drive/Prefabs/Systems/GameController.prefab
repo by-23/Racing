@@ -46,6 +46,8 @@ GameObject:
   - component: {fileID: 4820472400563388748}
   - component: {fileID: 1386954587729972546}
   - component: {fileID: 2545123944653421841}
+  - component: {fileID: 2736572696894151449}
+  - component: {fileID: 4994464550669025003}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -130,7 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fe468f59717034f8d93da30aa0a930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 5258304601143362737, guid: 32f57a23e09f5de4f82166c51517da71, type: 3}
+  isOnline: 0
+  playerPrefab: {fileID: 5258304601143362737, guid: 32f57a23e09f5de4f82166c51517da71,
+    type: 3}
   spawnPoints:
   - spawnPoint: {x: 100, y: 0, z: 55}
     isFull: 0
@@ -140,7 +144,11 @@ MonoBehaviour:
     isFull: 0
   - spawnPoint: {x: 105, y: 0, z: 50}
     isFull: 0
-  mainMenu: {fileID: 0}
+  playerInfoUIPrefab: {fileID: -7615637054289674736, guid: 71a4d38262a151a4a8bd06178b1064fb,
+    type: 3}
+  playerInfoListUI: {fileID: 0}
+  Joystick: {fileID: 0}
+  playersList: []
 --- !u!114 &2545123944653421841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,6 +164,42 @@ MonoBehaviour:
   roomListParent: {fileID: 0}
   roomListItemPrefab: {fileID: 8183909011509936856, guid: 548fc98a53c456f489a3f71f0ec627a7,
     type: 3}
+--- !u!114 &2736572696894151449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197925563622929721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &4994464550669025003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197925563622929721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b36f99224fb3654dba0bd2cddd3ee0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoints: []
+  totalLaps: 5
 --- !u!1 &5036125078336879321
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +278,7 @@ PrefabInstance:
     - target: {fileID: 3148238885663292076, guid: 929a28be7de950243b979e94eaa4f88d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 68
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 3148238885663292076, guid: 929a28be7de950243b979e94eaa4f88d,
         type: 3}

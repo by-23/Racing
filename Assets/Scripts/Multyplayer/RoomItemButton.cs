@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class RoomItemButton : MonoBehaviour
 {
-    public TextMeshProUGUI name;
+    public new TextMeshProUGUI name;
     public TextMeshProUGUI playerCount;
     [SerializeField] private Button button;
 

@@ -1,12 +1,8 @@
-using System.Collections;
-using Newtonsoft.Json;
-using Photon.Realtime;
 using Photon.Pun;
-using UnityEngine;
-using Ilumisoft.SkillDrive.UI;
+using Photon.Realtime;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using Ilumisoft.SkillDrive;
-using UnityEngine.Serialization;
+using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomManager : MonoBehaviourPunCallbacks
@@ -21,47 +17,49 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private GameObject playerInfoListUI;
     [SerializeField] private Canvas Joystick;
-    [SerializeField] private List<GameObject> playersList;
+    [SerializeField] private List<GameObject> playersList = new List<GameObject>();
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void Start()
     {
-        DontDestroyOnLoad(this);
-        PhotonNetwork.ConnectUsingSettings();
-        Application.targetFrameRate = 60;
-        QualitySettings.vSyncCount = 0;
-        DontDestroyOnLoad(this);
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.JoinLobby();
+        }
+        else
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     public override void OnConnectedToMaster()
     {
-        base.OnConnectedToMaster();
-        Debug.Log("Connected to master server");
+        Debug.Log("Connected to Master");
         PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
     {
-        base.OnJoinedLobby();
-        Debug.Log("Connected to Lobby");
+        Debug.Log("Joined Lobby");
     }
 
     public void CreateRoom(string name)
     {
-        RoomOptions roomOptions = new RoomOptions();
-        JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        };
-        roomOptions.CustomRoomProperties = new Hashtable
-        {
-            { "spawnPoints", JsonConvert.SerializeObject(spawnPoints, settings) }
-        };
-        PhotonNetwork.CreateRoom(name, roomOptions);
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = 4;
+        PhotonNetwork.CreateRoom(name, options);
     }
 
     public void JoinRoomByName(string roomName)
@@ -71,22 +69,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        base.OnPlayerEnteredRoom(newPlayer);
-        // Обработка нового игрока в комнате
-        Debug.Log($"Player {newPlayer.NickName} joined the room");
-
-        // Обновление UI для всех игроков
-        foreach (var player in PhotonNetwork.PlayerList)
-        {
-            // var playerGameObject = GetPlayerGameObject(player);
-
-            // if (playerGameObject != null)
-            // {
-            //     UpdateUI(newPlayer.ActorNumber, playerGameObject.GetComponent<PlayerInfo>().PlayerName);
-            // }
-        }
+        Debug.Log("Player Entered Room: " + newPlayer.NickName);
     }
-
 
     public override void OnJoinedRoom()
     {
@@ -97,6 +81,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             string json = PhotonNetwork.CurrentRoom.CustomProperties["spawnPoints"] as string;
             spawnPoints = JsonConvert.DeserializeObject<List<SpawnPoint>>(json);
+        }
+
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("playersList"))
+        {
+            string json = PhotonNetwork.CurrentRoom.CustomProperties["playersList"] as string;
+            playersList = JsonConvert.DeserializeObject<List<GameObject>>(json);
         }
 
         isOnline = true;
@@ -123,12 +113,17 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (spawnPointSelected && isOnline)
         {
             instantiatedPlayer = PhotonNetwork.Instantiate(playerPrefab.name, currentSpawnPoint, Quaternion.identity);
-           
+
             Hashtable props = new Hashtable
             {
                 {
                     "spawnPoints",
                     JsonConvert.SerializeObject(spawnPoints,
+                        new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
+                },
+                {
+                    "playersList",
+                    JsonConvert.SerializeObject(playersList,
                         new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
                 }
             };
@@ -139,9 +134,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
             instantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
         }
 
-        instantiatedPlayer.GetComponent<Vehicle>().SetLocalPlayer();
-        var actorNumber = instantiatedPlayer.GetComponent<PhotonView>().Owner.ActorNumber;
-        UpdateUI(actorNumber, instantiatedPlayer.GetComponent<PlayerInfo>().PlayerName);
+        playersList.Add(instantiatedPlayer);
+
+        var instantiatedPlayerComponents = instantiatedPlayer.GetComponent<PlayerComponents>();
+        instantiatedPlayerComponents.vehicle.SetLocalPlayer();
+        var actorNumber = instantiatedPlayerComponents.photonView.Owner.ActorNumber;
+        UpdateUI(actorNumber, instantiatedPlayerComponents.playerInfo.PlayerName);
     }
 
     [PunRPC]
@@ -161,21 +159,17 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void UpdateUI(int actorNumber, string name)
     {
-        photonView.RPC("UpdatePlayerNameUI", RpcTarget.All, actorNumber, name);
+        photonView.RPC("UpdatePlayerNameUI", RpcTarget.AllBuffered, actorNumber, name);
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
-        base.OnPlayerLeftRoom(otherPlayer);
-        // Обработка выхода игрока из комнаты
-        Debug.Log($"Player {otherPlayer.NickName} left the room");
+        Debug.Log("Player Left Room: " + otherPlayer.NickName);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        base.OnDisconnected(cause);
-        Debug.Log("Disconnected from server for reason: " + cause.ToString());
-        isOnline = false;
+        Debug.Log("Disconnected: " + cause.ToString());
     }
 
     [System.Serializable]

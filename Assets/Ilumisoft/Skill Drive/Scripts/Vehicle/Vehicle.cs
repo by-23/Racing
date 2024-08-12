@@ -195,7 +195,7 @@ namespace Ilumisoft.SkillDrive
             }
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
             healthController.OnDeath -= OnDeath;
