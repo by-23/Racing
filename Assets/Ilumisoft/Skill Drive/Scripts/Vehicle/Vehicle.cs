@@ -33,6 +33,7 @@ namespace Ilumisoft.SkillDrive
         public Rigidbody Rigidbody { get; private set; }
         public bool IsGrounded => groundDetection.IsGrounded;
         public bool CanMove = true;
+        private FloatingJoystick joystick;
         public float ForwardSpeed => Vector3.Dot(Rigidbody.velocity, transform.forward);
 
         public float NormalizedForwardSpeed
@@ -48,6 +49,7 @@ namespace Ilumisoft.SkillDrive
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
             healthController = GetComponent<HealthController>();
             healthController.OnDeath += OnDeath;
+            joystick = FindObjectOfType<FloatingJoystick>();
         }
 
         protected virtual void FixedUpdate()
@@ -73,7 +75,11 @@ namespace Ilumisoft.SkillDrive
         {
             if (isLocalPlayer)
             {
+#if UNITY_STANDALONE || UNITY_WEBGL
                 float turnInput = UnityEngine.Input.GetAxisRaw("Horizontal");
+#elif UNITY_ANDROID || UNITY_IOS
+                float turnInput = joystick.Horizontal;
+#endif
                 TurnWheels(turnInput * 30f);
                 RotateWheels();
             }
