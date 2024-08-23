@@ -1,21 +1,15 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] private Transform target; // Цель, за которой следит камера
+    [SerializeField] private Transform target;
     [SerializeField] private float distance = 5;
-    [SerializeField] private Vector3 offset = new Vector3(0f, 0, 0); // Оффсет камеры
-
-    // [SerializeField] private float angle = 45;
-    // [SerializeField] private float angleSmoothing = 30;
-    private new Camera camera;
-
-    private void Start()
-    {
-        camera = GetComponent<Camera>();
-    }
+    [SerializeField] private Vector3 offset = new Vector3(0f, 0, 0);
+    [SerializeField] private float moveTime = 1f;
+    [SerializeField] private Ease easing;
 
     void LateUpdate()
     {
@@ -31,6 +25,11 @@ public class CameraFollow : MonoBehaviour
     }
 
     public void SetTarget(Transform target)
+    {
+        this.transform.DOMove(target.position, moveTime).SetEase(easing).OnComplete(() => SelectTarget(target));
+    }
+
+    private void SelectTarget(Transform target)
     {
         this.target = target;
     }

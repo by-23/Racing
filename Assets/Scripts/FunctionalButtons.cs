@@ -1,7 +1,9 @@
 using System;
 using Ilumisoft.SkillDrive;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -13,6 +15,10 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
     public Button brakeButton;
     public Button fireButton;
     public Slider healthSlider;
+    public Button menuButton;
+    public Button continueButton;
+    public Button quitToMenuButton;
+    public GameObject pauseMenu;
 
     private bool isAccelerating = false;
     private float accelerationAmount = 0f;
@@ -30,6 +36,28 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
         {
             ApplyAcceleration(accelerationAmount);
         }
+    }
+
+    public void OpenPauseMenu()
+    {
+        pauseMenu.SetActive(true);
+        menuButton.gameObject.SetActive(false);
+    }
+
+    public void ClosePauseMenu()
+    {
+        pauseMenu.SetActive(false);
+        menuButton.gameObject.SetActive(true);
+    }
+
+    public void QuitToMenu()
+    {
+        if (PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.LeaveLobby();
+        }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void OnHealthChanged(float health)

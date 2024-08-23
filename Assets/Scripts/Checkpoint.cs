@@ -17,7 +17,6 @@ public class Checkpoint : MonoBehaviour
             PhotonView photonView = other.GetComponentInParent<PhotonView>();
             if (photonView != null && !isActivated)
             {
-                // Проверка на соответствие текущего индекса контрольной точки
                 if (gameController.currentCheckpointIndex == checkpointIndex)
                 {
                     isActivated = true;

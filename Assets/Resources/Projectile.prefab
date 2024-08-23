@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2369302362383642950}
@@ -151,8 +151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionFXPrefab: {fileID: 725748389856807712, guid: 00f60d0e78f493e42b98cc88e5f16e12,
     type: 3}
-  speed: 100
-  followSpeed: 120
+  speed: 80
+  followSpeed: 100
   lifetime: 15
   upwardsModifier: 50
   oscillationRange: 0.4

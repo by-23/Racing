@@ -31,6 +31,7 @@ public class Projectile : MonoBehaviour
     {
         rBody = GetComponent<Rigidbody>();
     }
+
     private void OnEnable()
     {
         StartCoroutine(DespawnAfterLifetime());
@@ -116,7 +117,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        targetVehicle.healthController.TakeDamage(50);
+        if (targetVehicle) targetVehicle.healthController.TakeDamage(50);
         Destroy(gameObject);
     }
 

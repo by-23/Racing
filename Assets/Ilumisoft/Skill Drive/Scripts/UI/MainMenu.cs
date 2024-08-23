@@ -1,6 +1,7 @@
 ﻿using Ilumisoft.SkillDrive.LevelSelection;
 using System;
 using System.Collections;
+using AYellowpaper.SerializedCollections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -21,26 +22,16 @@ namespace Ilumisoft.SkillDrive.UI
 
         [SerializeField] TextMeshProUGUI NewLobbyName;
 
-        [SerializeField] GameObject zoomInCam = null;
+        [SerializeField] private new CameraFollow camera;
 
-        [SerializeField] GameObject playCam = null;
-
-        [SerializeField] AudioSource confirmAudioSource;
-
-
-        private IEnumerator Start()
+        private void Start()
         {
             playButton.onClick.AddListener(OnPlayButtonClicked);
             CreateLobbyButton.onClick.AddListener(OnCreateLobbyButtonClicked);
-
-            yield return null;
-
-            zoomInCam.SetActive(true);
         }
 
         private void OnPlayButtonClicked()
         {
-            StartCoroutine(LoadCoroutine());
             RoomManager.Instance.StartGame();
         }
 
@@ -50,7 +41,6 @@ namespace Ilumisoft.SkillDrive.UI
             {
                 RoomManager.Instance.CreateRoom(NewLobbyName.text);
                 RoomManager.Instance.isOnline = true;
-                StartCoroutine(LoadCoroutine());
             }
             else
             {
@@ -71,16 +61,6 @@ namespace Ilumisoft.SkillDrive.UI
         public override void Hide()
         {
             canvasGroup.interactable = false;
-        }
-
-        IEnumerator LoadCoroutine()
-        {
-            StopAllCoroutines();
-            playCam.SetActive(true);
-
-            yield return new WaitForSecondsRealtime(0.25f);
-
-            confirmAudioSource.Play();
         }
     }
 }

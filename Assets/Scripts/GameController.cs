@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
@@ -9,17 +10,15 @@ public class GameController : MonoBehaviourPunCallbacks
     private int totalCheckpoints;
     internal int currentCheckpointIndex = 0;
     private Dictionary<int, int> playerLaps = new Dictionary<int, int>();
-    private int currentPlayerId;
 
     [SerializeField] private List<Checkpoint> checkpoints;
     [SerializeField] private int totalLaps = 3;
+    [SerializeField] private Transform finishedMenu;
 
     private void Awake()
     {
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
-        DontDestroyOnLoad(this);
-
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         checkpoints.AddRange(FindObjectsOfType<Checkpoint>());
@@ -43,7 +42,6 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 currentCheckpointIndex = 0;
                 PlayerCompletedLap(playerId);
-                currentPlayerId = playerId;
             }
         }
     }
@@ -62,7 +60,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
         if (currentLap >= totalLaps)
         {
-            OnAllLapsCompleted();
+            OnAllLapsCompleted(playerId);
         }
 
         foreach (var checkpoint in checkpoints)
@@ -85,9 +83,19 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    private void OnAllLapsCompleted()
+    private void OnAllLapsCompleted(int playerId)
     {
         Debug.Log("Player completed a Level!");
+        var cameraFollow = RoomManager.Instance.playersList[playerId].cameraFollow;
+        RoomManager.Instance.playersList.Remove(playerId);
+        if (RoomManager.Instance.playersList.Count > 0)
+        {
+            cameraFollow.SetTarget(RoomManager.Instance.playersList.Last().Value.vehicle.transform);
+        }
+        else
+        {
+            cameraFollow.SetTarget(finishedMenu);
+        }
     }
 
     private void OnDestroy()

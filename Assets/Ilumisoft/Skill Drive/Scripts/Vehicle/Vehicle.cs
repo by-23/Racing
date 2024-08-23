@@ -8,9 +8,6 @@ namespace Ilumisoft.SkillDrive
 {
     public class Vehicle : NetworkBehaviour
     {
-        private bool isLocalPlayer;
-        private Joystick joystick;
-
         [SerializeField] internal Camera playerCam;
         [SerializeField] private Attack attack;
         [SerializeField] private TriggerCallBack triggerCallback;
@@ -28,7 +25,8 @@ namespace Ilumisoft.SkillDrive
         [SerializeField] private float wheelsRotationSpeed = 100f;
         [SerializeField] private float turnPercentage = 1f;
         [SerializeField] private float turnSpeed = 20f;
-        
+
+        private bool isLocalPlayer;
         private float currentTurnAngle = 0f;
         public HealthController healthController;
         public VehicleStats FinalStats => stats;
@@ -46,7 +44,6 @@ namespace Ilumisoft.SkillDrive
         protected virtual void Awake()
         {
             Rigidbody = GetComponent<Rigidbody>();
-            joystick = Joystick.Instance;
             groundDetection.Initialize(this);
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
             healthController = GetComponent<HealthController>();
@@ -85,7 +82,7 @@ namespace Ilumisoft.SkillDrive
 
         private void OnTriggerEntered(Collider other)
         {
-            if (other.TryGetComponent(out Projectile projectile))
+            if (other.TryGetComponent(out Projectile projectile) && projectile.Owner != this)
                 projectile.SetTarget(this);
         }
 

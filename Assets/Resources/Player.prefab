@@ -108,6 +108,8 @@ MonoBehaviour:
   target: {fileID: 5505003984607041509}
   distance: 5
   offset: {x: 0, y: 20, z: -20}
+  moveTime: 1
+  easing: 0
 --- !u!1 &2445090919241411759
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,6 +565,7 @@ MonoBehaviour:
   attack: {fileID: 4320569773949241135}
   healthController: {fileID: 1940173394000298594}
   photonView: {fileID: 3896878137984185943}
+  cameraFollow: {fileID: 4987286397470350725}
 --- !u!1001 &841632710170942201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -581,26 +584,6 @@ PrefabInstance:
       propertyPath: vehicle
       value: 
       objectReference: {fileID: 1816427083731817154}
-    - target: {fileID: 2430686341380726254, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_Convex
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2436667369377959288, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2436667369377959288, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2436667369377959288, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2436667369377959288, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -651,41 +634,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2818349608629704562, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3876902964438285842, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5247068527164562525, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.3
-      objectReference: {fileID: 0}
     - target: {fileID: 6445182131119432746, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: vehicle
       value: 
       objectReference: {fileID: 1816427083731817154}
-    - target: {fileID: 6630594579394847733, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7103932388082763939, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8537138988155704303, guid: 71f98781a624545ccae847811d71db95,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

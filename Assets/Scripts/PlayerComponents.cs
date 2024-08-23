@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
@@ -20,6 +21,7 @@ public class PlayerComponents : MonoBehaviour
     [SerializeField] public Attack attack;
     [SerializeField] public HealthController healthController;
     [SerializeField] public PhotonView photonView;
+    [SerializeField] public CameraFollow cameraFollow;
 
     private void OnValidate()
     {
@@ -29,5 +31,11 @@ public class PlayerComponents : MonoBehaviour
         if (attack == null) attack = GetComponent<Attack>();
         if (healthController == null) healthController = GetComponent<HealthController>();
         if (photonView == null) photonView = GetComponent<PhotonView>();
+        if (cameraFollow == null) cameraFollow = GetComponentInChildren<CameraFollow>();
+    }
+
+    private void Awake()
+    {
+        RoomManager.Instance.playersList.Add(photonView.Owner.ActorNumber, this);
     }
 }
