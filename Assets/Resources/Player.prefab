@@ -308,6 +308,8 @@ GameObject:
   - component: {fileID: 7390991703966368553}
   - component: {fileID: 4159044441855039309}
   - component: {fileID: 1706685002037496352}
+  - component: {fileID: 2176173375843595912}
+  - component: {fileID: -1163877452224727432}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -571,6 +573,45 @@ MonoBehaviour:
   healthController: {fileID: 1940173394000298594}
   photonView: {fileID: 3896878137984185943}
   cameraFollow: {fileID: 4987286397470350725}
+--- !u!195 &2176173375843595912
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 1
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &-1163877452224727432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vehicle: {fileID: 0}
+  steeringSensitivity: 2
+  accelerationFactor: 1
+  obstacleDetectionDistance: 20
+  avoidanceStrength: -5
 --- !u!1001 &841632710170942201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -638,6 +679,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2759432308006757469, guid: 71f98781a624545ccae847811d71db95,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6445182131119432746, guid: 71f98781a624545ccae847811d71db95,
         type: 3}

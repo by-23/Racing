@@ -12,17 +12,19 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        gameController = GameController.Instance;
+        gameController.currentCheckpointIndex = checkpointIndex + 1;
         if (other.CompareTag("Player"))
         {
-            PhotonView photonView = other.GetComponentInParent<PhotonView>();
-            if (photonView != null && !isActivated)
-            {
-                if (gameController.currentCheckpointIndex == checkpointIndex)
-                {
-                    isActivated = true;
-                    gameController.PlayerPassedCheckpoint(photonView.Owner.ActorNumber, checkpointIndex);
-                }
-            }
+            // PhotonView photonView = other.GetComponentInParent<PhotonView>();
+            // if (photonView != null && !isActivated)
+            // {
+            //     if (gameController.currentCheckpointIndex == checkpointIndex)
+            //     {
+            //         isActivated = true;
+            //         gameController.PlayerPassedCheckpoint(photonView.Owner.ActorNumber, checkpointIndex);
+            //     }
+            // }
         }
     }
 }
