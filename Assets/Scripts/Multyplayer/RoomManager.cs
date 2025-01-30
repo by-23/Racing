@@ -116,6 +116,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (!spawnPointSelected || !isOnline)
         {
             instantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
+            var instantiatedPlayerComponents = instantiatedPlayer.GetComponent<PlayerComponents>();
+            instantiatedPlayerComponents.vehicle.SetLocalPlayer();
         }
         else
         {

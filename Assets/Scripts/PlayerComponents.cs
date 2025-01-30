@@ -36,6 +36,7 @@ public class PlayerComponents : MonoBehaviour
 
     private void Awake()
     {
-        RoomManager.Instance.playersList.Add(photonView.Owner.ActorNumber, this);
+        if (RoomManager.Instance.isOnline)
+            RoomManager.Instance.playersList.Add(photonView.Owner.ActorNumber, this);
     }
 }
