@@ -353,7 +353,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.8
   m_Height: 3.5
@@ -398,7 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2832591860
+  GlobalObjectIdHash: 2639700093
   InScenePlacedSourceGlobalObjectIdHash: 1883042892
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -610,8 +610,21 @@ MonoBehaviour:
   vehicle: {fileID: 0}
   steeringSensitivity: 2
   accelerationFactor: 1
-  obstacleDetectionDistance: 20
-  avoidanceStrength: -5
+  pathCreator: {fileID: 0}
+  lookAheadDistance: 30
+  brakingPower: 100
+  minTurnAngle: 1
+  turnScanDistance: 30
+  turnBrakingDistance: 10
+  maxTurnSpeed: 80
+  minTurnSpeed: 30
+  maxTurnAngle: 60
+  obstacleDetectionDistance: 5
+  obstacleSlowdown: 0.5
+  avoidanceStrength: 1
+  rayCount: 5
+  detectionAngle: 90
+  turnSearchStep: 1
 --- !u!1001 &841632710170942201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -683,7 +696,7 @@ PrefabInstance:
     - target: {fileID: 2759432308006757469, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6445182131119432746, guid: 71f98781a624545ccae847811d71db95,
         type: 3}

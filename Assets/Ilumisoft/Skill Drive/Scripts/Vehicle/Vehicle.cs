@@ -26,6 +26,7 @@ namespace Ilumisoft.SkillDrive
         [SerializeField] private float turnPercentage = 1f;
         [SerializeField] private float turnSpeed = 20f;
 
+
         private bool isLocalPlayer;
         private float currentTurnAngle = 0f;
         public HealthController healthController;
@@ -37,6 +38,7 @@ namespace Ilumisoft.SkillDrive
         public float ForwardSpeed => Vector3.Dot(Rigidbody.velocity, transform.forward);
 
         public float NormalizedForwardSpeed
+
 
         {
             get => (Mathf.Abs(ForwardSpeed) > 0.1f) ? ForwardSpeed / FinalStats.MaxSpeed : 0.0f;
@@ -104,6 +106,12 @@ namespace Ilumisoft.SkillDrive
             FRwheel.Rotate(Vector3.right, rotationSpeed);
             BLwheel.Rotate(Vector3.right, rotationSpeed);
             BRwheel.Rotate(Vector3.right, rotationSpeed);
+        }
+
+        public void ApplyBraking(float brakePower)
+        {
+            Vector3 brakeForce = -Rigidbody.velocity.normalized * brakePower;
+            Rigidbody.AddForce(brakeForce, ForceMode.Acceleration);
         }
 
         public void TurnWheels(float turnAngle)
