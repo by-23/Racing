@@ -49,9 +49,9 @@ public class GameController : MonoBehaviourPunCallbacks
     internal int currentCheckpointIndex = 0;
     private Dictionary<int, int> playerLaps = new Dictionary<int, int>();
 
-    public List<Checkpoint> checkpoints;
     [SerializeField] internal int totalLaps = 3;
     [SerializeField] internal Transform finishedMenu;
+    [SerializeField] internal bool isGameStarted = false;
 
     private void Awake()
     {
@@ -63,14 +63,6 @@ public class GameController : MonoBehaviourPunCallbacks
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
         SceneManager.sceneLoaded += OnSceneLoaded;
-
-        checkpoints.AddRange(FindObjectsOfType<Checkpoint>());
-        checkpoints.Reverse();
-        totalCheckpoints = checkpoints.Count;
-        foreach (var checkpoint in checkpoints)
-        {
-            checkpoint.gameController = this;
-        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -105,11 +97,6 @@ public class GameController : MonoBehaviourPunCallbacks
         if (currentLap >= totalLaps)
         {
             OnAllLapsCompleted(playerId);
-        }
-
-        foreach (var checkpoint in checkpoints)
-        {
-            checkpoint.isActivated = false;
         }
     }
 

@@ -550,16 +550,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vehicle: {fileID: 0}
   steeringSensitivity: 5
-  accelerationFactor: 3
+  accelerationFactor: 1
   pathCreator: {fileID: 0}
   lookAheadDistance: 20
+  pathSampleStep: 0.5
   brakingPower: 200
   minTurnAngle: 2
-  turnScanDistance: 40
-  turnBrakingDistance: 30
-  maxTurnSpeed: 80
-  minTurnSpeed: 40
-  maxTurnAngle: 60
+  turnScanDistance: 30
+  turnBrakingDistance: 10
+  maxTurnSpeed: 100
+  minTurnSpeed: 50
+  maxTurnAngle: 70
   obstacleDetectionDistance: 5
   obstacleSlowdown: 0.5
   avoidanceStrength: 1

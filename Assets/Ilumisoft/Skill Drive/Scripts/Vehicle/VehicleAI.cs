@@ -101,7 +101,7 @@ namespace Ilumisoft.SkillDrive
 
         private void Update()
         {
-            if (vehicle.CanMove && pathCreator != null)
+            if (vehicle.CanMove && pathCreator != null && GameController.Instance.isGameStarted)
             {
                 // Анализируем предстоящий поворот и применяем торможение, если найден поворот с углом > minTurnAngle
                 ApplyTurnBraking();

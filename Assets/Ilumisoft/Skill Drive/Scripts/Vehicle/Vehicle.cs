@@ -192,7 +192,7 @@ namespace Ilumisoft.SkillDrive
 
         protected virtual void ApplySteering()
         {
-            if (IsGrounded && CanMove)
+            if (IsGrounded && CanMove && GameController.Instance.isGameStarted)
             {
                 float steeringPower;
 #if UNITY_STANDALONE || UNITY_WEBGL
@@ -212,7 +212,7 @@ namespace Ilumisoft.SkillDrive
 
         public virtual void ApplyAcceleration(float accelerationInput)
         {
-            if (IsGrounded && CanMove)
+            if (IsGrounded && CanMove && GameController.Instance.isGameStarted)
             {
                 float forceMagnitude = 0f; // Инициализируем переменную для хранения величины силы
 

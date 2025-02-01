@@ -1072,7 +1072,6 @@ GameObject:
   - component: {fileID: 356259526719096996}
   - component: {fileID: 8145253688807192308}
   - component: {fileID: 2248145638076795425}
-  - component: {fileID: 5753080752332553774}
   m_Layer: 5
   m_Name: Quit Button
   m_TagString: Untagged
@@ -1194,18 +1193,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5753080752332553774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3522995052526228616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9933e9e542c8ec744b40fad388a4968d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3613386743056000359
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1339,6 @@ GameObject:
   - component: {fileID: 6755005696825842427}
   - component: {fileID: 2551305211284726030}
   - component: {fileID: 3018108102850585105}
-  - component: {fileID: 6331118354429599677}
   m_Layer: 5
   m_Name: Menu Button
   m_TagString: Untagged
@@ -1474,18 +1460,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6331118354429599677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4060222716975849423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9933e9e542c8ec744b40fad388a4968d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4083003889290784969
 GameObject:
   m_ObjectHideFlags: 0

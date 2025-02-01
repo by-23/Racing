@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using Ilumisoft.SkillDrive;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -24,6 +26,7 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
     private float accelerationAmount = 0f;
     private HealthController healthController;
 
+
     public void ListenToHealthController(HealthController healthController)
     {
         this.healthController = healthController;
@@ -45,6 +48,11 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
     }
 
     public void ClosePauseMenu()
+    {
+        pauseMenu.SetActive(false);
+        menuButton.gameObject.SetActive(true);
+    }
+    public void RestartLevel()
     {
         pauseMenu.SetActive(false);
         menuButton.gameObject.SetActive(true);

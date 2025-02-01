@@ -24,6 +24,8 @@ namespace Ilumisoft.SkillDrive.UI
 
         [SerializeField] private new CameraFollow camera;
 
+        public TextMeshProUGUI countdownText; // UI-текст для отображения отчета
+
         private void Start()
         {
             playButton.onClick.AddListener(OnPlayButtonClicked);
@@ -33,7 +35,24 @@ namespace Ilumisoft.SkillDrive.UI
         private void OnPlayButtonClicked()
         {
             RoomManager.Instance.StartGame();
+            StartCoroutine(CountdownRoutine());
+            countdownText.gameObject.SetActive(true);
         }
+
+        IEnumerator CountdownRoutine()
+        {
+            for (int i = 3; i > 0; i--)
+            {
+                countdownText.text = i.ToString();
+                yield return new WaitForSeconds(1f);
+            }
+
+            countdownText.text = "START";
+            yield return new WaitForSeconds(1f);
+            countdownText.gameObject.SetActive(false);
+            GameController.Instance.isGameStarted = true;
+        }
+
 
         private void OnCreateLobbyButtonClicked()
         {
