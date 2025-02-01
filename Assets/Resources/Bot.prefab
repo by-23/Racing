@@ -299,17 +299,16 @@ GameObject:
   - component: {fileID: 5505003984607041509}
   - component: {fileID: 2817538194188812170}
   - component: {fileID: 2604161214765010509}
-  - component: {fileID: 2835823211572818209}
+  - component: {fileID: 3365895076832356282}
+  - component: {fileID: -8554887327945055041}
   - component: {fileID: 1816427083731817154}
   - component: {fileID: 9178862210767006648}
   - component: {fileID: 4320569773949241135}
   - component: {fileID: 1940173394000298594}
-  - component: {fileID: 3896878137984185943}
-  - component: {fileID: 7390991703966368553}
-  - component: {fileID: 4159044441855039309}
   - component: {fileID: 1706685002037496352}
+  - component: {fileID: -7637648645194494759}
   m_Layer: 2
-  m_Name: Player
+  m_Name: Bot
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -384,7 +383,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &2835823211572818209
+--- !u!114 &3365895076832356282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1388826236
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &-8554887327945055041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -393,18 +413,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 2603592718261198966}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2639700093
-  InScenePlacedSourceGlobalObjectIdHash: 1883042892
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 1
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 9178862210767006648}
+  - {fileID: 1940173394000298594}
+  - {fileID: 5901295366481742353}
+  - {fileID: 4966514685246398662}
+  - {fileID: 2026922541095948248}
+  - {fileID: 4745496516336607837}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &1816427083731817154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,68 +517,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
---- !u!114 &3896878137984185943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 1
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 9178862210767006648}
-  - {fileID: 1940173394000298594}
-  - {fileID: 7390991703966368553}
-  - {fileID: 4159044441855039309}
-  - {fileID: 5901295366481742353}
-  - {fileID: 4966514685246398662}
-  - {fileID: 2026922541095948248}
-  - {fileID: 4745496516336607837}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &7390991703966368553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
---- !u!114 &4159044441855039309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 0
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 1
 --- !u!114 &1706685002037496352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,13 +529,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f35055dd7b19c4ca13f8296927fcc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkObject: {fileID: 2835823211572818209}
+  networkObject: {fileID: 3365895076832356282}
   vehicle: {fileID: 1816427083731817154}
   playerInfo: {fileID: 9178862210767006648}
   attack: {fileID: 4320569773949241135}
   healthController: {fileID: 1940173394000298594}
-  photonView: {fileID: 3896878137984185943}
+  photonView: {fileID: -8554887327945055041}
   cameraFollow: {fileID: 4987286397470350725}
+--- !u!114 &-7637648645194494759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vehicle: {fileID: 0}
+  steeringSensitivity: 5
+  accelerationFactor: 3
+  pathCreator: {fileID: 0}
+  lookAheadDistance: 20
+  brakingPower: 200
+  minTurnAngle: 2
+  turnScanDistance: 40
+  turnBrakingDistance: 30
+  maxTurnSpeed: 80
+  minTurnSpeed: 40
+  maxTurnAngle: 60
+  obstacleDetectionDistance: 5
+  obstacleSlowdown: 0.5
+  avoidanceStrength: 1
+  rayCount: 5
+  detectionAngle: 60
+  turnSearchStep: 1
 --- !u!1001 &841632710170942201
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -16,10 +16,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public SerializedDictionary<int, PlayerComponents> playersList = new SerializedDictionary<int, PlayerComponents>();
 
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject botPrefab;
     [Space] [SerializeField] List<SpawnPoint> spawnPoints;
     [SerializeField] private PlayerInfoUI playerInfoUIPrefab;
     [SerializeField] private GameObject playerInfoListUI;
     [SerializeField] List<GameObject> ControlsUI;
+    [SerializeField] private List<GameObject> instantiatedBots;
+    [SerializeField, Range(0, 7)] private int botCount;
 
     private void Awake()
     {
@@ -102,22 +105,22 @@ public class RoomManager : MonoBehaviourPunCallbacks
         bool spawnPointSelected = false;
         GameObject instantiatedPlayer;
 
-        foreach (var spawnPoint in spawnPoints)
-        {
-            if (!spawnPoint.isFull)
-            {
-                currentSpawnPoint = spawnPoint.spawnPoint;
-                spawnPoint.isFull = true;
-                spawnPointSelected = true;
-                break;
-            }
-        }
 
         if (!spawnPointSelected || !isOnline)
         {
+            currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
+
             instantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
             var instantiatedPlayerComponents = instantiatedPlayer.GetComponent<PlayerComponents>();
             instantiatedPlayerComponents.vehicle.SetLocalPlayer();
+
+            for (int i = 0; i < botCount; i++)
+            {
+                currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
+                instantiatedBots.Add(Instantiate(botPrefab, currentSpawnPoint, Quaternion.identity));
+                var instantiatedBotComponents = instantiatedBots[i].GetComponent<PlayerComponents>();
+                instantiatedBotComponents.vehicle.SetBot();
+            }
         }
         else
         {
@@ -139,6 +142,23 @@ public class RoomManager : MonoBehaviourPunCallbacks
             UpdateUI(actorNumber, instantiatedPlayerComponents.playerInfo.PlayerName);
             GetGameInfo();
         }
+    }
+
+    private Vector3 GetAwailableSpawnPoint(Vector3 currentSpawnPoint)
+    {
+        bool spawnPointSelected;
+        foreach (var spawnPoint in spawnPoints)
+        {
+            if (!spawnPoint.isFull)
+            {
+                currentSpawnPoint = spawnPoint.spawnPoint;
+                spawnPoint.isFull = true;
+                spawnPointSelected = true;
+                break;
+            }
+        }
+
+        return currentSpawnPoint;
     }
 
     [PunRPC]

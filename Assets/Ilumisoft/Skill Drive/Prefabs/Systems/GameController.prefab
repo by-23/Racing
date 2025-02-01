@@ -103,14 +103,26 @@ MonoBehaviour:
     _serializedList: []
   playerPrefab: {fileID: 2603592718261198966, guid: 714d15f98e4b49b41a1d1c45b419e76e,
     type: 3}
+  botPrefab: {fileID: 2603592718261198966, guid: 72889041c8892af47bf2e4636bbe331a,
+    type: 3}
   spawnPoints:
+  - spawnPoint: {x: 100, y: 0, z: 50}
+    isFull: 0
+  - spawnPoint: {x: 115, y: 0, z: 50}
+    isFull: 0
   - spawnPoint: {x: 100, y: 0, z: 65}
     isFull: 0
   - spawnPoint: {x: 115, y: 0, z: 65}
     isFull: 0
-  - spawnPoint: {x: 100, y: 0, z: 50}
+  - spawnPoint: {x: 100, y: 0, z: 80}
     isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 50}
+  - spawnPoint: {x: 115, y: 0, z: 80}
+    isFull: 0
+  - spawnPoint: {x: 100, y: 0, z: 95}
+    isFull: 0
+  - spawnPoint: {x: 115, y: 0, z: 95}
+    isFull: 0
+  - spawnPoint: {x: 115, y: 0, z: 65}
     isFull: 0
   playerInfoUIPrefab: {fileID: -7615637054289674736, guid: 71a4d38262a151a4a8bd06178b1064fb,
     type: 3}
@@ -122,6 +134,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  instantiatedBots: []
+  botCount: 2
 --- !u!114 &2545123944653421841
 MonoBehaviour:
   m_ObjectHideFlags: 0

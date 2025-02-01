@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Ilumisoft.SkillDrive
 {
@@ -140,6 +141,12 @@ namespace Ilumisoft.SkillDrive
             isLocalPlayer = true;
             gameObject.name = "Local Player";
             playerCam.gameObject.SetActive(true);
+        }
+
+        public void SetBot()
+        {
+            isLocalPlayer = true;
+            gameObject.name = Random.Range(0, 10).ToString();
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

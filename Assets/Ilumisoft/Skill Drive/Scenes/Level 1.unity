@@ -7663,14 +7663,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1386954587729972546, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
+      propertyPath: botCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386954587729972546, guid: b2a949fa24f377f47acb73d27c80f326,
+        type: 3}
       propertyPath: playerInfoListUI
       value: 
       objectReference: {fileID: 583152370}
-    - target: {fileID: 1386954587729972546, guid: b2a949fa24f377f47acb73d27c80f326,
-        type: 3}
-      propertyPath: ControlsUI.Array.size
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 1386954587729972546, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
       propertyPath: ControlsUI.Array.data[0]

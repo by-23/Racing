@@ -12,7 +12,6 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInfo))]
 [RequireComponent(typeof(Attack))]
 [RequireComponent(typeof(HealthController))]
-[RequireComponent(typeof(PhotonView))]
 public class PlayerComponents : MonoBehaviour
 {
     [SerializeField] public NetworkObject networkObject;
