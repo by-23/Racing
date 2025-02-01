@@ -47,6 +47,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scene Loader
       objectReference: {fileID: 0}
+    - target: {fileID: 3477196593658265298, guid: 44ac7db977c91674498956f471bd6127,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3477196593658265299, guid: 44ac7db977c91674498956f471bd6127,
         type: 3}
       propertyPath: m_RootOrder
@@ -181,6 +186,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Post Processing
       objectReference: {fileID: 0}
+    - target: {fileID: 6216166666855491454, guid: 092fced1a06c50c4bb129c62075b6632,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -259,6 +269,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Music Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7567541697552672720, guid: 6fd1233fef4b7734cbab46f01a0dadf0,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

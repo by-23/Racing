@@ -46,6 +46,7 @@ MonoBehaviour:
   - PlayerPassedCheckpoint
   - UpdateLapCount
   - UpdatePlayerNameUI
+  - RPC_HandleProjectile
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

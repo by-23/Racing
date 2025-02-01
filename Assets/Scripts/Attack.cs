@@ -33,24 +33,44 @@ public class Attack : MonoBehaviour
         GameObject newProjectile = null;
         if (RoomManager.Instance.isOnline)
         {
+            // Создаём снаряд через Photon
             newProjectile = PhotonNetwork.Instantiate("Projectile", transform.position, Quaternion.identity);
-            // Call the RPC method to handle the rest of the logic
-            photonView.RPC("HandleProjectile", RpcTarget.All, newProjectile.GetComponent<PhotonView>().ViewID);
+            // Вызываем RPC для установки параметров снаряда на всех клиентах
+            photonView.RPC("RPC_HandleProjectile", RpcTarget.All, newProjectile.GetComponent<PhotonView>().ViewID);
         }
         else
         {
+            // Создаём снаряд стандартным способом
             newProjectile = Instantiate(projectile.gameObject);
-            HandleProjectile(newProjectile.GetComponent<PhotonView>().ViewID);
+            // Прямо устанавливаем параметры снаряда
+            SetupProjectile(newProjectile);
         }
     }
 
-    [PunRPC]
-    private void HandleProjectile(int viewID)
+    /// <summary>
+    /// Общий метод для установки параметров снаряда.
+    /// </summary>
+    /// <param name="projectileObj">Объект снаряда.</param>
+    private void SetupProjectile(GameObject projectileObj)
     {
-        GameObject newProjectile = PhotonView.Find(viewID).gameObject;
-        newProjectile.GetComponent<Projectile>().Owner = vehicle;
-        var newProjectileTransform = newProjectile.transform;
-        newProjectileTransform.position = muzzlePosition.position;
-        newProjectileTransform.rotation = muzzlePosition.rotation;
+        Projectile proj = projectileObj.GetComponent<Projectile>();
+        if (proj != null)
+        {
+            proj.Owner = vehicle;
+        }
+
+        projectileObj.transform.position = muzzlePosition.position;
+        projectileObj.transform.rotation = muzzlePosition.rotation;
+    }
+
+    [PunRPC]
+    private void RPC_HandleProjectile(int viewID)
+    {
+        PhotonView projPhotonView = PhotonView.Find(viewID);
+        if (projPhotonView != null)
+        {
+            GameObject newProjectile = projPhotonView.gameObject;
+            SetupProjectile(newProjectile);
+        }
     }
 }

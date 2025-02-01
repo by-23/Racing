@@ -155,6 +155,7 @@ MonoBehaviour:
   followSpeed: 100
   lifetime: 15
   upwardsModifier: 50
+  collider: {fileID: 7419360478070821159}
   oscillationRange: 0.4
   oscillationFrequency: 10
   explosionForce: 3000000

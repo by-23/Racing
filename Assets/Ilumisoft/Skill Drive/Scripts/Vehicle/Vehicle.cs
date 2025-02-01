@@ -1,4 +1,5 @@
 ﻿using System;
+using PathCreation;
 using Unity.Netcode;
 using UnityEngine;
 using Photon.Pun;
@@ -27,7 +28,7 @@ namespace Ilumisoft.SkillDrive
         [SerializeField] private float turnPercentage = 1f;
         [SerializeField] private float turnSpeed = 20f;
 
-
+        private PathCreator pathCreator;
         private bool isLocalPlayer;
         private float currentTurnAngle = 0f;
         public HealthController healthController;
@@ -53,6 +54,7 @@ namespace Ilumisoft.SkillDrive
             healthController = GetComponent<HealthController>();
             healthController.OnDeath += OnDeath;
             joystick = FindObjectOfType<FloatingJoystick>();
+            pathCreator = FindObjectOfType<PathCreator>();
         }
 
         protected virtual void FixedUpdate()
@@ -126,9 +128,22 @@ namespace Ilumisoft.SkillDrive
             BRwheelPivot.localRotation = Quaternion.Euler(0, -currentTurnAngle, 0);
         }
 
-        private void ResetCarPosition()
+        protected internal void ResetCarPosition()
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            if (pathCreator != null)
+            {
+                float closestDistance = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
+                Vector3 closestPoint = pathCreator.path.GetPointAtDistance(closestDistance);
+                Vector3 pathDirection = pathCreator.path.GetDirection(closestDistance);
+
+                transform.position = closestPoint;
+                transform.rotation = Quaternion.LookRotation(pathDirection, Vector3.up);
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+
             CanMove = true;
             healthController.Heal(100);
         }

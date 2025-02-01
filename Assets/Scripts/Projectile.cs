@@ -13,6 +13,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float followSpeed;
     [SerializeField] private float lifetime = 15f;
     [SerializeField] private float upwardsModifier = 5f;
+    [SerializeField] private Collider collider;
 
     private Rigidbody rBody;
     private Vehicle targetVehicle;
@@ -79,7 +80,10 @@ public class Projectile : MonoBehaviour
         if (other.TryGetComponent(out Vehicle vehicle) && Owner != null && vehicle != Owner)
         {
             if (!RoomManager.Instance.isOnline)
+            {
                 Explode();
+                collider.isTrigger = true;
+            }
             else
                 this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All);
         }

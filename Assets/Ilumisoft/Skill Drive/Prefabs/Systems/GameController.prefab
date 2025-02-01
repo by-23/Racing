@@ -186,9 +186,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b36f99224fb3654dba0bd2cddd3ee0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoints: []
   totalLaps: 1
   finishedMenu: {fileID: 0}
+  isGameStarted: 0
 --- !u!1001 &7489016735028556185
 PrefabInstance:
   m_ObjectHideFlags: 0
