@@ -7648,6 +7648,11 @@ PrefabInstance:
       propertyPath: roomListParent
       value: 
       objectReference: {fileID: 1108952983}
+    - target: {fileID: 2736572696894151449, guid: b2a949fa24f377f47acb73d27c80f326,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6246214652830603187, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
       propertyPath: camPositions._serializedList.Array.data[0].Value

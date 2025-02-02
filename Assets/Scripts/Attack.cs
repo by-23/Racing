@@ -8,11 +8,11 @@ public class Attack : MonoBehaviour
 {
     [SerializeField] private Projectile projectile;
     [SerializeField] private PhotonView photonView;
-    [SerializeField] private Transform muzzlePosition;
+    [SerializeField] protected Transform muzzlePosition;
     [SerializeField] private Vehicle vehicle;
-    [SerializeField] private float fireRate = 1f; // Задержка между выстрелами в секундах
+    [SerializeField] protected float fireRate = 1f; // Задержка между выстрелами в секундах
 
-    private float nextTimeToShoot = 0f;
+    protected float nextTimeToShoot = 0f;
 
     private void Awake()
     {

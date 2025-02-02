@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Ilumisoft.SkillDrive
 {
-    public class VehicleAI : MonoBehaviour
+    public class BotAI : MonoBehaviour
     {
         [Header("Vehicle Settings")] [SerializeField]
         private Vehicle vehicle;

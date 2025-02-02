@@ -303,10 +303,10 @@ GameObject:
   - component: {fileID: -8554887327945055041}
   - component: {fileID: 1816427083731817154}
   - component: {fileID: 9178862210767006648}
-  - component: {fileID: 4320569773949241135}
   - component: {fileID: 1940173394000298594}
-  - component: {fileID: 1706685002037496352}
   - component: {fileID: -7637648645194494759}
+  - component: {fileID: -4256842069966461579}
+  - component: {fileID: -8441199704336409492}
   m_Layer: 2
   m_Name: Bot
   m_TagString: Bot
@@ -449,7 +449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCam: {fileID: 5285592622119876980}
-  attack: {fileID: 4320569773949241135}
+  attack: {fileID: 0}
   triggerCallback: {fileID: 9131081407688437010}
   stats:
     MaxSpeed: 100
@@ -490,24 +490,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerName: 
---- !u!114 &4320569773949241135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8c0a7a5feeadb341b6a7e6d4d51385d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectile: {fileID: 4960673026342986844, guid: f7960b60e5f98ca4f9813d58661e2c17,
-    type: 3}
-  photonView: {fileID: 0}
-  muzzlePosition: {fileID: 5663055877064385965}
-  vehicle: {fileID: 1816427083731817154}
-  fireRate: 1
 --- !u!114 &1940173394000298594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,25 +503,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
---- !u!114 &1706685002037496352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15f35055dd7b19c4ca13f8296927fcc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  networkObject: {fileID: 3365895076832356282}
-  vehicle: {fileID: 1816427083731817154}
-  playerInfo: {fileID: 9178862210767006648}
-  attack: {fileID: 4320569773949241135}
-  healthController: {fileID: 1940173394000298594}
-  photonView: {fileID: -8554887327945055041}
-  cameraFollow: {fileID: 4987286397470350725}
 --- !u!114 &-7637648645194494759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,6 +541,45 @@ MonoBehaviour:
   carResetTime: 7
   maxLateralDeviation: 10
   deviationUpdateInterval: 2
+--- !u!114 &-4256842069966461579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e58d82627ca35e4c82c48b669742854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 4960673026342986844, guid: f7960b60e5f98ca4f9813d58661e2c17,
+    type: 3}
+  photonView: {fileID: -8554887327945055041}
+  muzzlePosition: {fileID: 5663055877064385965}
+  vehicle: {fileID: 1816427083731817154}
+  fireRate: 10
+  detectionRange: 50
+  attackChance: 1
+--- !u!114 &-8441199704336409492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f35055dd7b19c4ca13f8296927fcc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkObject: {fileID: 3365895076832356282}
+  vehicle: {fileID: 1816427083731817154}
+  playerInfo: {fileID: 9178862210767006648}
+  attack: {fileID: -4256842069966461579}
+  healthController: {fileID: 1940173394000298594}
+  photonView: {fileID: -8554887327945055041}
+  cameraFollow: {fileID: 0}
 --- !u!1001 &841632710170942201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -596,6 +598,11 @@ PrefabInstance:
       propertyPath: vehicle
       value: 
       objectReference: {fileID: 1816427083731817154}
+    - target: {fileID: 2430686341380726254, guid: 71f98781a624545ccae847811d71db95,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2436667369377959288, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -650,6 +657,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Radius
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4691651709771899290, guid: 71f98781a624545ccae847811d71db95,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6445182131119432746, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
