@@ -56,6 +56,8 @@ MonoBehaviour:
       Value: {fileID: 0}
     - Key: Multiplayer
       Value: {fileID: 0}
+    - Key: PlayMenu
+      Value: {fileID: 0}
   mainCamera: {fileID: 0}
   moveTime: 1
   easing: 10
@@ -136,7 +138,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   instantiatedBots: []
-  botCount: 2
+  botCount: 3
 --- !u!114 &2545123944653421841
 MonoBehaviour:
   m_ObjectHideFlags: 0

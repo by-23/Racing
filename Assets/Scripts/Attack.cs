@@ -21,7 +21,7 @@ public class Attack : MonoBehaviour
 
     public void TryFire()
     {
-        if (Time.time >= nextTimeToShoot)
+        if (Time.time >= nextTimeToShoot && GameController.Instance.isGameStarted)
         {
             Fire();
             nextTimeToShoot = Time.time + fireRate; // Обновляем время следующего выстрела

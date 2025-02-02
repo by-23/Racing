@@ -16,7 +16,7 @@ namespace Ilumisoft.SkillDrive.UI
 
         [SerializeField] Selectable selectable = null;
 
-        [SerializeField] public Button playButton;
+        [SerializeField] public Button GoButton;
 
         [SerializeField] public Button CreateLobbyButton;
 
@@ -24,15 +24,27 @@ namespace Ilumisoft.SkillDrive.UI
 
         [SerializeField] private new CameraFollow camera;
 
-        public TextMeshProUGUI countdownText; // UI-текст для отображения отчета
+        [SerializeField] private TextMeshProUGUI countdownText; // UI-текст для отображения отчета
+
+        [SerializeField] private TextMeshProUGUI botCountText;
+
+        [SerializeField] private Slider botCountSlider;
+
 
         private void Start()
         {
-            playButton.onClick.AddListener(OnPlayButtonClicked);
+            GoButton.onClick.AddListener(OnGoButtonClicked);
             CreateLobbyButton.onClick.AddListener(OnCreateLobbyButtonClicked);
+            botCountSlider.onValueChanged.AddListener(OnBotCountSliderChanged);
         }
 
-        private void OnPlayButtonClicked()
+        private void OnBotCountSliderChanged(float arg0)
+        {
+            botCountText.text = arg0.ToString();
+            RoomManager.Instance.ChancheBotCount((int)arg0);
+        }
+
+        private void OnGoButtonClicked()
         {
             RoomManager.Instance.StartGame();
             StartCoroutine(CountdownRoutine());

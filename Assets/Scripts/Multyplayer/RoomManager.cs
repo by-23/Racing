@@ -48,6 +48,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
+    protected internal void ChancheBotCount(int botCount)
+    {
+        this.botCount = botCount;
+    }
+
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Master");

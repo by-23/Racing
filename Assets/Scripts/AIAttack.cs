@@ -12,7 +12,8 @@ public class BotAttack : Attack
 
     private void Update()
     {
-        DetectAndAttack();
+        if (GameController.Instance.isGameStarted)
+            DetectAndAttack();
     }
 
     private void DetectAndAttack()
