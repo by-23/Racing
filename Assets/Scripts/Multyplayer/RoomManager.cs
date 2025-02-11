@@ -3,6 +3,7 @@ using Photon.Realtime;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using Ilumisoft.SkillDrive.UI;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -23,17 +24,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] List<GameObject> ControlsUI;
     [SerializeField] private List<GameObject> instantiatedBots;
     [SerializeField, Range(0, 7)] private int botCount;
+    [SerializeField] private MainMenu mainMenu;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
     }
 
     private void Start()
@@ -107,14 +102,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         Vector3 currentSpawnPoint = Vector3.zero;
-        bool spawnPointSelected = false;
         GameObject instantiatedPlayer;
 
+        currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
 
-        if (!spawnPointSelected || !isOnline)
+        if (!isOnline)
         {
-            currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
-
             instantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
             var instantiatedPlayerComponents = instantiatedPlayer.GetComponent<PlayerComponents>();
             instantiatedPlayerComponents.vehicle.SetLocalPlayer();
@@ -146,6 +139,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             var actorNumber = instantiatedPlayerComponents.photonView.Owner.ActorNumber;
             UpdateUI(actorNumber, instantiatedPlayerComponents.playerInfo.PlayerName);
             GetGameInfo();
+            mainMenu.OnOnlineStartClicked();
         }
     }
 

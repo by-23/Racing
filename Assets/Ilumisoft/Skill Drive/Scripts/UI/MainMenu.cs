@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-using WebSocketSharp;
 
 namespace Ilumisoft.SkillDrive.UI
 {
@@ -33,7 +32,7 @@ namespace Ilumisoft.SkillDrive.UI
 
         private void Start()
         {
-            GoButton.onClick.AddListener(OnGoButtonClicked);
+            GoButton.onClick.AddListener(OnOfflineStartClicked);
             CreateLobbyButton.onClick.AddListener(OnCreateLobbyButtonClicked);
             botCountSlider.onValueChanged.AddListener(OnBotCountSliderChanged);
         }
@@ -44,9 +43,15 @@ namespace Ilumisoft.SkillDrive.UI
             RoomManager.Instance.ChancheBotCount((int)arg0);
         }
 
-        private void OnGoButtonClicked()
+        private void OnOfflineStartClicked()
         {
             RoomManager.Instance.StartGame();
+            StartCoroutine(CountdownRoutine());
+            countdownText.gameObject.SetActive(true);
+        }
+
+        protected internal void OnOnlineStartClicked()
+        {
             StartCoroutine(CountdownRoutine());
             countdownText.gameObject.SetActive(true);
         }

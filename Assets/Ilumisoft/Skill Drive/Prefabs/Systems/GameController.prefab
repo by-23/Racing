@@ -138,7 +138,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   instantiatedBots: []
-  botCount: 3
+  botCount: 0
+  mainMenu: {fileID: 0}
 --- !u!114 &2545123944653421841
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public class BotAttack : Attack
     [Header("Bot Settings")] [SerializeField]
     private float detectionRange = 20f; // Дальность обнаружения цели
 
-    [SerializeField, Range(1, 10)] private float attackChance = 0.5f; // Вероятность атаки (от 0 до 1)
+    [SerializeField, Range(1, 100)] private int attackChance; // Вероятность атаки (от 0 до 1)
 
     private void Update()
     {
@@ -24,7 +24,7 @@ public class BotAttack : Attack
         {
             if (hit.collider.CompareTag("PlayerMesh"))
             {
-                int randomValue = UnityEngine.Random.Range(1, 10);
+                int randomValue = int.Parse(UnityEngine.Random.Range(1, 100).ToString());
                 if (randomValue <= attackChance)
                 {
                     TryFire();
