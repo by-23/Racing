@@ -21,6 +21,7 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
     public Button continueButton;
     public Button quitToMenuButton;
     public GameObject pauseMenu;
+    public FloatingJoystick floatingJoystick;
 
     private bool isAccelerating = false;
     private float accelerationAmount = 0f;

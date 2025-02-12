@@ -45,6 +45,7 @@ namespace Ilumisoft.SkillDrive
         [SerializeField] protected internal Rigidbody rigidbody;
         public bool IsGrounded => groundDetection.IsGrounded;
         public bool CanMove = true;
+        private FloatingJoystick floatingJoystick;
         public float ForwardSpeed => Vector3.Dot(rigidbody.velocity, transform.forward);
 
         public float NormalizedForwardSpeed
@@ -63,6 +64,7 @@ namespace Ilumisoft.SkillDrive
             healthController = GetComponent<HealthController>();
             healthController.OnDeath += OnDeath;
             pathCreator = FindObjectOfType<PathCreator>();
+            floatingJoystick = FunctionalButtons.Instance.floatingJoystick;
         }
 
         protected virtual void FixedUpdate()
@@ -91,7 +93,7 @@ namespace Ilumisoft.SkillDrive
 #if UNITY_STANDALONE || UNITY_WEBGL
                 float turnInput = UnityEngine.Input.GetAxisRaw("Horizontal");
 #elif UNITY_ANDROID || UNITY_IOS
-                float turnInput = FloatingJoystick.Instance.Horizontal;
+                float turnInput = floatingJoystick.Horizontal;
 #endif
                 TurnWheels(turnInput * 30f);
                 RotateWheels();
@@ -223,13 +225,13 @@ namespace Ilumisoft.SkillDrive
         {
             if (IsGrounded && CanMove && GameController.Instance.isGameStarted)
             {
-                float newSteeringPower;
+                float newSteeringPower = 0;
 #if UNITY_STANDALONE || UNITY_WEBGL
                 // Используем стандартное управление для ПК
                 newSteeringPower = UnityEngine.Input.GetAxis("Horizontal") * steeringPower;
 #elif UNITY_ANDROID || UNITY_IOS
                 // Используем джойстик для мобильных устройств
-                steeringPower = FloatingJoystick.Instance.Horizontal * steeringPower;
+                newSteeringPower = floatingJoystick.Horizontal * steeringPower;
 #endif
                 float speedFactor = ForwardSpeed * 0.075f;
                 newSteeringPower = Mathf.Clamp(newSteeringPower * speedFactor, -steeringPower,

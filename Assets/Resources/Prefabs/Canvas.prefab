@@ -2777,7 +2777,6 @@ GameObject:
   - component: {fileID: 2664541749504249219}
   - component: {fileID: 3285424754942597501}
   - component: {fileID: 2916211295878806560}
-  - component: {fileID: 6936083003839003898}
   m_Layer: 5
   m_Name: Restart Button
   m_TagString: Untagged
@@ -2899,18 +2898,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6936083003839003898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8107526601972103161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4feef74acc907f74da58c618039d0b42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8261580609876326040
 GameObject:
   m_ObjectHideFlags: 0
@@ -3127,7 +3114,6 @@ GameObject:
   - component: {fileID: 1268332390826840575}
   - component: {fileID: 5143623655425048165}
   - component: {fileID: 2778986753710676094}
-  - component: {fileID: 6578450791420892158}
   m_Layer: 5
   m_Name: Continue Button
   m_TagString: Untagged
@@ -3249,18 +3235,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6578450791420892158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8685292136665426544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4feef74acc907f74da58c618039d0b42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8939772409955097220
 GameObject:
   m_ObjectHideFlags: 0
