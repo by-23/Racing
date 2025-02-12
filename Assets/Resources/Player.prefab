@@ -438,10 +438,10 @@ MonoBehaviour:
   turnSpeed: 25
   gravity: 20
   fallGravity: 50
-  maxSpeed: 50
+  maxSpeed: 100
   acceleration: 20
   steeringPower: 1.5
-  grip: 1
+  grip: 0.04
   healthController: {fileID: 0}
   rigidbody: {fileID: 2604161214765010509}
   CanMove: 1

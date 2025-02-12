@@ -222,22 +222,22 @@ namespace Ilumisoft.SkillDrive
             }
         }
 
-        protected void ApplySteering()
+        protected virtual void ApplySteering()
         {
             if (IsGrounded && CanMove && GameController.Instance.isGameStarted)
             {
-                float steeringPower;
+                float newSteeringPower;
 #if UNITY_STANDALONE || UNITY_WEBGL
                 // Используем стандартное управление для ПК
-                steeringPower = UnityEngine.Input.GetAxis("Horizontal") * this.steeringPower;
+                newSteeringPower = UnityEngine.Input.GetAxis("Horizontal") * steeringPower;
 #elif UNITY_ANDROID || UNITY_IOS
                 // Используем джойстик для мобильных устройств
-                steeringPower = joystick.Horizontal * FinalStats.SteeringPower;
+                steeringPower = joystick.Horizontal * steeringPower;
 #endif
                 float speedFactor = ForwardSpeed * 0.075f;
-                steeringPower = Mathf.Clamp(steeringPower * speedFactor, -steeringPower,
+                newSteeringPower = Mathf.Clamp(newSteeringPower * speedFactor, -steeringPower,
                     steeringPower);
-                float rotationTorque = steeringPower - rigidbody.angularVelocity.y;
+                float rotationTorque = newSteeringPower - rigidbody.angularVelocity.y;
                 rigidbody.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
             }
         }
