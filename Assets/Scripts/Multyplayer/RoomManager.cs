@@ -25,6 +25,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] private List<GameObject> instantiatedBots;
     [SerializeField, Range(0, 7)] private int botCount;
     [SerializeField] private MainMenu mainMenu;
+    [SerializeField] protected internal Director direktor;
+    [SerializeField] private int maxPlayersInLobby = 4;
+    private GameObject currentInstantiatedPlayer;
 
     private void Awake()
     {
@@ -62,7 +65,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void CreateRoom(string name)
     {
         RoomOptions options = new RoomOptions();
-        options.MaxPlayers = 4;
+        options.MaxPlayers = maxPlayersInLobby;
         PhotonNetwork.CreateRoom(name, options);
     }
 
@@ -76,14 +79,23 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("Player Entered Room: " + newPlayer.NickName);
     }
 
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        Debug.Log("Player Left Room: " + otherPlayer.NickName);
+
+        mainMenu.RemovePlayerUI(otherPlayer);
+    }
+
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
         Debug.Log("Connected to Room");
         GetGameInfo();
         isOnline = true;
-        StartGame();
+        direktor.MoveCamera("Lobby");
+        GetReadyToStartGame();
     }
+
 
     private void GetGameInfo()
     {
@@ -94,22 +106,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void StartGame()
+    protected internal void GetReadyToStartGame()
     {
-        foreach (var element in ControlsUI)
-        {
-            element.SetActive(true);
-        }
-
         Vector3 currentSpawnPoint = Vector3.zero;
-        GameObject instantiatedPlayer;
 
         currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
 
         if (!isOnline)
         {
-            instantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
-            var instantiatedPlayerComponents = instantiatedPlayer.GetComponent<PlayerComponents>();
+            currentInstantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
+            var instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
             instantiatedPlayerComponents.vehicle.SetLocalPlayer();
 
             for (int i = 0; i < botCount; i++)
@@ -122,7 +128,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            instantiatedPlayer = PhotonNetwork.Instantiate(playerPrefab.name, currentSpawnPoint, Quaternion.identity);
+            currentInstantiatedPlayer =
+                PhotonNetwork.Instantiate(playerPrefab.name, currentSpawnPoint, Quaternion.identity);
+
 
             Hashtable props = new Hashtable
             {
@@ -133,13 +141,29 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 },
             };
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+            PlayerComponents instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
+            string playerName = instantiatedPlayerComponents.playerInfo.PlayerName;
+            instantiatedPlayerComponents.photonView.RPC("ChangePlayerName", RpcTarget.AllBuffered, playerName);
+            instantiatedPlayerComponents.vehicle.ChangePlayerName(playerName);
+            instantiatedPlayerComponents.photonView.Owner.NickName = playerName;
+            mainMenu.AddPlayerUI(instantiatedPlayerComponents.photonView.Owner);
+        }
+    }
 
-            var instantiatedPlayerComponents = instantiatedPlayer.GetComponent<PlayerComponents>();
+    protected internal void StartGame()
+    {
+        if (currentInstantiatedPlayer != null)
+        {
+            foreach (var element in ControlsUI)
+            {
+                element.SetActive(true);
+            }
+
+            var instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
             instantiatedPlayerComponents.vehicle.SetLocalPlayer();
             var actorNumber = instantiatedPlayerComponents.photonView.Owner.ActorNumber;
             UpdateUI(actorNumber, instantiatedPlayerComponents.playerInfo.PlayerName);
             GetGameInfo();
-            mainMenu.OnOnlineStartClicked();
         }
     }
 
@@ -181,10 +205,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         photonView.RPC("UpdatePlayerNameUI", RpcTarget.AllBuffered, actorNumber, name);
     }
 
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
-    {
-        Debug.Log("Player Left Room: " + otherPlayer.NickName);
-    }
 
     public override void OnDisconnected(DisconnectCause cause)
     {

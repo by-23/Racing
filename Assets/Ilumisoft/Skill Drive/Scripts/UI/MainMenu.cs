@@ -1,7 +1,10 @@
 ﻿using Ilumisoft.SkillDrive.LevelSelection;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -15,27 +18,130 @@ namespace Ilumisoft.SkillDrive.UI
 
         [SerializeField] Selectable selectable = null;
 
-        [SerializeField] public Button GoButton;
+        [SerializeField] protected Button goButton;
 
-        [SerializeField] public Button CreateLobbyButton;
+        [SerializeField] protected Button multiplayerButton;
 
-        [SerializeField] TextMeshProUGUI NewLobbyName;
+        [SerializeField] protected Button createLobbyButton;
 
-        [SerializeField] private new CameraFollow camera;
+        [SerializeField] protected Button backFromRoomButton;
 
-        [SerializeField] private TextMeshProUGUI countdownText; // UI-текст для отображения отчета
+        [SerializeField] protected Button readyButton;
+
+        [SerializeField] TextMeshProUGUI newLobbyName;
+
+        [SerializeField] private TextMeshProUGUI countdownText;
 
         [SerializeField] private TextMeshProUGUI botCountText;
 
         [SerializeField] private Slider botCountSlider;
 
+        [SerializeField] protected UiPlayerElement[] uiPlayerElements;
+
+        [SerializeField] private PhotonView photonView;
+
+        internal Dictionary<int, UiPlayerElement> playerUIMap = new Dictionary<int, UiPlayerElement>();
+
 
         private void Start()
         {
-            GoButton.onClick.AddListener(OnOfflineStartClicked);
-            CreateLobbyButton.onClick.AddListener(OnCreateLobbyButtonClicked);
+            goButton.onClick.AddListener(OnOfflineStartClicked);
+            createLobbyButton.onClick.AddListener(OnCreateLobbyButtonClicked);
             botCountSlider.onValueChanged.AddListener(OnBotCountSliderChanged);
+            multiplayerButton.onClick.AddListener(OnMultiplayerButtonClicked);
+            backFromRoomButton.onClick.AddListener(OnQuitFromRoom);
+            readyButton.onClick.AddListener(OnReadyButtonClicked);
         }
+
+        protected internal void OnMultiplayerButtonClicked()
+        {
+            RoomManager.Instance.direktor.MoveCamera("Multiplayer");
+        }
+
+        protected internal void OnQuitFromRoom()
+        {
+            RoomManager.Instance.direktor.MoveCamera("Multiplayer");
+            PhotonNetwork.LeaveRoom();
+        }
+
+        public void AddPlayerUI(Player player)
+        {
+            int actorNumber = player.ActorNumber;
+            string nickName = player.NickName;
+
+            photonView.RPC("RPC_AddPlayerUI", RpcTarget.AllBuffered, actorNumber, nickName);
+        }
+
+        [PunRPC]
+        public void RPC_AddPlayerUI(int actorNumber, string nickName)
+        {
+            if (playerUIMap.ContainsKey(actorNumber))
+                return;
+
+            UiPlayerElement freeElement = null;
+            foreach (var element in uiPlayerElements)
+            {
+                if (element.isEmpty)
+                {
+                    freeElement = element;
+                    break;
+                }
+            }
+
+            if (freeElement != null)
+            {
+                freeElement.gameObject.SetActive(true);
+                freeElement.playerName.text = nickName;
+                playerUIMap.Add(actorNumber, freeElement);
+                freeElement.isEmpty = false;
+            }
+            else
+            {
+                Debug.LogWarning("Нет свободного UI-элемента для нового игрока");
+            }
+        }
+
+        public void RemovePlayerUI(Player player)
+        {
+            int actorNumber = player.ActorNumber;
+            if (playerUIMap.TryGetValue(actorNumber, out var element))
+            {
+                element.gameObject.SetActive(false);
+                playerUIMap.Remove(actorNumber);
+            }
+        }
+
+        [PunRPC]
+        public void RPC_SetPlayerReady(int actorNumber, bool isReady)
+        {
+            if (playerUIMap.TryGetValue(actorNumber, out UiPlayerElement playerElement))
+            {
+                bool newReadyState = !playerUIMap[actorNumber].isReady;
+                playerElement.readyText.color = newReadyState ? Color.green : Color.gray;
+                playerElement.isReady = isReady;
+                CheckAllPlayersReady();
+            }
+        }
+
+        public void OnReadyButtonClicked()
+        {
+            int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+            bool newReadyState = !playerUIMap[actorNumber].isReady;
+            photonView.RPC("RPC_SetPlayerReady", RpcTarget.AllBuffered, actorNumber, newReadyState);
+        }
+
+        private void CheckAllPlayersReady()
+        {
+            foreach (var playerElement in playerUIMap.Values)
+            {
+                if (!playerElement.isReady)
+                    return;
+            }
+
+            Debug.Log("All players are ready!");
+            OnAllPlayersReady();
+        }
+
 
         private void OnBotCountSliderChanged(float arg0)
         {
@@ -45,16 +151,18 @@ namespace Ilumisoft.SkillDrive.UI
 
         private void OnOfflineStartClicked()
         {
+            RoomManager.Instance.GetReadyToStartGame();
+            StartCoroutine(CountdownRoutine());
+            countdownText.gameObject.SetActive(true);
+        }
+
+        protected internal void OnAllPlayersReady()
+        {
             RoomManager.Instance.StartGame();
             StartCoroutine(CountdownRoutine());
             countdownText.gameObject.SetActive(true);
         }
 
-        protected internal void OnOnlineStartClicked()
-        {
-            StartCoroutine(CountdownRoutine());
-            countdownText.gameObject.SetActive(true);
-        }
 
         IEnumerator CountdownRoutine()
         {
@@ -73,10 +181,11 @@ namespace Ilumisoft.SkillDrive.UI
 
         private void OnCreateLobbyButtonClicked()
         {
-            if (NewLobbyName.text.Length > 4)
+            if (newLobbyName.text.Length > 4)
             {
-                RoomManager.Instance.CreateRoom(NewLobbyName.text);
+                RoomManager.Instance.CreateRoom(newLobbyName.text);
                 RoomManager.Instance.isOnline = true;
+                RoomManager.Instance.direktor.MoveCamera("Lobby");
             }
             else
             {

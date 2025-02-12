@@ -47,6 +47,10 @@ MonoBehaviour:
   - UpdateLapCount
   - UpdatePlayerNameUI
   - RPC_HandleProjectile
+  - ChangePlayerName
+  - SetPlayerReady
+  - RPC_AddPlayerUI
+  - RPC_SetPlayerReady
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

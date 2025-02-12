@@ -31,6 +31,8 @@ namespace Ilumisoft.SkillDrive
         private PathCreator pathCreator;
         private bool isLocalPlayer;
         private float currentTurnAngle = 0f;
+        private bool isReady;
+        public bool IsReady => isReady;
         public HealthController healthController;
         public VehicleStats FinalStats => stats;
         public Rigidbody Rigidbody { get; private set; }
@@ -45,6 +47,7 @@ namespace Ilumisoft.SkillDrive
         {
             get => (Mathf.Abs(ForwardSpeed) > 0.1f) ? ForwardSpeed / FinalStats.MaxSpeed : 0.0f;
         }
+
 
         protected virtual void Awake()
         {
@@ -95,6 +98,13 @@ namespace Ilumisoft.SkillDrive
         {
             if (other.TryGetComponent(out Projectile projectile) && projectile.Owner != this)
                 projectile.SetTarget(this);
+        }
+        
+
+        [PunRPC]
+        internal void ChangePlayerName(string newName)
+        {
+            gameObject.name = newName;
         }
 
         private void OnDeath()
@@ -154,7 +164,6 @@ namespace Ilumisoft.SkillDrive
             FunctionalButtons.Instance.attack = attack;
             FunctionalButtons.Instance.ListenToHealthController(healthController);
             isLocalPlayer = true;
-            gameObject.name = "Local Player";
             playerCam.gameObject.SetActive(true);
         }
 

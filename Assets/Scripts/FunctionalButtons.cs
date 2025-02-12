@@ -52,6 +52,7 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
         pauseMenu.SetActive(false);
         menuButton.gameObject.SetActive(true);
     }
+
     public void RestartLevel()
     {
         pauseMenu.SetActive(false);
@@ -62,7 +63,9 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
     {
         if (PhotonNetwork.InLobby)
         {
+            PhotonNetwork.LeaveRoom();
             PhotonNetwork.LeaveLobby();
+            PhotonNetwork.Disconnect();
         }
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
