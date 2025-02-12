@@ -42,11 +42,11 @@ namespace Ilumisoft.SkillDrive
         private bool isReady;
         public bool IsReady => isReady;
         public HealthController healthController;
-        public Rigidbody Rigidbody { get; private set; }
+        [SerializeField] protected internal Rigidbody rigidbody;
         public bool IsGrounded => groundDetection.IsGrounded;
         public bool CanMove = true;
         private FloatingJoystick joystick;
-        public float ForwardSpeed => Vector3.Dot(Rigidbody.velocity, transform.forward);
+        public float ForwardSpeed => Vector3.Dot(rigidbody.velocity, transform.forward);
 
         public float NormalizedForwardSpeed
 
@@ -58,12 +58,13 @@ namespace Ilumisoft.SkillDrive
 
         protected virtual void Awake()
         {
-            Rigidbody = GetComponent<Rigidbody>();
+            rigidbody = GetComponent<Rigidbody>();
             groundDetection.Initialize(this);
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
             healthController = GetComponent<HealthController>();
             healthController.OnDeath += OnDeath;
             joystick = FindObjectOfType<FloatingJoystick>();
+            joystick.gameObject.SetActive(false);
             pathCreator = FindObjectOfType<PathCreator>();
         }
 
@@ -130,8 +131,8 @@ namespace Ilumisoft.SkillDrive
 
         public void ApplyBraking(float brakePower)
         {
-            Vector3 brakeForce = -Rigidbody.velocity.normalized * brakePower;
-            Rigidbody.AddForce(brakeForce, ForceMode.Acceleration);
+            Vector3 brakeForce = -rigidbody.velocity.normalized * brakePower;
+            rigidbody.AddForce(brakeForce, ForceMode.Acceleration);
         }
 
         public void TurnWheels(float turnAngle)
@@ -204,7 +205,7 @@ namespace Ilumisoft.SkillDrive
         {
             float factor = groundDetection.IsGrounded ? gravity : fallGravity;
 
-            Rigidbody.AddForce(-factor * Vector3.up, ForceMode.Acceleration);
+            rigidbody.AddForce(-factor * Vector3.up, ForceMode.Acceleration);
         }
 
         protected virtual void ApplyLateralFriction()
@@ -212,12 +213,12 @@ namespace Ilumisoft.SkillDrive
             if (IsGrounded)
             {
                 // Calculate how much the vehicle is moving left or right
-                float lateralSpeed = Vector3.Dot(Rigidbody.velocity, transform.right);
+                float lateralSpeed = Vector3.Dot(rigidbody.velocity, transform.right);
 
                 //Calculate the desired amount of friction to apply to the side of the vehicle.
                 Vector3 lateralFriction = -transform.right * ((lateralSpeed / Time.fixedDeltaTime) * grip);
 
-                Rigidbody.AddForce(lateralFriction, ForceMode.Acceleration);
+                rigidbody.AddForce(lateralFriction, ForceMode.Acceleration);
             }
         }
 
@@ -236,8 +237,8 @@ namespace Ilumisoft.SkillDrive
                 float speedFactor = ForwardSpeed * 0.075f;
                 steeringPower = Mathf.Clamp(steeringPower * speedFactor, -steeringPower,
                     steeringPower);
-                float rotationTorque = steeringPower - Rigidbody.angularVelocity.y;
-                Rigidbody.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
+                float rotationTorque = steeringPower - rigidbody.angularVelocity.y;
+                rigidbody.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
             }
         }
 
@@ -251,16 +252,16 @@ namespace Ilumisoft.SkillDrive
                 forceMagnitude = accelerationInput * acceleration;
 
                 // Применяем силу для ускорения
-                Rigidbody.AddForce(transform.forward * forceMagnitude, ForceMode.Acceleration);
+                rigidbody.AddForce(transform.forward * forceMagnitude, ForceMode.Acceleration);
 
                 // Опционально: ограничение максимальной скорости и плавное торможение
-                var currentSpeed = Rigidbody.velocity.magnitude;
+                var currentSpeed = rigidbody.velocity.magnitude;
                 var maxSpeed = this.maxSpeed;
                 if (currentSpeed > maxSpeed)
                 {
                     // Применяем обратную силу для уменьшения скорости до максимально допустимой
                     var excessSpeed = currentSpeed - maxSpeed;
-                    Rigidbody.AddForce(-transform.forward * (forceMagnitude * (excessSpeed / maxSpeed)),
+                    rigidbody.AddForce(-transform.forward * (forceMagnitude * (excessSpeed / maxSpeed)),
                         ForceMode.Acceleration);
                 }
             }

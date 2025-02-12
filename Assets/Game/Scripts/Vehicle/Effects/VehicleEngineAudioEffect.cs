@@ -7,7 +7,7 @@ namespace Ilumisoft.SkillDrive.Effects
     /// Effect creating a dynamic engine sfx effect by adjusting the pitch of the engine audio source depending on the velocity of the vehicle
     /// </summary>
     [RequireComponent(typeof(AudioSource))]
-    public class VehicleEngineAudioEffect : Vehicle
+    public class VehicleEngineAudioEffect : MonoBehaviour
     {
         [SerializeField] float minPitch = 0.25f;
 
@@ -15,11 +15,14 @@ namespace Ilumisoft.SkillDrive.Effects
 
         [SerializeField] float multiplier = 1.2f;
 
+        [SerializeField] private Vehicle vehicle;
+
         AudioSource audioSource;
 
         private void Awake()
         {
             audioSource = GetComponent<AudioSource>();
+            if (vehicle == null) vehicle = GetComponentInParent<Vehicle>();
         }
 
         private void OnFinish()
@@ -47,7 +50,7 @@ namespace Ilumisoft.SkillDrive.Effects
         {
             if (audioSource != null)
             {
-                audioSource.pitch = Mathf.Lerp(minPitch, maxPitch, NormalizedForwardSpeed * multiplier);
+                audioSource.pitch = Mathf.Lerp(minPitch, maxPitch, vehicle.NormalizedForwardSpeed * multiplier);
             }
         }
     }

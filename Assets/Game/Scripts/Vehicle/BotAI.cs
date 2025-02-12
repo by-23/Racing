@@ -156,10 +156,10 @@ namespace Ilumisoft.SkillDrive
 
         private void FixedUpdate()
         {
-            if (vehicle.Rigidbody.velocity.magnitude < 0.5f && currentSpeedMultiplier <= 0)
+            if (vehicle.rigidbody.velocity.magnitude < 0.5f && currentSpeedMultiplier <= 0)
             {
-                vehicle.Rigidbody.velocity = Vector3.zero;
-                vehicle.Rigidbody.angularVelocity = Vector3.zero;
+                vehicle.rigidbody.velocity = Vector3.zero;
+                vehicle.rigidbody.angularVelocity = Vector3.zero;
             }
         }
 
@@ -203,7 +203,7 @@ namespace Ilumisoft.SkillDrive
             float targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
             float steeringPowerValue = targetAngle * steeringSensitivity * vehicle.steeringPower;
 
-            vehicle.Rigidbody.AddRelativeTorque(0f, steeringPowerValue, 0f, ForceMode.Acceleration);
+            vehicle.rigidbody.AddRelativeTorque(0f, steeringPowerValue, 0f, ForceMode.Acceleration);
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace Ilumisoft.SkillDrive
                 if (distanceToTurn <= turnBrakingDistance)
                 {
                     float minSpeedForTurn = GetMinSpeedForTurn(upcomingTurnAngle);
-                    if (vehicle.Rigidbody.velocity.magnitude > minSpeedForTurn)
+                    if (vehicle.rigidbody.velocity.magnitude > minSpeedForTurn)
                     {
                         vehicle.ApplyBraking(brakingPower);
                     }
@@ -359,7 +359,7 @@ namespace Ilumisoft.SkillDrive
         {
             float angleToAvoidance = Vector3.SignedAngle(transform.forward, avoidanceDirection, Vector3.up);
             float steeringPowerValue = angleToAvoidance * avoidanceStrength * vehicle.steeringPower;
-            vehicle.Rigidbody.AddRelativeTorque(0f, steeringPowerValue, 0f, ForceMode.Acceleration);
+            vehicle.rigidbody.AddRelativeTorque(0f, steeringPowerValue, 0f, ForceMode.Acceleration);
         }
 
         private void OnDrawGizmos()
