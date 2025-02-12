@@ -70,16 +70,20 @@ public class RoomList : MonoBehaviourPunCallbacks
 
     public void UpdaterUI()
     {
-        foreach (Transform roomItem in roomListParent)
-        {
-            Destroy(roomItem);
-        }
+        if (roomListParent.childCount > 0)
+            foreach (Transform roomItem in roomListParent)
+            {
+                Destroy(roomItem);
+            }
 
         foreach (var room in cachedRoomList)
         {
-            GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
-            roomItem.GetComponent<RoomItemButton>().name.text = room.Name;
+            if (room.PlayerCount > 0)
+            {
+                GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
+                roomItem.GetComponent<RoomItemButton>().name.text = room.Name;
             roomItem.GetComponent<RoomItemButton>().playerCount.text = room.PlayerCount + "/4";
+            }
         }
     }
 }

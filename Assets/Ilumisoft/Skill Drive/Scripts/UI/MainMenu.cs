@@ -56,11 +56,13 @@ namespace Ilumisoft.SkillDrive.UI
         protected internal void OnMultiplayerButtonClicked()
         {
             RoomManager.Instance.direktor.MoveCamera("Multiplayer");
+            RoomManager.Instance.ChancheBotCount(0);
         }
 
         protected internal void OnQuitFromRoom()
         {
             RoomManager.Instance.direktor.MoveCamera("Multiplayer");
+            RoomList.Instance.UpdaterUI();
             PhotonNetwork.LeaveRoom();
         }
 

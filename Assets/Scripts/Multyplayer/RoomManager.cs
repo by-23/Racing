@@ -64,6 +64,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void CreateRoom(string name)
     {
+        playersList.Clear();
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = maxPlayersInLobby;
         PhotonNetwork.CreateRoom(name, options);
@@ -208,6 +209,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+        RoomList.Instance.UpdaterUI();
         Debug.Log("Disconnected: " + cause.ToString());
     }
 
