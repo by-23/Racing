@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Ilumisoft/Skill Drive/Scenes/Level 1.unity
+    path: Assets/Game/Scenes/Level 1.unity
     guid: b4da4660c40c9564fb874f7cd07ff210
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000,
