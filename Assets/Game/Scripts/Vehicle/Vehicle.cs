@@ -45,7 +45,6 @@ namespace Ilumisoft.SkillDrive
         [SerializeField] protected internal Rigidbody rigidbody;
         public bool IsGrounded => groundDetection.IsGrounded;
         public bool CanMove = true;
-        private FloatingJoystick joystick;
         public float ForwardSpeed => Vector3.Dot(rigidbody.velocity, transform.forward);
 
         public float NormalizedForwardSpeed
@@ -63,8 +62,6 @@ namespace Ilumisoft.SkillDrive
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
             healthController = GetComponent<HealthController>();
             healthController.OnDeath += OnDeath;
-            joystick = FindObjectOfType<FloatingJoystick>();
-            joystick.gameObject.SetActive(false);
             pathCreator = FindObjectOfType<PathCreator>();
         }
 
@@ -94,7 +91,7 @@ namespace Ilumisoft.SkillDrive
 #if UNITY_STANDALONE || UNITY_WEBGL
                 float turnInput = UnityEngine.Input.GetAxisRaw("Horizontal");
 #elif UNITY_ANDROID || UNITY_IOS
-                float turnInput = joystick.Horizontal;
+                float turnInput = FloatingJoystick.Instance.Horizontal;
 #endif
                 TurnWheels(turnInput * 30f);
                 RotateWheels();
@@ -232,7 +229,7 @@ namespace Ilumisoft.SkillDrive
                 newSteeringPower = UnityEngine.Input.GetAxis("Horizontal") * steeringPower;
 #elif UNITY_ANDROID || UNITY_IOS
                 // Используем джойстик для мобильных устройств
-                steeringPower = joystick.Horizontal * steeringPower;
+                steeringPower = FloatingJoystick.Instance.Horizontal * steeringPower;
 #endif
                 float speedFactor = ForwardSpeed * 0.075f;
                 newSteeringPower = Mathf.Clamp(newSteeringPower * speedFactor, -steeringPower,

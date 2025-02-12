@@ -5,6 +5,13 @@ using UnityEngine.EventSystems;
 
 public class FloatingJoystick : Joystick
 {
+    public static FloatingJoystick Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     protected override void Start()
     {
         base.Start();
