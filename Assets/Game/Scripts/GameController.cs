@@ -92,7 +92,7 @@ public class GameController : MonoBehaviourPunCallbacks
         playerLaps[playerId]++;
         int currentLap = playerLaps[playerId];
 
-        RoomManager.Instance.instantiatedPlayerInfoUIs[playerId].currentLap.text = currentLap.ToString();
+        UI.Instance.instantiatedPlayerInfoUIs[playerId].currentLap.text = currentLap.ToString();
 
         if (currentLap >= totalLaps)
         {
@@ -117,11 +117,11 @@ public class GameController : MonoBehaviourPunCallbacks
     private void OnAllLapsCompleted(int playerId)
     {
         Debug.Log("Player completed a Level!");
-        var cameraFollow = RoomManager.Instance.playersList[playerId].cameraFollow;
-        RoomManager.Instance.playersList.Remove(playerId);
-        if (RoomManager.Instance.playersList.Count > 0)
+        var cameraFollow = PlayersSpawner.Instance.playersList[playerId].cameraFollow;
+        PlayersSpawner.Instance.playersList.Remove(playerId);
+        if (PlayersSpawner.Instance.playersList.Count > 0)
         {
-            cameraFollow.SetTarget(RoomManager.Instance.playersList.Last().Value.vehicle.transform);
+            cameraFollow.SetTarget(PlayersSpawner.Instance.playersList.Last().Value.vehicle.transform);
         }
         else
         {

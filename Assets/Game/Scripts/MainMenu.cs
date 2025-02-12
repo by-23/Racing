@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : Singleton<MainMenu>
 {
     [SerializeField] protected Button goButton;
 
@@ -48,7 +48,7 @@ public class MainMenu : MonoBehaviour
     protected internal void OnMultiplayerButtonClicked()
     {
         RoomManager.Instance.direktor.MoveCamera("Multiplayer");
-        RoomManager.Instance.ChancheBotCount(0);
+        PlayersSpawner.Instance.ChancheBotCount(0);
     }
 
     protected internal void OnQuitFromRoom()
@@ -140,12 +140,12 @@ public class MainMenu : MonoBehaviour
     private void OnBotCountSliderChanged(float arg0)
     {
         botCountText.text = arg0.ToString();
-        RoomManager.Instance.ChancheBotCount((int)arg0);
+        PlayersSpawner.Instance.ChancheBotCount((int)arg0);
     }
 
     private void OnOfflineStartClicked()
     {
-        RoomManager.Instance.GetReadyToStartGame();
+        PlayersSpawner.Instance.SpawnPlayer();
         StartCoroutine(CountdownRoutine());
         countdownText.gameObject.SetActive(true);
     }
