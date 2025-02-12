@@ -31,7 +31,7 @@ public class Attack : MonoBehaviour
     private void Fire()
     {
         GameObject newProjectile = null;
-        if (RoomManager.Instance.isOnline)
+        if (RoomManager.Instance.IsOnline)
         {
             // Создаём снаряд через Photon
             newProjectile = PhotonNetwork.Instantiate("Projectile", transform.position, Quaternion.identity);

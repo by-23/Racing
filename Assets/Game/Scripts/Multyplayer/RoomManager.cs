@@ -10,11 +10,14 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager Instance;
-    public bool isOnline;
-    public Dictionary<int, PlayerInfoUI> instantiatedPlayerInfoUIs = new Dictionary<int, PlayerInfoUI>();
+    private bool isOnline;
 
-    [SerializedDictionary("ID", "Player")]
-    public SerializedDictionary<int, PlayerComponents> playersList = new SerializedDictionary<int, PlayerComponents>();
+    [SerializeField]
+    internal Dictionary<int, PlayerInfoUI> instantiatedPlayerInfoUIs = new Dictionary<int, PlayerInfoUI>();
+
+    [SerializedDictionary("ID", "Player")] [SerializeField]
+    internal SerializedDictionary<int, PlayerComponents>
+        playersList = new SerializedDictionary<int, PlayerComponents>();
 
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject botPrefab;
@@ -28,6 +31,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] protected internal Director direktor;
     [SerializeField] private int maxPlayersInLobby = 4;
     private GameObject currentInstantiatedPlayer;
+
+    public bool IsOnline
+    {
+        get => isOnline;
+        set => isOnline = value;
+    }
 
     private void Awake()
     {

@@ -79,7 +79,7 @@ public class Projectile : MonoBehaviour
     {
         if (other.TryGetComponent(out Vehicle vehicle) && Owner != null && vehicle != Owner)
         {
-            if (!RoomManager.Instance.isOnline)
+            if (!RoomManager.Instance.IsOnline)
             {
                 Explode();
                 collider.isTrigger = true;
@@ -98,7 +98,7 @@ public class Projectile : MonoBehaviour
     private void Explode()
     {
         GameObject newExplosionFX;
-        if (RoomManager.Instance.isOnline)
+        if (RoomManager.Instance.IsOnline)
             newExplosionFX = PhotonNetwork.Instantiate("CFXR Explosion Smoke 2 Solo (HDR)", transform.position,
                 quaternion.identity);
         else
@@ -129,7 +129,7 @@ public class Projectile : MonoBehaviour
     {
         yield return new WaitForSeconds(lifetime);
 
-        if (RoomManager.Instance.isOnline)
+        if (RoomManager.Instance.IsOnline)
         {
             PhotonNetwork.Destroy(gameObject);
         }

@@ -253,10 +253,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a1323dace6be864fb5c88bccac2c88b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicle: {fileID: 0}
   minPitch: 0.25
   maxPitch: 1.1
   multiplier: 1.2
+  vehicle: {fileID: 0}
 --- !u!1 &2542488834302406140
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1388826236
+  GlobalObjectIdHash: 1432072879
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -451,14 +451,6 @@ MonoBehaviour:
   playerCam: {fileID: 5285592622119876980}
   attack: {fileID: 0}
   triggerCallback: {fileID: 9131081407688437010}
-  stats:
-    MaxSpeed: 100
-    Acceleration: 20
-    SteeringPower: 1.5
-    Grip: 0.04
-  physics:
-    gravity: 20
-    fallGravity: 20
   groundDetection:
     GroundLayers:
       serializedVersion: 2
@@ -475,7 +467,14 @@ MonoBehaviour:
   wheelsRotationSpeed: 100
   turnPercentage: 0.5
   turnSpeed: 25
+  gravity: 20
+  fallGravity: 50
+  maxSpeed: 50
+  acceleration: 20
+  steeringPower: 1.5
+  grip: 1
   healthController: {fileID: 0}
+  rigidbody: {fileID: 0}
   CanMove: 1
 --- !u!114 &9178862210767006648
 MonoBehaviour:
@@ -575,7 +574,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkObject: {fileID: 3365895076832356282}
   vehicle: {fileID: 1816427083731817154}
-  playerInfo: {fileID: 9178862210767006648}
+  playerInfo:
+    PlayerName: 
   attack: {fileID: -4256842069966461579}
   healthController: {fileID: 1940173394000298594}
   photonView: {fileID: -8554887327945055041}
@@ -669,7 +669,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1816427083731817154}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8266297195647795048, guid: 71f98781a624545ccae847811d71db95, type: 3}
+    - {fileID: 1476007226022546242, guid: 71f98781a624545ccae847811d71db95, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71f98781a624545ccae847811d71db95, type: 3}

@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class RoomItemButton : MonoBehaviour
 {
-    public new TextMeshProUGUI name;
-    public TextMeshProUGUI playerCount;
+    private new TextMeshProUGUI name;
+    private TextMeshProUGUI playerCount;
     [SerializeField] private Button button;
 
     private void Start()
@@ -19,5 +19,11 @@ public class RoomItemButton : MonoBehaviour
     public void OnButtonPressed()
     {
         RoomManager.Instance.JoinRoomByName(name.text);
+    }
+
+    public void SetRoom(string roomName, int playerCount)
+    {
+        name.text = roomName;
+        this.playerCount.text = playerCount.ToString();
     }
 }

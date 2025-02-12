@@ -178,7 +178,7 @@ public class MainMenu : MonoBehaviour
         if (newLobbyName.text.Length > 4)
         {
             RoomManager.Instance.CreateRoom(newLobbyName.text);
-            RoomManager.Instance.isOnline = true;
+            RoomManager.Instance.IsOnline = true;
             RoomManager.Instance.direktor.MoveCamera("Lobby");
         }
         else

@@ -1196,6 +1196,7 @@ MonoBehaviour:
   continueButton: {fileID: 2778986753710676094}
   quitToMenuButton: {fileID: 2248145638076795425}
   pauseMenu: {fileID: 687144833324131383}
+  floatingJoystick: {fileID: 1663373921701615362}
 --- !u!1 &3522995052526228616
 GameObject:
   m_ObjectHideFlags: 0
@@ -3469,6 +3470,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
+--- !u!114 &1663373921701615362 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8170153791668043265, guid: 0d230cc8be529a542a08cb878ab14b18,
+    type: 3}
+  m_PrefabInstance: {fileID: 7383451833416771843}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a47f546fc70ec8428172694e78e4288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1663373921701615367 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8170153791668043268, guid: 0d230cc8be529a542a08cb878ab14b18,

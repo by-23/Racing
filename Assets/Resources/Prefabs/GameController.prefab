@@ -102,7 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fe468f59717034f8d93da30aa0a930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOnline: 0
   playersList:
     _serializedList: []
   playerPrefab: {fileID: 2603592718261198966, guid: 714d15f98e4b49b41a1d1c45b419e76e,

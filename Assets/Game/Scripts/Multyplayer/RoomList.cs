@@ -12,7 +12,7 @@ public class RoomList : MonoBehaviourPunCallbacks
     public static RoomList Instance;
 
     [Header("UI")] public Transform roomListParent;
-    public GameObject roomListItemPrefab;
+    [SerializeField] private GameObject roomListItemPrefab;
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
 
 
@@ -81,8 +81,7 @@ public class RoomList : MonoBehaviourPunCallbacks
             if (room.PlayerCount > 0)
             {
                 GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
-                roomItem.GetComponent<RoomItemButton>().name.text = room.Name;
-            roomItem.GetComponent<RoomItemButton>().playerCount.text = room.PlayerCount + "/4";
+                roomItem.GetComponent<RoomItemButton>().SetRoom(room.Name, room.PlayerCount);
             }
         }
     }
