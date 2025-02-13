@@ -66,6 +66,7 @@ namespace Ilumisoft.SkillDrive
         private float deviationTimer = 0f;
 
         private Coroutine resetCoroutine;
+        private float steeringPowerValue;
 
         private void Start()
         {
@@ -133,9 +134,21 @@ namespace Ilumisoft.SkillDrive
             }
         }
 
+        private void FixedUpdate()
+        {
+            vehicle.ApplySteering(steeringPowerValue);
+            
+            if (vehicle.rb.velocity.magnitude < 0.5f && currentSpeedMultiplier <= 0)
+            {
+                vehicle.rb.velocity = Vector3.zero;
+                vehicle.rb.angularVelocity = Vector3.zero;
+            }
+        }
+
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out Projectile projectile) && resetCoroutine == null)
+            if (other.TryGetComponent(out Explosive explosive) && resetCoroutine == null)
                 resetCoroutine = StartCoroutine(ResetCarPosition());
         }
 
@@ -145,8 +158,7 @@ namespace Ilumisoft.SkillDrive
             ;
 
             if (!Physics.Raycast(transform.position + Vector3.up * 1.0f, Vector3.down, out RaycastHit hit, 2f,
-                    groundLayer) ||
-                hit.collider.tag != "Ground")
+                    groundLayer) || hit.collider.tag != "Ground")
             {
                 vehicle.ResetCarPosition();
             }
@@ -154,14 +166,6 @@ namespace Ilumisoft.SkillDrive
             resetCoroutine = null;
         }
 
-        private void FixedUpdate()
-        {
-            if (vehicle.rigidbody.velocity.magnitude < 0.5f && currentSpeedMultiplier <= 0)
-            {
-                vehicle.rigidbody.velocity = Vector3.zero;
-                vehicle.rigidbody.angularVelocity = Vector3.zero;
-            }
-        }
 
         /// <summary>
         /// Обновляет значение бокового отклонения через заданный интервал времени.
@@ -201,9 +205,7 @@ namespace Ilumisoft.SkillDrive
             directionToTarget.y = 0;
 
             float targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
-            float steeringPowerValue = targetAngle * steeringSensitivity * vehicle.steeringPower;
-
-            vehicle.rigidbody.AddRelativeTorque(0f, steeringPowerValue, 0f, ForceMode.Acceleration);
+            steeringPowerValue = targetAngle * steeringSensitivity * vehicle.steeringPower;
         }
 
         /// <summary>
@@ -280,7 +282,7 @@ namespace Ilumisoft.SkillDrive
                 if (distanceToTurn <= turnBrakingDistance)
                 {
                     float minSpeedForTurn = GetMinSpeedForTurn(upcomingTurnAngle);
-                    if (vehicle.rigidbody.velocity.magnitude > minSpeedForTurn)
+                    if (vehicle.rb.velocity.magnitude > minSpeedForTurn)
                     {
                         vehicle.ApplyBraking(brakingPower);
                     }
@@ -359,7 +361,7 @@ namespace Ilumisoft.SkillDrive
         {
             float angleToAvoidance = Vector3.SignedAngle(transform.forward, avoidanceDirection, Vector3.up);
             float steeringPowerValue = angleToAvoidance * avoidanceStrength * vehicle.steeringPower;
-            vehicle.rigidbody.AddRelativeTorque(0f, steeringPowerValue, 0f, ForceMode.Acceleration);
+            vehicle.rb.AddRelativeTorque(0f, steeringPowerValue, 0f, ForceMode.Acceleration);
         }
 
         private void OnDrawGizmos()

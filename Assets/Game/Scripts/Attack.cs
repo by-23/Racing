@@ -3,10 +3,11 @@ using Ilumisoft.SkillDrive;
 using Photon.Pun;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Attack : MonoBehaviour
 {
-    [SerializeField] private Projectile projectile;
+    [SerializeField] private Item item;
     [SerializeField] private PhotonView photonView;
     [SerializeField] protected Transform muzzlePosition;
     [SerializeField] private Vehicle vehicle;
@@ -24,43 +25,40 @@ public class Attack : MonoBehaviour
         if (Time.time >= nextTimeToShoot && GameController.Instance.isGameStarted)
         {
             Fire();
-            nextTimeToShoot = Time.time + fireRate; // Обновляем время следующего выстрела
+            nextTimeToShoot = Time.time + fireRate / 100; // Обновляем время следующего выстрела
         }
     }
 
     private void Fire()
     {
-        GameObject newProjectile = null;
+        GameObject itemObj = null;
         if (RoomManager.Instance.IsOnline)
         {
             // Создаём снаряд через Photon
-            newProjectile = PhotonNetwork.Instantiate("Projectile", transform.position, Quaternion.identity);
+            itemObj = PhotonNetwork.Instantiate(item.gameObject.name, transform.position, Quaternion.identity);
             // Вызываем RPC для установки параметров снаряда на всех клиентах
-            photonView.RPC("RPC_HandleProjectile", RpcTarget.All, newProjectile.GetComponent<PhotonView>().ViewID);
+            photonView.RPC("RPC_HandleProjectile", RpcTarget.All, itemObj.GetComponent<PhotonView>().ViewID);
         }
         else
         {
             // Создаём снаряд стандартным способом
-            newProjectile = Instantiate(projectile.gameObject);
+            itemObj = Instantiate(item.gameObject);
             // Прямо устанавливаем параметры снаряда
-            SetupProjectile(newProjectile);
+            SetupItem(itemObj);
         }
     }
 
     /// <summary>
     /// Общий метод для установки параметров снаряда.
     /// </summary>
-    /// <param name="projectileObj">Объект снаряда.</param>
-    private void SetupProjectile(GameObject projectileObj)
+    /// <param name="itemObj">Объект снаряда.</param>
+    private void SetupItem(GameObject itemObj)
     {
-        Projectile proj = projectileObj.GetComponent<Projectile>();
-        if (proj != null)
-        {
-            proj.Owner = vehicle;
-        }
+        if (itemObj.TryGetComponent(out Item item))
+            item.Owner = vehicle;
 
-        projectileObj.transform.position = muzzlePosition.position;
-        projectileObj.transform.rotation = muzzlePosition.rotation;
+        itemObj.transform.position = muzzlePosition.position;
+        itemObj.transform.rotation = muzzlePosition.rotation;
     }
 
     [PunRPC]
@@ -70,7 +68,7 @@ public class Attack : MonoBehaviour
         if (projPhotonView != null)
         {
             GameObject newProjectile = projPhotonView.gameObject;
-            SetupProjectile(newProjectile);
+            SetupItem(newProjectile);
         }
     }
 }

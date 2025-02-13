@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 2545123944653421841}
   - component: {fileID: 2736572696894151449}
   - component: {fileID: 4994464550669025003}
+  - component: {fileID: 7581323166912425064}
+  - component: {fileID: 1007093837762111635}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -102,47 +104,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fe468f59717034f8d93da30aa0a930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playersList:
-    _serializedList: []
-  playerPrefab: {fileID: 2603592718261198966, guid: 714d15f98e4b49b41a1d1c45b419e76e,
-    type: 3}
-  botPrefab: {fileID: 2603592718261198966, guid: 72889041c8892af47bf2e4636bbe331a,
-    type: 3}
-  spawnPoints:
-  - spawnPoint: {x: 100, y: 0, z: 50}
-    isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 50}
-    isFull: 0
-  - spawnPoint: {x: 100, y: 0, z: 65}
-    isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 65}
-    isFull: 0
-  - spawnPoint: {x: 100, y: 0, z: 80}
-    isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 80}
-    isFull: 0
-  - spawnPoint: {x: 100, y: 0, z: 95}
-    isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 95}
-    isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 65}
-    isFull: 0
-  playerInfoUIPrefab: {fileID: -7615637054289674736, guid: 71a4d38262a151a4a8bd06178b1064fb,
-    type: 3}
-  playerInfoListUI: {fileID: 0}
-  ControlsUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  instantiatedBots: []
-  botCount: 0
   mainMenu: {fileID: 0}
   direktor: {fileID: 6246214652830603187}
   maxPlayersInLobby: 4
+  playerSpawner: {fileID: 7581323166912425064}
+  ui: {fileID: 1007093837762111635}
 --- !u!114 &2545123944653421841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +161,68 @@ MonoBehaviour:
   totalLaps: 1
   finishedMenu: {fileID: 0}
   isGameStarted: 0
+--- !u!114 &7581323166912425064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197925563622929721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4327e31471d5408987d62d35126dd761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playersList:
+    _serializedList: []
+  playerPrefab: {fileID: 2603592718261198966, guid: 714d15f98e4b49b41a1d1c45b419e76e,
+    type: 3}
+  botPrefab: {fileID: 2603592718261198966, guid: 72889041c8892af47bf2e4636bbe331a,
+    type: 3}
+  instantiatedBots: []
+  spawnPoints:
+  - spawnPoint: {x: 100, y: 0, z: 50}
+    isFull: 0
+  - spawnPoint: {x: 115, y: 0, z: 50}
+    isFull: 0
+  - spawnPoint: {x: 100, y: 0, z: 65}
+    isFull: 0
+  - spawnPoint: {x: 115, y: 0, z: 65}
+    isFull: 0
+  - spawnPoint: {x: 100, y: 0, z: 80}
+    isFull: 0
+  - spawnPoint: {x: 115, y: 0, z: 80}
+    isFull: 0
+  - spawnPoint: {x: 100, y: 0, z: 95}
+    isFull: 0
+  - spawnPoint: {x: 115, y: 0, z: 95}
+    isFull: 0
+  - spawnPoint: {x: 115, y: 0, z: 65}
+    isFull: 0
+  botCount: 0
+--- !u!114 &1007093837762111635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197925563622929721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c9a911ab6146ce9468a654c1022f74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInfoUIPrefab: {fileID: -7615637054289674736, guid: 71a4d38262a151a4a8bd06178b1064fb,
+    type: 3}
+  playerInfoListUI: {fileID: 0}
+  ControlsUI:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1001 &7489016735028556185
 PrefabInstance:
   m_ObjectHideFlags: 0

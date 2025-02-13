@@ -24,7 +24,7 @@ public class BotAttack : Attack
         {
             if (hit.collider.CompareTag("PlayerMesh"))
             {
-                int randomValue = int.Parse(UnityEngine.Random.Range(1, 100).ToString());
+                int randomValue = UnityEngine.Random.Range(1, 100);
                 if (randomValue <= attackChance)
                 {
                     TryFire();

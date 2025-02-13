@@ -10,6 +10,7 @@ namespace Ilumisoft.SkillDrive
 {
     public class Vehicle : NetworkBehaviour
     {
+        [SerializeField] protected internal Rigidbody rb;
         [SerializeField] internal Camera playerCam;
         [SerializeField] private Attack attack;
         [SerializeField] private TriggerCallBack triggerCallback;
@@ -27,9 +28,7 @@ namespace Ilumisoft.SkillDrive
         [SerializeField] private float turnSpeed = 20f;
         [SerializeField] private float gravity = 20;
         [SerializeField] private float fallGravity = 50;
-
         [SerializeField] private float maxSpeed = 50;
-
         [SerializeField] private float acceleration = 20;
 
         [Range(0, 3)] [SerializeField] internal float steeringPower = 1.5f;
@@ -42,11 +41,10 @@ namespace Ilumisoft.SkillDrive
         private bool isReady;
         public bool IsReady => isReady;
         public HealthController healthController;
-        [SerializeField] protected internal Rigidbody rigidbody;
         public bool IsGrounded => groundDetection.IsGrounded;
         public bool CanMove = true;
         private FloatingJoystick floatingJoystick;
-        public float ForwardSpeed => Vector3.Dot(rigidbody.velocity, transform.forward);
+        public float ForwardSpeed => Vector3.Dot(rb.velocity, transform.forward);
 
         public float NormalizedForwardSpeed
 
@@ -58,7 +56,7 @@ namespace Ilumisoft.SkillDrive
 
         protected virtual void Awake()
         {
-            rigidbody = GetComponent<Rigidbody>();
+            rb = GetComponent<Rigidbody>();
             groundDetection.Initialize(this);
             triggerCallback.OnTriggerEntered += OnTriggerEntered;
             healthController = GetComponent<HealthController>();
@@ -71,18 +69,11 @@ namespace Ilumisoft.SkillDrive
         {
             if (isLocalPlayer)
             {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.R))
-                {
-                    ResetCarPosition();
-                }
-
                 PerformGroundCheck();
 
                 ApplyGravity();
 
                 ApplyLateralFriction();
-
-                ApplySteering();
             }
         }
 
@@ -90,21 +81,15 @@ namespace Ilumisoft.SkillDrive
         {
             if (isLocalPlayer)
             {
-#if UNITY_STANDALONE || UNITY_WEBGL
-                float turnInput = UnityEngine.Input.GetAxisRaw("Horizontal");
-#elif UNITY_ANDROID || UNITY_IOS
-                float turnInput = floatingJoystick.Horizontal;
-#endif
-                TurnWheels(turnInput * 30f);
-                RotateWheels();
+                SpinWheels();
             }
         }
 
 
         private void OnTriggerEntered(Collider other)
         {
-            if (other.TryGetComponent(out Projectile projectile) && projectile.Owner != this)
-                projectile.SetTarget(this);
+            if (other.TryGetComponent(out Follower fireball))
+                fireball.SetTarget(this);
         }
 
 
@@ -119,7 +104,7 @@ namespace Ilumisoft.SkillDrive
             CanMove = false;
         }
 
-        private void RotateWheels()
+        private void SpinWheels()
         {
             float rotationSpeed = ForwardSpeed * wheelsRotationSpeed * Time.deltaTime;
             FLwheel.Rotate(Vector3.right, rotationSpeed);
@@ -130,8 +115,8 @@ namespace Ilumisoft.SkillDrive
 
         public void ApplyBraking(float brakePower)
         {
-            Vector3 brakeForce = -rigidbody.velocity.normalized * brakePower;
-            rigidbody.AddForce(brakeForce, ForceMode.Acceleration);
+            Vector3 brakeForce = -rb.velocity.normalized * brakePower;
+            rb.AddForce(brakeForce, ForceMode.Acceleration);
         }
 
         public void TurnWheels(float turnAngle)
@@ -204,7 +189,7 @@ namespace Ilumisoft.SkillDrive
         {
             float factor = groundDetection.IsGrounded ? gravity : fallGravity;
 
-            rigidbody.AddForce(-factor * Vector3.up, ForceMode.Acceleration);
+            rb.AddForce(-factor * Vector3.up, ForceMode.Acceleration);
         }
 
         protected virtual void ApplyLateralFriction()
@@ -212,32 +197,24 @@ namespace Ilumisoft.SkillDrive
             if (IsGrounded)
             {
                 // Calculate how much the vehicle is moving left or right
-                float lateralSpeed = Vector3.Dot(rigidbody.velocity, transform.right);
+                float lateralSpeed = Vector3.Dot(rb.velocity, transform.right);
 
                 //Calculate the desired amount of friction to apply to the side of the vehicle.
                 Vector3 lateralFriction = -transform.right * ((lateralSpeed / Time.fixedDeltaTime) * grip);
 
-                rigidbody.AddForce(lateralFriction, ForceMode.Acceleration);
+                rb.AddForce(lateralFriction, ForceMode.Acceleration);
             }
         }
 
-        protected virtual void ApplySteering()
+        protected internal virtual void ApplySteering(float newSteeringPower)
         {
             if (IsGrounded && CanMove && GameController.Instance.isGameStarted)
             {
-                float newSteeringPower = 0;
-#if UNITY_STANDALONE || UNITY_WEBGL
-                // Используем стандартное управление для ПК
-                newSteeringPower = UnityEngine.Input.GetAxis("Horizontal") * steeringPower;
-#elif UNITY_ANDROID || UNITY_IOS
-                // Используем джойстик для мобильных устройств
-                newSteeringPower = floatingJoystick.Horizontal * steeringPower;
-#endif
                 float speedFactor = ForwardSpeed * 0.075f;
                 newSteeringPower = Mathf.Clamp(newSteeringPower * speedFactor, -steeringPower,
                     steeringPower);
-                float rotationTorque = newSteeringPower - rigidbody.angularVelocity.y;
-                rigidbody.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
+                float rotationTorque = newSteeringPower - rb.angularVelocity.y;
+                rb.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
             }
         }
 
@@ -245,22 +222,21 @@ namespace Ilumisoft.SkillDrive
         {
             if (IsGrounded && CanMove && GameController.Instance.isGameStarted)
             {
-                float forceMagnitude = 0f; // Инициализируем переменную для хранения величины силы
+                float forceMagnitude = 0f;
 
-                // Используем джойстик для мобильных устройств
                 forceMagnitude = accelerationInput * acceleration;
 
                 // Применяем силу для ускорения
-                rigidbody.AddForce(transform.forward * forceMagnitude, ForceMode.Acceleration);
+                rb.AddForce(transform.forward * forceMagnitude, ForceMode.Acceleration);
 
                 // Опционально: ограничение максимальной скорости и плавное торможение
-                var currentSpeed = rigidbody.velocity.magnitude;
+                var currentSpeed = rb.velocity.magnitude;
                 var maxSpeed = this.maxSpeed;
                 if (currentSpeed > maxSpeed)
                 {
                     // Применяем обратную силу для уменьшения скорости до максимально допустимой
                     var excessSpeed = currentSpeed - maxSpeed;
-                    rigidbody.AddForce(-transform.forward * (forceMagnitude * (excessSpeed / maxSpeed)),
+                    rb.AddForce(-transform.forward * (forceMagnitude * (excessSpeed / maxSpeed)),
                         ForceMode.Acceleration);
                 }
             }

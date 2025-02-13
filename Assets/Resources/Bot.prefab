@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: -7637648645194494759}
   - component: {fileID: -4256842069966461579}
   - component: {fileID: -8441199704336409492}
-  m_Layer: 2
+  m_Layer: 6
   m_Name: Bot
   m_TagString: Bot
   m_Icon: {fileID: 0}
@@ -395,7 +395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1432072879
+  GlobalObjectIdHash: 1388826236
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -448,8 +448,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28604db03ff51e4a8604a4576bfb048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 2604161214765010509}
   playerCam: {fileID: 5285592622119876980}
-  attack: {fileID: 0}
+  attack: {fileID: -4256842069966461579}
   triggerCallback: {fileID: 9131081407688437010}
   groundDetection:
     GroundLayers:
@@ -474,7 +475,6 @@ MonoBehaviour:
   steeringPower: 1.5
   grip: 1
   healthController: {fileID: 0}
-  rigidbody: {fileID: 0}
   CanMove: 1
 --- !u!114 &9178862210767006648
 MonoBehaviour:
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicle: {fileID: 0}
+  vehicle: {fileID: 1816427083731817154}
   steeringSensitivity: 5
   accelerationFactor: 1
   pathCreator: {fileID: 0}
@@ -552,12 +552,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e58d82627ca35e4c82c48b669742854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 4960673026342986844, guid: f7960b60e5f98ca4f9813d58661e2c17,
-    type: 3}
+  item: {fileID: 823709582306054355, guid: 3c9a3d72afd6c714db69270b46eab244, type: 3}
   photonView: {fileID: -8554887327945055041}
   muzzlePosition: {fileID: 5663055877064385965}
   vehicle: {fileID: 1816427083731817154}
-  fireRate: 10
+  fireRate: 20
   detectionRange: 50
   attackChance: 1
 --- !u!114 &-8441199704336409492
@@ -657,6 +656,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Radius
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2759432308006757469, guid: 71f98781a624545ccae847811d71db95,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4691651709771899290, guid: 71f98781a624545ccae847811d71db95,
         type: 3}

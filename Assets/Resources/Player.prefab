@@ -308,7 +308,8 @@ GameObject:
   - component: {fileID: 7390991703966368553}
   - component: {fileID: 4159044441855039309}
   - component: {fileID: 1706685002037496352}
-  m_Layer: 2
+  - component: {fileID: 434645814503051999}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -417,6 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28604db03ff51e4a8604a4576bfb048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 2604161214765010509}
   playerCam: {fileID: 5285592622119876980}
   attack: {fileID: 4320569773949241135}
   triggerCallback: {fileID: 9131081407688437010}
@@ -443,7 +445,6 @@ MonoBehaviour:
   steeringPower: 1.5
   grip: 0.04
   healthController: {fileID: 0}
-  rigidbody: {fileID: 2604161214765010509}
   CanMove: 1
 --- !u!114 &9178862210767006648
 MonoBehaviour:
@@ -470,9 +471,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c0a7a5feeadb341b6a7e6d4d51385d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 4960673026342986844, guid: f7960b60e5f98ca4f9813d58661e2c17,
-    type: 3}
-  photonView: {fileID: 0}
+  item: {fileID: 823709582306054355, guid: 3c9a3d72afd6c714db69270b46eab244, type: 3}
+  photonView: {fileID: 3896878137984185943}
   muzzlePosition: {fileID: 5663055877064385965}
   vehicle: {fileID: 1816427083731817154}
   fireRate: 1
@@ -573,11 +573,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkObject: {fileID: 2835823211572818209}
   vehicle: {fileID: 1816427083731817154}
-  playerInfo: {fileID: 9178862210767006648}
+  playerInfo:
+    PlayerName: 
   attack: {fileID: 4320569773949241135}
   healthController: {fileID: 1940173394000298594}
   photonView: {fileID: 3896878137984185943}
   cameraFollow: {fileID: 4987286397470350725}
+--- !u!114 &434645814503051999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04474f1f7d594eed9fa7d721095dba2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &841632710170942201
 PrefabInstance:
   m_ObjectHideFlags: 0
