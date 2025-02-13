@@ -38,20 +38,4 @@ public class PlayerComponents : MonoBehaviour
         if (RoomManager.Instance.IsOnline)
             PlayersSpawner.Instance.playersList.Add(photonView.Owner.ActorNumber, this);
     }
-
-    [PunRPC]
-    public void ChangePlayerName(string newName)
-    {
-        if (playerInfo != null)
-        {
-            playerInfo.PlayerName = newName;
-            Debug.Log("PlayerComponents: Имя игрока изменено на " + newName);
-        }
-    }
-
-    [System.Serializable]
-    public class PlayerInfo
-    {
-        public string PlayerName;
-    }
 }

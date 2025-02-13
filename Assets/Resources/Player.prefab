@@ -458,7 +458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13aac84682dba154fb9dedf0e17f7e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerName: 
+  PlayerName: Bob
 --- !u!114 &4320569773949241135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,8 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkObject: {fileID: 2835823211572818209}
   vehicle: {fileID: 1816427083731817154}
-  playerInfo:
-    PlayerName: 
+  playerInfo: {fileID: 9178862210767006648}
   attack: {fileID: 4320569773949241135}
   healthController: {fileID: 1940173394000298594}
   photonView: {fileID: 3896878137984185943}
