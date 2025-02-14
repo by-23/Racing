@@ -13,7 +13,7 @@ public class Vehicle : NetworkBehaviour
 
     internal bool isLocalPlayer;
 
-    protected virtual void Awake()
+    private void Awake()
     {
         triggerCallback.OnTriggerEntered += OnTriggerEntered;
         healthController.OnDeath += OnDeath;
@@ -31,7 +31,7 @@ public class Vehicle : NetworkBehaviour
     private void OnDeath() => vehicleMovement.CanMove = false;
 
 
-    public void SetLocalPlayer()
+    internal void SetLocalPlayer()
     {
         FunctionalButtons.Instance.vehicle = this;
         FunctionalButtons.Instance.attack = attack;
@@ -41,14 +41,14 @@ public class Vehicle : NetworkBehaviour
         vehicleMovement.enabled = true;
     }
 
-    public void SetBot()
+    internal void SetBot()
     {
         isLocalPlayer = true;
         gameObject.name = Random.Range(0, 10).ToString();
         vehicleMovement.enabled = true;
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    private void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting) stream.SendNext(vehicleMovement.CanMove);
         else vehicleMovement.CanMove = (bool)stream.ReceiveNext();

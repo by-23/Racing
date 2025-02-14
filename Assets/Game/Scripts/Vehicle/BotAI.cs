@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using PathCreation;
 using UnityEngine;
 
-
 public class BotAI : MonoBehaviour
 {
     [Header("Vehicle Settings")] [SerializeField]
@@ -15,7 +14,7 @@ public class BotAI : MonoBehaviour
     internal PathCreator pathCreator;
 
     [SerializeField] private float lookAheadDistance = 5f;
-    [SerializeField] private float pathSampleStep = 0.5f; // расстояние между предвычисленными точками
+    [SerializeField] private float pathSampleStep = 0.5f; // Расстояние между предвычисленными точками
 
     [Header("Turn Braking")] [SerializeField]
     private float brakingPower = 10f;
@@ -44,9 +43,9 @@ public class BotAI : MonoBehaviour
     [SerializeField] private float carResetTime;
 
     [Header("Path Deviation")] [SerializeField]
-    private float maxLateralDeviation = 2f; // максимальное боковое отклонение
+    private float maxLateralDeviation = 2f; // Максимальное боковое отклонение
 
-    [SerializeField] private float deviationUpdateInterval = 2f; // интервал обновления отклонения
+    [SerializeField] private float deviationUpdateInterval = 2f; // Интервал обновления отклонения
 
     private Vehicle vehicle;
     private VehicleMovement vehicleMovement;
@@ -65,7 +64,7 @@ public class BotAI : MonoBehaviour
     private float currentLateralDeviation = 0f;
     private float deviationTimer = 0f;
 
-    private Coroutine resetCoroutine;
+    internal Coroutine resetCoroutine;
     private float steeringPowerValue;
 
     private void Start()
@@ -81,6 +80,9 @@ public class BotAI : MonoBehaviour
     /// </summary>
     private void CachePathPoints()
     {
+        if (pathCreator == null)
+            return;
+
         totalPathLength = pathCreator.path.length;
         cachedPoints.Clear();
         cachedDistances.Clear();
@@ -94,25 +96,24 @@ public class BotAI : MonoBehaviour
             distance += pathSampleStep;
         }
 
-        if (cachedDistances[cachedDistances.Count - 1] < totalPathLength)
+        if (cachedDistances.Count == 0 || cachedDistances[cachedDistances.Count - 1] < totalPathLength)
         {
             cachedPoints.Add(pathCreator.path.GetPointAtDistance(totalPathLength, EndOfPathInstruction.Stop));
             cachedDistances.Add(totalPathLength);
         }
     }
 
-
-    private void Update()
-    {
-    }
+    // Update() больше не нужен, поэтому его удалили
 
     private void FixedUpdate()
     {
         ApplyTurnBraking();
+
         vehicleMovement.ApplyAcceleration(accelerationFactor * currentSpeedMultiplier);
         vehicleMovement.ApplySteering(steeringPowerValue);
 
-        if (vehicleMovement.rb.velocity.magnitude < 0.5f && currentSpeedMultiplier <= 0)
+        // Используем sqrMagnitude для оптимизации (0.5^2 = 0.25)
+        if (vehicleMovement.rb.velocity.sqrMagnitude < 0.25f && currentSpeedMultiplier <= 0f)
         {
             vehicleMovement.rb.velocity = Vector3.zero;
             vehicleMovement.rb.angularVelocity = Vector3.zero;
@@ -139,27 +140,25 @@ public class BotAI : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Explosive explosive) && resetCoroutine == null)
             resetCoroutine = StartCoroutine(ResetCarPosition());
     }
 
-    private IEnumerator ResetCarPosition()
+    internal IEnumerator ResetCarPosition()
     {
         yield return new WaitForSeconds(carResetTime);
-        ;
 
         if (!Physics.Raycast(transform.position + Vector3.up * 1.0f, Vector3.down, out RaycastHit hit, 2f,
-                groundLayer) || hit.collider.tag != "Ground")
+                groundLayer) ||
+            hit.collider.tag != "Ground")
         {
             vehicleMovement.ResetCarPosition();
         }
 
         resetCoroutine = null;
     }
-
 
     /// <summary>
     /// Обновляет значение бокового отклонения через заданный интервал времени.
@@ -187,16 +186,17 @@ public class BotAI : MonoBehaviour
         targetPosition = GetPointAtDistance(targetDistance);
 
         // Вычисляем тангенс маршрута в точке targetPosition (используем небольшую дельту для интерполяции)
-        Vector3 forwardOnPath =
-            (GetPointAtDistance(Mathf.Min(targetDistance + 0.1f, totalPathLength)) - targetPosition).normalized;
-        // Вычисляем вектор, перпендикулярный направлению движения (с учетом оси Y)
+        float nextDistance = Mathf.Min(targetDistance + 0.1f, totalPathLength);
+        Vector3 forwardOnPath = (GetPointAtDistance(nextDistance) - targetPosition).normalized;
+
+        // Вычисляем вектор, перпендикулярный направлению движения (с учётом оси Y)
         Vector3 lateralDirection = Vector3.Cross(Vector3.up, forwardOnPath).normalized;
 
         // Добавляем к целевой точке смещение по боковой оси
         targetPosition += lateralDirection * currentLateralDeviation;
 
         Vector3 directionToTarget = (targetPosition - transform.position).normalized;
-        directionToTarget.y = 0;
+        directionToTarget.y = 0f;
 
         float targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
         steeringPowerValue = targetAngle * steeringSensitivity * vehicleMovement.steeringPower;
@@ -214,6 +214,7 @@ public class BotAI : MonoBehaviour
         int bestIndex = lastClosestIndex;
         float bestSqrDist = (cachedPoints[bestIndex] - position).sqrMagnitude;
 
+        // Движение вперёд по кешированным точкам
         while (bestIndex + 1 < cachedPoints.Count)
         {
             float nextSqrDist = (cachedPoints[bestIndex + 1] - position).sqrMagnitude;
@@ -228,6 +229,7 @@ public class BotAI : MonoBehaviour
             }
         }
 
+        // Движение назад по кешированным точкам
         while (bestIndex - 1 >= 0)
         {
             float prevSqrDist = (cachedPoints[bestIndex - 1] - position).sqrMagnitude;
@@ -247,7 +249,7 @@ public class BotAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Возвращает точку на маршруте по заданной дистанции, используя интерполяцию между кешированными точками.
+    /// Возвращает точку на маршруте по заданной дистанции, используя бинарный поиск для интерполяции между кешированными точками.
     /// </summary>
     private Vector3 GetPointAtDistance(float distance)
     {
@@ -256,10 +258,18 @@ public class BotAI : MonoBehaviour
         if (distance >= totalPathLength)
             return cachedPoints[cachedPoints.Count - 1];
 
-        int index = cachedDistances.FindIndex(d => d >= distance);
-        if (index == -1)
-            return cachedPoints[cachedPoints.Count - 1];
+        int low = 0;
+        int high = cachedDistances.Count - 1;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            if (cachedDistances[mid] < distance)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
 
+        int index = low;
         if (index == 0)
             return cachedPoints[0];
 
@@ -305,9 +315,15 @@ public class BotAI : MonoBehaviour
         float currentDistance = FindClosestDistance(transform.position);
         float endDistance = Mathf.Min(currentDistance + turnScanDistance, totalPathLength);
 
-        Vector3 startTangent = (GetPointAtDistance(currentDistance + 0.1f) - GetPointAtDistance(currentDistance))
-            .normalized;
-        Vector3 endTangent = (GetPointAtDistance(endDistance) - GetPointAtDistance(endDistance - 0.1f)).normalized;
+        // Сохраняем промежуточные значения для минимизации вычислений
+        float delta = 0.1f;
+        Vector3 pointA = GetPointAtDistance(currentDistance);
+        Vector3 pointB = GetPointAtDistance(currentDistance + delta);
+        Vector3 startTangent = (pointB - pointA).normalized;
+
+        Vector3 pointC = GetPointAtDistance(endDistance - delta);
+        Vector3 pointD = GetPointAtDistance(endDistance);
+        Vector3 endTangent = (pointD - pointC).normalized;
 
         turnAngle = Vector3.Angle(startTangent, endTangent);
         if (turnAngle > minTurnAngle)
@@ -320,26 +336,33 @@ public class BotAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Обнаруживает препятствия с тегом "Obstacle".
+    /// Обнаруживает препятствия с тегом "Obstacle" с использованием Physics.RaycastNonAlloc.
     /// </summary>
     private bool DetectObstacle(out Vector3 avoidanceDirection)
     {
         avoidanceDirection = Vector3.zero;
-        Vector3 rayOrigin = transform.position + transform.forward * 1.0f;
+        Vector3 origin = transform.position;
+        // Точка, немного вперёд от машины
+        Vector3 rayOrigin = origin + transform.forward * 1.0f;
 
         float angleStep = detectionAngle / (rayCount - 1);
-        float startAngle = -detectionAngle / 2;
+        float startAngle = -detectionAngle / 2f;
+
+        // Используем фиксированный массив для хранения результатов
+        RaycastHit[] hits = new RaycastHit[rayCount];
 
         for (int i = 0; i < rayCount; i++)
         {
             Vector3 rayDirection = Quaternion.Euler(0, startAngle + angleStep * i, 0) * transform.forward;
-            if (Physics.Raycast(transform.position, rayDirection, out RaycastHit hit, obstacleDetectionDistance,
-                    obstacleLayerMask))
+            int hitCount =
+                Physics.RaycastNonAlloc(origin, rayDirection, hits, obstacleDetectionDistance, obstacleLayerMask);
+            for (int j = 0; j < hitCount; j++)
             {
-                if (hit.collider.CompareTag("Obstacle"))
+                if (hits[j].collider.CompareTag("Obstacle"))
                 {
-                    Vector3 localHitPoint = transform.InverseTransformPoint(hit.point);
-                    avoidanceDirection = (localHitPoint.x < 0) ? transform.right : -transform.right;
+                    // Преобразуем hit.point в локальные координаты для определения стороны
+                    Vector3 localHitPoint = transform.InverseTransformPoint(hits[j].point);
+                    avoidanceDirection = (localHitPoint.x < 0f) ? transform.right : -transform.right;
                     return true;
                 }
             }
@@ -354,10 +377,11 @@ public class BotAI : MonoBehaviour
     private void AvoidObstacle(Vector3 avoidanceDirection)
     {
         float angleToAvoidance = Vector3.SignedAngle(transform.forward, avoidanceDirection, Vector3.up);
-        float steeringPowerValue = angleToAvoidance * avoidanceStrength * vehicleMovement.steeringPower;
-        vehicleMovement.rb.AddRelativeTorque(0f, steeringPowerValue, 0f, ForceMode.Acceleration);
+        float steeringValue = angleToAvoidance * avoidanceStrength * vehicleMovement.steeringPower;
+        vehicleMovement.rb.AddRelativeTorque(0f, steeringValue, 0f, ForceMode.Acceleration);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (pathCreator != null && cachedPoints.Count > 0)
@@ -368,17 +392,17 @@ public class BotAI : MonoBehaviour
 
         Gizmos.color = Color.red;
         float angleStep = detectionAngle / (rayCount - 1);
-        float startAngle = -detectionAngle / 2;
+        float startAngle = -detectionAngle / 2f;
         for (int i = 0; i < rayCount; i++)
         {
             Vector3 dir = Quaternion.Euler(0, startAngle + angleStep * i, 0) * transform.forward;
             Gizmos.DrawLine(transform.position, transform.position + dir * obstacleDetectionDistance);
         }
 
-        Vector3 rayStart = transform.position + Vector3.up * 1.0f; // Поднятая начальная точка
-        Vector3 rayEnd = rayStart + Vector3.down * 2f; // Конечная точка луча
-
-        Gizmos.color = Color.white; // Цвет для визуализации
-        Gizmos.DrawLine(rayStart, rayEnd); // Рисуем линию
+        Vector3 rayStart = transform.position + Vector3.up * 1.0f;
+        Vector3 rayEnd = rayStart + Vector3.down * 2f;
+        Gizmos.color = Color.white;
+        Gizmos.DrawLine(rayStart, rayEnd);
     }
+#endif
 }

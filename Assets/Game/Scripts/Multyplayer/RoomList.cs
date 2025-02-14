@@ -3,15 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class RoomList : MonoBehaviourPunCallbacks
 {
     public static RoomList Instance;
 
-    [Header("UI")] public Transform roomListParent;
+    [Header("UI")] internal Transform roomListParent;
     [SerializeField] private GameObject roomListItemPrefab;
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
 

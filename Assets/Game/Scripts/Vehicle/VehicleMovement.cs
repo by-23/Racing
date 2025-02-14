@@ -1,13 +1,11 @@
 ﻿using PathCreation;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 
 public class VehicleMovement : MonoBehaviour
 {
     [SerializeField] internal Rigidbody rb;
     [SerializeField] internal PathCreator pathCreator;
-    [SerializeField] VehicleGroundDetection groundDetection = new VehicleGroundDetection();
+    [SerializeField] internal VehicleGroundDetection groundDetection = new VehicleGroundDetection();
     [SerializeField] private float gravity = 20;
     [SerializeField] private float fallGravity = 50;
     [SerializeField] private float maxSpeed = 50;
@@ -41,32 +39,37 @@ public class VehicleMovement : MonoBehaviour
     private BotAI botAI;
     private float currentTurnAngle = 0f;
     private FloatingJoystick floatingJoystick;
-
+    private Transform _cachedTransform;
+    internal GameController _gameController;
 
     private void Awake()
     {
         vehicle = GetComponent<Vehicle>();
         botAI = GetComponent<BotAI>();
         rb = GetComponent<Rigidbody>();
-        groundDetection.Initialize(GetComponent<Vehicle>());
+        groundDetection.Initialize(vehicle);
         floatingJoystick = FunctionalButtons.Instance.floatingJoystick;
         pathCreator = FindObjectOfType<PathCreator>();
+
+        _cachedTransform = transform;
+        _gameController = GameController.Instance;
     }
 
     private void FixedUpdate()
     {
         if (!vehicle.isLocalPlayer) return;
+        bool isGrounded = groundDetection.IsGrounded;
 
         PerformGroundCheck();
-        ApplyGravity();
-        ApplyLateralFriction();
+        ApplyGravity(isGrounded);
+        ApplyLateralFriction(isGrounded);
 
-        float steering = floatingJoystick.Horizontal;
-        float acceleration = floatingJoystick.Vertical;
+        float steeringInput = floatingJoystick.Horizontal;
+        float accelerationInput = floatingJoystick.Vertical;
 
-        ApplySteering(steering);
-        ApplyAcceleration(acceleration);
-        TurnWheels(steering);
+        ApplySteering(steeringInput);
+        ApplyAcceleration(accelerationInput);
+        TurnWheels(steeringInput);
         SpinWheels();
     }
 
@@ -106,28 +109,33 @@ public class VehicleMovement : MonoBehaviour
 
     private void PerformGroundCheck() => groundDetection.CheckGround();
 
-    private void ApplyGravity()
+    private void ApplyGravity(bool isGrounded)
     {
-        float factor = IsGrounded ? gravity : fallGravity;
+        float factor = isGrounded ? gravity : fallGravity;
         rb.AddForce(-factor * Vector3.up, ForceMode.Acceleration);
     }
 
-    private void ApplyLateralFriction()
+    private void ApplyLateralFriction(bool isGrounded)
     {
-        if (IsGrounded)
+        if (isGrounded)
         {
-            float lateralSpeed = Vector3.Dot(rb.velocity, transform.right);
-            Vector3 lateralFriction = -transform.right * ((lateralSpeed / Time.fixedDeltaTime) * grip);
+            // Кэширование transform.right
+            Vector3 right = _cachedTransform.right;
+            float lateralSpeed = Vector3.Dot(rb.velocity, right);
+            Vector3 lateralFriction = -right * ((lateralSpeed / Time.fixedDeltaTime) * grip);
             rb.AddForce(lateralFriction, ForceMode.Acceleration);
         }
     }
 
     public void ApplySteering(float steeringInput)
     {
-        if (!IsGrounded || !CanMove || !GameController.Instance.isGameStarted)
-            return;
+        bool isGameStarted = _gameController.isGameStarted;
+        bool isGrounded = groundDetection.IsGrounded;
 
-        float speedFactor = ForwardSpeed * 0.075f;
+        if (!isGrounded || !CanMove || !isGameStarted)
+            return;
+        float forwardSpeed = Vector3.Dot(rb.velocity, _cachedTransform.forward);
+        float speedFactor = forwardSpeed * 0.075f;
         float clampedSteering = Mathf.Clamp(steeringInput * speedFactor, -steeringPower, steeringPower);
         float rotationTorque = clampedSteering - rb.angularVelocity.y;
         rb.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
@@ -135,11 +143,14 @@ public class VehicleMovement : MonoBehaviour
 
     public void ApplyAcceleration(float accelerationInput)
     {
-        if (!IsGrounded || !CanMove || !GameController.Instance.isGameStarted)
+        bool isGameStarted = _gameController.isGameStarted;
+        bool isGrounded = groundDetection.IsGrounded;
+
+        if (!isGrounded || !CanMove || !isGameStarted)
             return;
 
         float forceMagnitude = accelerationInput * acceleration;
-        Vector3 forward = transform.forward;
+        Vector3 forward = _cachedTransform.forward;
         rb.AddForce(forward * forceMagnitude, ForceMode.Acceleration);
 
         float currentSpeed = rb.velocity.magnitude;

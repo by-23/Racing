@@ -18,6 +18,8 @@ public class HealthController : NetworkBehaviour, IPunObservable
         {
             Die();
             health = 0;
+            if (TryGetComponent(out BotAI botAI) && botAI.resetCoroutine == null)
+                botAI.resetCoroutine = StartCoroutine(botAI.ResetCarPosition());
         }
 
         OnHealthChanged?.Invoke(health);
