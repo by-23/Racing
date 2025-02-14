@@ -1,15 +1,14 @@
 ﻿using System;
-using Ilumisoft.SkillDrive;
 using UnityEngine;
 
 public class VehicleInput : MonoBehaviour
 {
-    private Vehicle vehicle;
+    private VehicleMovement vehicleMovement;
     private float newSteeringPower = 0f;
 
     private void Awake()
     {
-        vehicle = GetComponent<Vehicle>();
+        vehicleMovement = GetComponent<VehicleMovement>();
     }
 
     private void Update()
@@ -20,19 +19,19 @@ public class VehicleInput : MonoBehaviour
 #elif UNITY_ANDROID || UNITY_IOS
                 float turnInput = floatingJoystick.Horizontal;
 #endif
-            newSteeringPower = turnInput * vehicle.steeringPower;
+            newSteeringPower = turnInput * vehicleMovement.steeringPower;
 
-            vehicle.TurnWheels(turnInput * 30f);
+            vehicleMovement.TurnWheels(turnInput * 30f);
 
             if (UnityEngine.Input.GetKeyDown(KeyCode.R))
             {
-                vehicle.ResetCarPosition();
+                vehicleMovement.ResetCarPosition();
             }
         }
     }
 
     private void FixedUpdate()
     {
-        vehicle.ApplySteering(newSteeringPower);
+        vehicleMovement.ApplySteering(newSteeringPower);
     }
 }

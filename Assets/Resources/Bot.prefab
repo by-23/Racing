@@ -302,6 +302,7 @@ GameObject:
   - component: {fileID: 3365895076832356282}
   - component: {fileID: -8554887327945055041}
   - component: {fileID: 1816427083731817154}
+  - component: {fileID: 374649462817665367}
   - component: {fileID: 9178862210767006648}
   - component: {fileID: 1940173394000298594}
   - component: {fileID: -7637648645194494759}
@@ -448,34 +449,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28604db03ff51e4a8604a4576bfb048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 2604161214765010509}
   playerCam: {fileID: 5285592622119876980}
   attack: {fileID: -4256842069966461579}
   triggerCallback: {fileID: 9131081407688437010}
+  healthController: {fileID: 1940173394000298594}
+  vehicleMovement: {fileID: 374649462817665367}
+--- !u!114 &374649462817665367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a559cabf2e74119a7d0e89821ecc93c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 2604161214765010509}
+  pathCreator: {fileID: 0}
   groundDetection:
     GroundLayers:
       serializedVersion: 2
       m_Bits: 256
-    RaycastDist: 5
-  FLwheel: {fileID: 7579504468426392392}
-  FRwheel: {fileID: 8218675226597591311}
-  BLwheel: {fileID: 8362951169830265341}
-  BRwheel: {fileID: 4492314644109699971}
-  FLwheelPivot: {fileID: 3220881276712684939}
-  FRwheelPivot: {fileID: 4863678122757719716}
-  BLwheelPivot: {fileID: 4495598245989721323}
-  BRwheelPivot: {fileID: 7581854656528536154}
-  wheelsRotationSpeed: 100
-  turnPercentage: 0.5
-  turnSpeed: 25
+    RaycastDist: 2
   gravity: 20
   fallGravity: 50
-  maxSpeed: 50
+  maxSpeed: 100
   acceleration: 20
-  steeringPower: 1.5
-  grip: 1
-  healthController: {fileID: 0}
-  CanMove: 1
+  wheelsRotationSpeed: 100
+  wheelsTurnPercentage: 1
+  wheelsTurnSpeed: 20
+  FLwheel: {fileID: 7579504468426392392, guid: 714d15f98e4b49b41a1d1c45b419e76e, type: 3}
+  FRwheel: {fileID: 8218675226597591311, guid: 714d15f98e4b49b41a1d1c45b419e76e, type: 3}
+  BLwheel: {fileID: 8362951169830265341, guid: 714d15f98e4b49b41a1d1c45b419e76e, type: 3}
+  BRwheel: {fileID: 4492314644109699971, guid: 714d15f98e4b49b41a1d1c45b419e76e, type: 3}
+  FLwheelPivot: {fileID: 3220881276712684939, guid: 714d15f98e4b49b41a1d1c45b419e76e,
+    type: 3}
+  FRwheelPivot: {fileID: 4863678122757719716, guid: 714d15f98e4b49b41a1d1c45b419e76e,
+    type: 3}
+  BLwheelPivot: {fileID: 4495598245989721323, guid: 714d15f98e4b49b41a1d1c45b419e76e,
+    type: 3}
+  BRwheelPivot: {fileID: 7581854656528536154, guid: 714d15f98e4b49b41a1d1c45b419e76e,
+    type: 3}
+  steeringPower: 3
+  grip: 0.04
 --- !u!114 &9178862210767006648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,7 +532,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicle: {fileID: 1816427083731817154}
   steeringSensitivity: 5
   accelerationFactor: 1
   pathCreator: {fileID: 0}
@@ -573,8 +590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkObject: {fileID: 3365895076832356282}
   vehicle: {fileID: 1816427083731817154}
-  playerInfo:
-    PlayerName: 
+  playerInfo: {fileID: 9178862210767006648}
   attack: {fileID: -4256842069966461579}
   healthController: {fileID: 1940173394000298594}
   photonView: {fileID: -8554887327945055041}
@@ -709,12 +725,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &3220881276712684939 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2818349608629704562, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710170942201}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3546509472622626908 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4222599565010555557, guid: 71f98781a624545ccae847811d71db95,
@@ -739,24 +749,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4492314644109699971 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3889416983491850618, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710170942201}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4495598245989721323 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3876902964438285842, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710170942201}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4863678122757719716 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5247068527164562525, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710170942201}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5044103079857511642 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5597505374112106019, guid: 71f98781a624545ccae847811d71db95,
@@ -799,30 +791,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &7579504468426392392 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7098195668767611313, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710170942201}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7581854656528536154 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7103932388082763939, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710170942201}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8218675226597591311 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8764160934054826998, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710170942201}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8362951169830265341 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9196701982545230596, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710170942201}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8799712159376979371 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8192276333234958162, guid: 71f98781a624545ccae847811d71db95,

@@ -1,56 +1,51 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Ilumisoft.SkillDrive.Audio
+
+public class MusicManager : MonoBehaviour
 {
-    public class MusicManager : MonoBehaviour
+    [SerializeField] AudioMixerGroup audioMixerGroup;
+
+    [SerializeField] AudioClip backgroundMusic = null;
+
+    [SerializeField] bool playOnAwake = true;
+
+    MusicPlayer musicPlayer = null;
+
+    private void Awake()
     {
-        [SerializeField]
-        AudioMixerGroup audioMixerGroup;
+        musicPlayer = FindOrCreateMusicPlayer();
+    }
 
-        [SerializeField]
-        AudioClip backgroundMusic = null;
+    /// <summary>
+    /// Returns an existing instance of Music Player or creates one (persistent)
+    /// </summary>
+    /// <returns></returns>
+    MusicPlayer FindOrCreateMusicPlayer()
+    {
+        musicPlayer = FindObjectOfType<MusicPlayer>();
 
-        [SerializeField]
-        bool playOnAwake = true;
-
-        MusicPlayer musicPlayer = null;
-
-        private void Awake()
+        if (musicPlayer == null)
         {
-            musicPlayer = FindOrCreateMusicPlayer();
+            musicPlayer = new GameObject("Music Player").AddComponent<MusicPlayer>();
+
+            DontDestroyOnLoad(musicPlayer);
         }
 
-        /// <summary>
-        /// Returns an existing instance of Music Player or creates one (persistent)
-        /// </summary>
-        /// <returns></returns>
-        MusicPlayer FindOrCreateMusicPlayer()
+        return musicPlayer;
+    }
+
+    void Start()
+    {
+        var audioSource = musicPlayer.AudioSource;
+
+        if (audioSource.isPlaying == false || audioSource.clip != backgroundMusic)
         {
-            musicPlayer = FindObjectOfType<MusicPlayer>();
-
-            if (musicPlayer == null)
+            if (playOnAwake)
             {
-                musicPlayer = new GameObject("Music Player").AddComponent<MusicPlayer>();
-
-                DontDestroyOnLoad(musicPlayer);
-            }
-
-            return musicPlayer;
-        }
-
-        void Start()
-        {
-            var audioSource = musicPlayer.AudioSource;
-
-            if(audioSource.isPlaying == false || audioSource.clip != backgroundMusic)
-            {
-                if (playOnAwake)
-                {
-                    audioSource.clip = backgroundMusic;
-                    audioSource.outputAudioMixerGroup = audioMixerGroup;
-                    audioSource.Play();
-                }
+                audioSource.clip = backgroundMusic;
+                audioSource.outputAudioMixerGroup = audioMixerGroup;
+                audioSource.Play();
             }
         }
     }

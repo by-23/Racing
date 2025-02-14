@@ -70,7 +70,7 @@ public class RoomList : MonoBehaviourPunCallbacks
 
     public void UpdaterUI()
     {
-        if (roomListParent.childCount > 0)
+        if (roomListParent && roomListParent.childCount > 0)
             foreach (Transform roomItem in roomListParent)
             {
                 Destroy(roomItem);

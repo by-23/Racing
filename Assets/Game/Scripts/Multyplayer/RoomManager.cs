@@ -3,7 +3,6 @@ using Photon.Realtime;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
-using Ilumisoft.SkillDrive.UI;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 

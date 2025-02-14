@@ -1,17 +1,19 @@
 using UnityEngine;
 
-namespace Ilumisoft.SkillDrive.Audio
+
+[RequireComponent(typeof(AudioSource))]
+public class MusicPlayer : MonoBehaviour
 {
-    [RequireComponent(typeof(AudioSource))]
-    public class MusicPlayer : MonoBehaviour
+    AudioSource audioSource;
+
+    public AudioSource AudioSource
     {
-        AudioSource audioSource;
+        get => this.audioSource;
+        set => this.audioSource = value;
+    }
 
-        public AudioSource AudioSource { get => this.audioSource; set => this.audioSource = value; }
-
-        private void Awake()
-        {
-            AudioSource = GetComponent<AudioSource>();
-        }
+    private void Awake()
+    {
+        AudioSource = GetComponent<AudioSource>();
     }
 }

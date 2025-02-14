@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Ilumisoft.SkillDrive;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -100,7 +99,7 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
     {
         if (vehicle != null)
         {
-            vehicle.ApplyAcceleration(amount);
+            vehicle.vehicleMovement.ApplyAcceleration(amount);
         }
     }
 
