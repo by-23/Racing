@@ -5,6 +5,7 @@ using ExitGames.Client.Photon;
 using Newtonsoft.Json;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayersSpawner : Singleton<PlayersSpawner>
 {
@@ -17,7 +18,7 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
 
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject botPrefab;
-    [SerializeField] private List<GameObject> instantiatedBots;
+    [SerializeField] internal List<GameObject> instantiatedPlayers;
     [Space] [SerializeField] List<SpawnPoint> spawnPoints;
     [SerializeField, Range(0, 7)] internal int botCount;
 
@@ -31,7 +32,7 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
     {
         roomManager = RoomManager.Instance;
     }
-    
+
     protected internal void ChancheBotCount(int botCount)
     {
         this.botCount = botCount;
@@ -41,21 +42,21 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
     {
         Vector3 currentSpawnPoint = Vector3.zero;
 
-        currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
-
         if (!roomManager.IsOnline)
         {
-            currentInstantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
-            var instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
-            instantiatedPlayerComponents.vehicle.SetLocalPlayer();
-
             for (int i = 0; i < botCount; i++)
             {
                 currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
-                instantiatedBots.Add(Instantiate(botPrefab, currentSpawnPoint, Quaternion.identity));
-                var instantiatedBotComponents = instantiatedBots[i].GetComponent<PlayerComponents>();
-                instantiatedBotComponents.vehicle.SetBot();
+                instantiatedPlayers.Add(Instantiate(botPrefab, currentSpawnPoint, Quaternion.identity));
+                var playerComponents = instantiatedPlayers[i].GetComponent<PlayerComponents>();
+                playerComponents.vehicle.SetBot();
             }
+
+            currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
+            currentInstantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
+            instantiatedPlayers.Add(currentInstantiatedPlayer);
+            var instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
+            instantiatedPlayerComponents.vehicle.SetLocalPlayer();
 
             roomManager.StartGame();
         }

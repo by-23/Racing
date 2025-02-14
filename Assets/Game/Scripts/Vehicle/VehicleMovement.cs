@@ -28,24 +28,19 @@ public class VehicleMovement : MonoBehaviour
 
     [Range(0, 1)] [SerializeField] private float grip = 1;
 
-
     internal bool CanMove { get; set; } = true;
-    private bool IsGrounded => groundDetection.IsGrounded;
     private float ForwardSpeed => Vector3.Dot(rb.velocity, transform.forward);
-
     internal float NormalizedForwardSpeed => (Mathf.Abs(ForwardSpeed) > 0.1f ? ForwardSpeed / maxSpeed : 0.0f);
 
     private Vehicle vehicle;
-    private BotAI botAI;
     private float currentTurnAngle = 0f;
     private FloatingJoystick floatingJoystick;
     private Transform _cachedTransform;
-    internal GameController _gameController;
+    private GameController _gameController;
 
     private void Awake()
     {
         vehicle = GetComponent<Vehicle>();
-        botAI = GetComponent<BotAI>();
         rb = GetComponent<Rigidbody>();
         groundDetection.Initialize(vehicle);
         floatingJoystick = FunctionalButtons.Instance.floatingJoystick;

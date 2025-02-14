@@ -569,7 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e58d82627ca35e4c82c48b669742854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 823709582306054355, guid: 3c9a3d72afd6c714db69270b46eab244, type: 3}
+  item: {fileID: -8871661809336245487, guid: 0f4be7d8747bb694fa377f4fbc11941a, type: 3}
   photonView: {fileID: -8554887327945055041}
   muzzlePosition: {fileID: 5663055877064385965}
   vehicle: {fileID: 1816427083731817154}

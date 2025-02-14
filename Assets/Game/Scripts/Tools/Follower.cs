@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using Photon.Pun;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Follower : MonoBehaviour
 {
@@ -12,6 +10,7 @@ public class Follower : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float followSpeed;
     [SerializeField] private float lifetime = 15f;
+    [SerializeField] private bool followImmediately;
 
     private bool hasTarget;
     public float oscillationRange = 1f;
@@ -19,26 +18,29 @@ public class Follower : MonoBehaviour
     private float timeCounter = 0f;
 
     private Item item;
-
-
     private Rigidbody rb;
-
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-        item = GetComponent<Item>();
-    }
 
     private void OnEnable()
     {
         StartCoroutine(DespawnAfterLifetime());
     }
 
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        item = GetComponent<Item>();
+        if (followImmediately)
+            targetVehicle = GetNearestTarget();
+    }
+
     private void FixedUpdate()
     {
-        if (hasTarget)
+        if (targetVehicle && hasTarget || followImmediately)
         {
+            float targetVehicleSpeed = targetVehicle.vehicleMovement.rb.velocity.magnitude;
+            float vehicleSpeed =
+                targetVehicleSpeed < 30 ? targetVehicleSpeed : 30;
+
             transform.rotation = Quaternion.LookRotation(targetVehicle.transform.position - transform.position);
             timeCounter += Time.deltaTime;
 
@@ -46,7 +48,7 @@ public class Follower : MonoBehaviour
 
             Vector3 movement = (transform.forward + new Vector3(horizontalOscillation, 0f, 0f)).normalized;
 
-            rb.transform.Translate(movement * (followSpeed * Time.deltaTime), Space.World);
+            rb.transform.Translate(movement * ((vehicleSpeed + followSpeed) * Time.deltaTime), Space.World);
         }
 
         else
@@ -64,6 +66,26 @@ public class Follower : MonoBehaviour
         }
     }
 
+    private Vehicle GetNearestTarget()
+    {
+        float minDistance = float.MaxValue;
+        Vehicle nearestTarget = null;
+
+        foreach (var player in PlayersSpawner.Instance.instantiatedPlayers)
+        {
+            var currentVehicle = player.GetComponent<Vehicle>();
+            if (player == null || player == item.Owner.gameObject) continue;
+
+            float distance = Vector3.Distance(player.transform.position, transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestTarget = currentVehicle;
+            }
+        }
+
+        return nearestTarget;
+    }
 
     private IEnumerator DespawnAfterLifetime()
     {
