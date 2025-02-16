@@ -476,7 +476,7 @@ MonoBehaviour:
   gravity: 20
   fallGravity: 50
   maxSpeed: 100
-  acceleration: 20
+  acceleration: 30
   wheelsRotationSpeed: 100
   wheelsTurnPercentage: 1
   wheelsTurnSpeed: 20
@@ -493,7 +493,7 @@ MonoBehaviour:
   BRwheelPivot: {fileID: 7581854656528536154, guid: 714d15f98e4b49b41a1d1c45b419e76e,
     type: 3}
   steeringPower: 3
-  grip: 0.04
+  grip: 1
 --- !u!114 &9178862210767006648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,14 +532,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steeringSensitivity: 5
+  steeringSensitivity: 20
   accelerationFactor: 1
-  pathCreator: {fileID: 0}
-  lookAheadDistance: 20
-  pathSampleStep: 0.5
-  brakingPower: 200
+  brakingPower: 300
   minTurnAngle: 2
-  turnScanDistance: 30
+  turnScanDistance: 50
   turnBrakingDistance: 10
   maxTurnSpeed: 100
   minTurnSpeed: 50
@@ -550,12 +547,12 @@ MonoBehaviour:
   detectionAngle: 15
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 72
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
   carResetTime: 7
-  maxLateralDeviation: 10
+  maxLateralDeviation: 8
   deviationUpdateInterval: 2
 --- !u!114 &-4256842069966461579
 MonoBehaviour:
@@ -575,7 +572,7 @@ MonoBehaviour:
   vehicle: {fileID: 1816427083731817154}
   fireRate: 20
   detectionRange: 50
-  attackChance: 1
+  attackChance: 0
 --- !u!114 &-8441199704336409492
 MonoBehaviour:
   m_ObjectHideFlags: 0

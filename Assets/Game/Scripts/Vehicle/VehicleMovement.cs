@@ -6,10 +6,10 @@ public class VehicleMovement : MonoBehaviour
     [SerializeField] internal Rigidbody rb;
     [SerializeField] internal PathCreator pathCreator;
     [SerializeField] internal VehicleGroundDetection groundDetection = new VehicleGroundDetection();
-    [SerializeField] private float gravity = 20;
-    [SerializeField] private float fallGravity = 50;
-    [SerializeField] private float maxSpeed = 50;
-    [SerializeField] private float acceleration = 20;
+    [SerializeField] private float gravity = 20f;
+    [SerializeField] private float fallGravity = 50f;
+    [SerializeField] private float maxSpeed = 50f;
+    [SerializeField] private float acceleration = 20f;
 
     [Header("Wheels")] [SerializeField] private float wheelsRotationSpeed = 100f;
     [SerializeField] private float wheelsTurnPercentage = 1f;
@@ -26,12 +26,13 @@ public class VehicleMovement : MonoBehaviour
     [Header("Movement Settings")] [Range(0, 3)] [SerializeField]
     internal float steeringPower = 1.5f;
 
-    [Range(0, 1)] [SerializeField] private float grip = 1;
+    [Range(0, 1)] [SerializeField] private float grip = 1f;
 
     internal bool CanMove { get; set; } = true;
     private float ForwardSpeed => Vector3.Dot(rb.velocity, transform.forward);
-    internal float NormalizedForwardSpeed => (Mathf.Abs(ForwardSpeed) > 0.1f ? ForwardSpeed / maxSpeed : 0.0f);
+    internal float NormalizedForwardSpeed => Mathf.Abs(ForwardSpeed) > 0.1f ? ForwardSpeed / maxSpeed : 0f;
 
+    internal int lastClosestPathIndex = 0;
     private Vehicle vehicle;
     private float currentTurnAngle = 0f;
     private FloatingJoystick floatingJoystick;
@@ -44,7 +45,11 @@ public class VehicleMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         groundDetection.Initialize(vehicle);
         floatingJoystick = FunctionalButtons.Instance.floatingJoystick;
-        pathCreator = FindObjectOfType<PathCreator>();
+        // Если pathCreator не назначен в инспекторе, пытаемся получить его из PathHolder
+        if (pathCreator == null)
+            pathCreator = (PathHolder.Instance != null)
+                ? PathHolder.Instance.pathCreator
+                : FindObjectOfType<PathCreator>();
 
         _cachedTransform = transform;
         _gameController = GameController.Instance;
@@ -52,9 +57,10 @@ public class VehicleMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!vehicle.isLocalPlayer) return;
-        bool isGrounded = groundDetection.IsGrounded;
+        if (!vehicle.isLocalPlayer)
+            return;
 
+        bool isGrounded = groundDetection.IsGrounded;
         PerformGroundCheck();
         ApplyGravity(isGrounded);
         ApplyLateralFriction(isGrounded);
@@ -68,13 +74,35 @@ public class VehicleMovement : MonoBehaviour
         SpinWheels();
     }
 
+    /// <summary>
+    /// Оптимизированный метод сброса позиции автомобиля с использованием кешированного пути.
+    /// </summary>
     public void ResetCarPosition()
     {
-        if (pathCreator != null)
+        var pathHolder = PathHolder.Instance;
+        if (pathHolder != null && pathHolder.pathCreator != null &&
+            pathHolder.cachedPoints.Count > lastClosestPathIndex)
         {
-            float closestDistance = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
-            transform.position = pathCreator.path.GetPointAtDistance(closestDistance);
-            transform.rotation = Quaternion.LookRotation(pathCreator.path.GetDirection(closestDistance));
+            // Находим ближайшую дистанцию вдоль пути с использованием кеша
+
+            float closestDistance =
+                pathHolder.FindClosestDistance(out lastClosestPathIndex, transform.position, lastClosestPathIndex);
+            transform.position = pathHolder.GetPointAtDistance(closestDistance);
+
+            // Вычисляем направление движения: берем следующий пункт или предыдущий, если мы в конце пути
+            Vector3 direction;
+            if (lastClosestPathIndex < pathHolder.cachedPoints.Count - 1)
+                direction = (pathHolder.cachedPoints[lastClosestPathIndex + 1] -
+                             pathHolder.cachedPoints[lastClosestPathIndex])
+                    .normalized;
+            else if (lastClosestPathIndex > 0)
+                direction = (pathHolder.cachedPoints[lastClosestPathIndex] -
+                             pathHolder.cachedPoints[lastClosestPathIndex - 1])
+                    .normalized;
+            else
+                direction = _cachedTransform.forward;
+
+            transform.rotation = Quaternion.LookRotation(direction);
         }
         else
         {
@@ -91,11 +119,12 @@ public class VehicleMovement : MonoBehaviour
         rb.AddForce(brakeForce, ForceMode.Acceleration);
     }
 
-    public void TurnWheels(float turnAngle)
+    public void TurnWheels(float turnInput)
     {
-        float targetTurnAngle = turnAngle * wheelsTurnPercentage;
+        float targetTurnAngle = turnInput * wheelsTurnPercentage;
         currentTurnAngle = Mathf.Lerp(currentTurnAngle, targetTurnAngle, Time.deltaTime * wheelsTurnSpeed);
 
+        // Передние колёса поворачиваются в одну сторону, задние — в противоположную
         FLwheelPivot.localRotation = Quaternion.Euler(0, currentTurnAngle, 0);
         FRwheelPivot.localRotation = Quaternion.Euler(0, currentTurnAngle, 0);
         BLwheelPivot.localRotation = Quaternion.Euler(0, -currentTurnAngle, 0);
@@ -106,29 +135,25 @@ public class VehicleMovement : MonoBehaviour
 
     private void ApplyGravity(bool isGrounded)
     {
-        float factor = isGrounded ? gravity : fallGravity;
-        rb.AddForce(-factor * Vector3.up, ForceMode.Acceleration);
+        float appliedGravity = isGrounded ? gravity : fallGravity;
+        rb.AddForce(Vector3.down * appliedGravity, ForceMode.Acceleration);
     }
 
     private void ApplyLateralFriction(bool isGrounded)
     {
-        if (isGrounded)
-        {
-            // Кэширование transform.right
-            Vector3 right = _cachedTransform.right;
-            float lateralSpeed = Vector3.Dot(rb.velocity, right);
-            Vector3 lateralFriction = -right * ((lateralSpeed / Time.fixedDeltaTime) * grip);
-            rb.AddForce(lateralFriction, ForceMode.Acceleration);
-        }
+        if (!isGrounded)
+            return;
+        Vector3 right = _cachedTransform.right;
+        float lateralSpeed = Vector3.Dot(rb.velocity, right);
+        Vector3 lateralFriction = -right * ((lateralSpeed / Time.fixedDeltaTime) * grip);
+        rb.AddForce(lateralFriction, ForceMode.Acceleration);
     }
 
     public void ApplySteering(float steeringInput)
     {
-        bool isGameStarted = _gameController.isGameStarted;
-        bool isGrounded = groundDetection.IsGrounded;
-
-        if (!isGrounded || !CanMove || !isGameStarted)
+        if (!groundDetection.IsGrounded || !CanMove || !_gameController.isGameStarted)
             return;
+
         float forwardSpeed = Vector3.Dot(rb.velocity, _cachedTransform.forward);
         float speedFactor = forwardSpeed * 0.075f;
         float clampedSteering = Mathf.Clamp(steeringInput * speedFactor, -steeringPower, steeringPower);
@@ -138,16 +163,14 @@ public class VehicleMovement : MonoBehaviour
 
     public void ApplyAcceleration(float accelerationInput)
     {
-        bool isGameStarted = _gameController.isGameStarted;
-        bool isGrounded = groundDetection.IsGrounded;
-
-        if (!isGrounded || !CanMove || !isGameStarted)
+        if (!groundDetection.IsGrounded || !CanMove || !_gameController.isGameStarted)
             return;
 
         float forceMagnitude = accelerationInput * acceleration;
         Vector3 forward = _cachedTransform.forward;
         rb.AddForce(forward * forceMagnitude, ForceMode.Acceleration);
 
+        // Если превышена максимальная скорость, применяем компенсацию
         float currentSpeed = rb.velocity.magnitude;
         if (currentSpeed > maxSpeed)
         {
@@ -156,14 +179,13 @@ public class VehicleMovement : MonoBehaviour
         }
     }
 
-
     private void SpinWheels()
     {
-        float rotationSpeed = ForwardSpeed * wheelsRotationSpeed * Time.deltaTime;
-        FLwheel.Rotate(Vector3.right, rotationSpeed);
-        FRwheel.Rotate(Vector3.right, rotationSpeed);
-        BLwheel.Rotate(Vector3.right, rotationSpeed);
-        BRwheel.Rotate(Vector3.right, rotationSpeed);
+        float rotationAmount = ForwardSpeed * wheelsRotationSpeed * Time.deltaTime;
+        FLwheel.Rotate(Vector3.right, rotationAmount);
+        FRwheel.Rotate(Vector3.right, rotationAmount);
+        BLwheel.Rotate(Vector3.right, rotationAmount);
+        BRwheel.Rotate(Vector3.right, rotationAmount);
     }
 
     private void OnDrawGizmosSelected() => groundDetection.OnDrawGizmosSelected(GetComponent<Vehicle>());

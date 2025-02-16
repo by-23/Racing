@@ -81,12 +81,12 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
         if (button == gasButton)
         {
             isAccelerating = true;
-            accelerationAmount = 1.0f;
+            accelerationAmount = 1f;
         }
         else if (button == brakeButton)
         {
             isAccelerating = true;
-            accelerationAmount = -1.0f;
+            accelerationAmount = -1f;
         }
     }
 

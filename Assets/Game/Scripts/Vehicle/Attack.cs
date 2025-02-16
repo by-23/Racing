@@ -54,11 +54,12 @@ public class Attack : MonoBehaviour
     private void SetupItem(GameObject itemObj)
     {
         if (itemObj.TryGetComponent(out Item item))
-            item.Owner = vehicle;
+            item.Init(vehicle);
         itemObj.transform.position = muzzlePosition.position;
         itemObj.transform.rotation = muzzlePosition.rotation;
     }
 
+    
     [PunRPC]
     private void RPC_HandleProjectile(int viewID)
     {

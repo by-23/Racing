@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
+using PathCreation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
@@ -45,13 +46,9 @@ public class GameController : MonoBehaviourPunCallbacks
 
     #endregion
 
-    private int totalCheckpoints;
-    internal int currentCheckpointIndex = 0;
-    private Dictionary<int, int> playerLaps = new Dictionary<int, int>();
 
-    [SerializeField] internal int totalLaps = 3;
-    [SerializeField] internal Transform finishedMenu;
     [SerializeField] internal bool isGameStarted = false;
+
 
     private void Awake()
     {
@@ -69,65 +66,6 @@ public class GameController : MonoBehaviourPunCallbacks
     {
     }
 
-    public void PlayerPassedCheckpoint(int playerId, int checkpointIndex)
-    {
-        if (checkpointIndex == currentCheckpointIndex)
-        {
-            currentCheckpointIndex++;
-            if (currentCheckpointIndex >= totalCheckpoints)
-            {
-                currentCheckpointIndex = 0;
-                PlayerCompletedLap(playerId);
-            }
-        }
-    }
-
-    private void PlayerCompletedLap(int playerId)
-    {
-        if (!playerLaps.ContainsKey(playerId))
-        {
-            playerLaps[playerId] = 0;
-        }
-
-        playerLaps[playerId]++;
-        int currentLap = playerLaps[playerId];
-
-        UI.Instance.instantiatedPlayerInfoUIs[playerId].currentLap.text = currentLap.ToString();
-
-        if (currentLap >= totalLaps)
-        {
-            OnAllLapsCompleted(playerId);
-        }
-    }
-
-    [PunRPC]
-    private void UpdateLapCount(int playerId, int currentLap)
-    {
-        if (playerLaps.ContainsKey(playerId))
-        {
-            playerLaps[playerId] = currentLap;
-            // Здесь можно обновить UI или другие элементы, чтобы отобразить количество кругов для каждого игрока
-        }
-        else
-        {
-            playerLaps.Add(playerId, currentLap);
-        }
-    }
-
-    private void OnAllLapsCompleted(int playerId)
-    {
-        Debug.Log("Player completed a Level!");
-        var cameraFollow = PlayersSpawner.Instance.playersList[playerId].cameraFollow;
-        PlayersSpawner.Instance.playersList.Remove(playerId);
-        if (PlayersSpawner.Instance.playersList.Count > 0)
-        {
-            cameraFollow.SetTarget(PlayersSpawner.Instance.playersList.Last().Value.vehicle.transform);
-        }
-        else
-        {
-            cameraFollow.SetTarget(finishedMenu);
-        }
-    }
 
     private void OnDestroy()
     {

@@ -39,7 +39,7 @@ public class Follower : MonoBehaviour
         {
             float targetVehicleSpeed = targetVehicle.vehicleMovement.rb.velocity.magnitude;
             float vehicleSpeed =
-                targetVehicleSpeed < 30 ? targetVehicleSpeed : 30;
+                targetVehicleSpeed < 50 ? 50 : targetVehicleSpeed;
 
             transform.rotation = Quaternion.LookRotation(targetVehicle.transform.position - transform.position);
             timeCounter += Time.deltaTime;
@@ -73,19 +73,32 @@ public class Follower : MonoBehaviour
 
         foreach (var player in PlayersSpawner.Instance.instantiatedPlayers)
         {
-            var currentVehicle = player.GetComponent<Vehicle>();
-            if (player == null || player == item.Owner.gameObject) continue;
+            if (player == null || player == item.Owner.gameObject)
+                continue;
 
-            float distance = Vector3.Distance(player.transform.position, transform.position);
+            // Переводим позицию цели в локальные координаты владельца
+            Vector3 localPos = item.Owner.transform.InverseTransformPoint(player.transform.position);
+
+            // Если цель не перед игроком (например, сзади или на уровне), пропускаем её
+            if (localPos.z <= 0)
+                continue;
+
+            // Можно дополнительно ограничить угол (например, 45°)
+            // float angle = Mathf.Atan2(Mathf.Abs(localPos.x), localPos.z) * Mathf.Rad2Deg;
+            // if (angle > 45f)
+            //     continue;
+
+            float distance = localPos.magnitude;
             if (distance < minDistance)
             {
                 minDistance = distance;
-                nearestTarget = currentVehicle;
+                nearestTarget = player.GetComponent<Vehicle>();
             }
         }
 
         return nearestTarget;
     }
+
 
     private IEnumerator DespawnAfterLifetime()
     {

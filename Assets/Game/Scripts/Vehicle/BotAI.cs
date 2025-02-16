@@ -10,11 +10,6 @@ public class BotAI : MonoBehaviour
 
     [SerializeField] private float accelerationFactor = 1f;
 
-    [Header("Path Following")] [SerializeField]
-    internal PathCreator pathCreator;
-
-    [SerializeField] private float lookAheadDistance = 5f;
-    [SerializeField] private float pathSampleStep = 0.5f; // Расстояние между предвычисленными точками
 
     [Header("Turn Braking")] [SerializeField]
     private float brakingPower = 10f;
@@ -49,13 +44,6 @@ public class BotAI : MonoBehaviour
 
     private Vehicle vehicle;
     private VehicleMovement vehicleMovement;
-    private int lastClosestIndex = 0;
-
-    // Кеширование маршрута
-    private List<Vector3> cachedPoints = new List<Vector3>();
-    private List<float> cachedDistances = new List<float>();
-    private float totalPathLength = 0f;
-
     private Vector3 targetPosition;
     private Vector3 lastAvoidanceDirection;
     private float currentSpeedMultiplier = 1f;
@@ -71,40 +59,11 @@ public class BotAI : MonoBehaviour
     {
         vehicle = GetComponent<Vehicle>();
         vehicleMovement = GetComponent<VehicleMovement>();
-        pathCreator = vehicleMovement.pathCreator;
-        CachePathPoints();
     }
 
     /// <summary>
     /// Разбивает путь на точки с шагом pathSampleStep и вычисляет накопленные расстояния.
     /// </summary>
-    private void CachePathPoints()
-    {
-        if (pathCreator == null)
-            return;
-
-        totalPathLength = pathCreator.path.length;
-        cachedPoints.Clear();
-        cachedDistances.Clear();
-
-        float distance = 0f;
-        while (distance <= totalPathLength)
-        {
-            Vector3 point = pathCreator.path.GetPointAtDistance(distance, EndOfPathInstruction.Stop);
-            cachedPoints.Add(point);
-            cachedDistances.Add(distance);
-            distance += pathSampleStep;
-        }
-
-        if (cachedDistances.Count == 0 || cachedDistances[cachedDistances.Count - 1] < totalPathLength)
-        {
-            cachedPoints.Add(pathCreator.path.GetPointAtDistance(totalPathLength, EndOfPathInstruction.Stop));
-            cachedDistances.Add(totalPathLength);
-        }
-    }
-
-    // Update() больше не нужен, поэтому его удалили
-
     private void FixedUpdate()
     {
         ApplyTurnBraking();
@@ -124,7 +83,8 @@ public class BotAI : MonoBehaviour
 
     private void FollowPath()
     {
-        if (vehicleMovement.CanMove && pathCreator != null && GameController.Instance.isGameStarted)
+        if (vehicleMovement.CanMove && PathHolder.Instance.pathCreator != null &&
+            GameController.Instance.isGameStarted)
         {
             if (DetectObstacle(out Vector3 avoidanceDirection))
             {
@@ -181,13 +141,15 @@ public class BotAI : MonoBehaviour
     /// </summary>
     private void FollowCachedPath()
     {
-        float currentDistance = FindClosestDistance(transform.position);
-        float targetDistance = Mathf.Min(currentDistance + lookAheadDistance, totalPathLength);
-        targetPosition = GetPointAtDistance(targetDistance);
+        float currentDistance = PathHolder.Instance.FindClosestDistance(out vehicleMovement.lastClosestPathIndex,
+            transform.position, vehicleMovement.lastClosestPathIndex);
+        float targetDistance = Mathf.Min(currentDistance + PathHolder.Instance.lookAheadDistance,
+            PathHolder.Instance.totalPathLength);
+        targetPosition = PathHolder.Instance.GetPointAtDistance(targetDistance);
 
         // Вычисляем тангенс маршрута в точке targetPosition (используем небольшую дельту для интерполяции)
-        float nextDistance = Mathf.Min(targetDistance + 0.1f, totalPathLength);
-        Vector3 forwardOnPath = (GetPointAtDistance(nextDistance) - targetPosition).normalized;
+        float nextDistance = Mathf.Min(targetDistance + 0.1f, PathHolder.Instance.totalPathLength);
+        Vector3 forwardOnPath = (PathHolder.Instance.GetPointAtDistance(nextDistance) - targetPosition).normalized;
 
         // Вычисляем вектор, перпендикулярный направлению движения (с учётом оси Y)
         Vector3 lateralDirection = Vector3.Cross(Vector3.up, forwardOnPath).normalized;
@@ -202,86 +164,12 @@ public class BotAI : MonoBehaviour
         steeringPowerValue = targetAngle * steeringSensitivity * vehicleMovement.steeringPower;
     }
 
-    /// <summary>
-    /// Ищет ближайшую дистанцию вдоль пути к заданной позиции, используя кешированные точки.
-    /// Предполагается, что автомобиль движется вперёд по маршруту, поэтому можно начинать поиск с последнего найденного индекса.
-    /// </summary>
-    private float FindClosestDistance(Vector3 position)
-    {
-        if (cachedPoints.Count == 0)
-            return 0f;
-
-        int bestIndex = lastClosestIndex;
-        float bestSqrDist = (cachedPoints[bestIndex] - position).sqrMagnitude;
-
-        // Движение вперёд по кешированным точкам
-        while (bestIndex + 1 < cachedPoints.Count)
-        {
-            float nextSqrDist = (cachedPoints[bestIndex + 1] - position).sqrMagnitude;
-            if (nextSqrDist < bestSqrDist)
-            {
-                bestSqrDist = nextSqrDist;
-                bestIndex++;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        // Движение назад по кешированным точкам
-        while (bestIndex - 1 >= 0)
-        {
-            float prevSqrDist = (cachedPoints[bestIndex - 1] - position).sqrMagnitude;
-            if (prevSqrDist < bestSqrDist)
-            {
-                bestSqrDist = prevSqrDist;
-                bestIndex--;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        lastClosestIndex = bestIndex;
-        return cachedDistances[bestIndex];
-    }
-
-    /// <summary>
-    /// Возвращает точку на маршруте по заданной дистанции, используя бинарный поиск для интерполяции между кешированными точками.
-    /// </summary>
-    private Vector3 GetPointAtDistance(float distance)
-    {
-        if (distance <= 0f)
-            return cachedPoints[0];
-        if (distance >= totalPathLength)
-            return cachedPoints[cachedPoints.Count - 1];
-
-        int low = 0;
-        int high = cachedDistances.Count - 1;
-        while (low <= high)
-        {
-            int mid = low + (high - low) / 2;
-            if (cachedDistances[mid] < distance)
-                low = mid + 1;
-            else
-                high = mid - 1;
-        }
-
-        int index = low;
-        if (index == 0)
-            return cachedPoints[0];
-
-        float d0 = cachedDistances[index - 1];
-        float d1 = cachedDistances[index];
-        float t = (distance - d0) / (d1 - d0);
-        return Vector3.Lerp(cachedPoints[index - 1], cachedPoints[index], t);
-    }
 
     private void ApplyTurnBraking()
     {
-        if (TryGetUpcomingTurnInfo(out float upcomingTurnAngle, out float distanceToTurn))
+        if (PathHolder.Instance.TryGetUpcomingTurnInfo(out float upcomingTurnAngle, out float distanceToTurn,
+                turnScanDistance, turnBrakingDistance, minTurnAngle, transform.position,
+                vehicleMovement.lastClosestPathIndex))
         {
             if (distanceToTurn <= turnBrakingDistance)
             {
@@ -304,36 +192,6 @@ public class BotAI : MonoBehaviour
         return Mathf.Lerp(maxTurnSpeed, minTurnSpeed, angleRatio);
     }
 
-    /// <summary>
-    /// Получает информацию о предстоящем повороте, используя кешированные данные.
-    /// </summary>
-    private bool TryGetUpcomingTurnInfo(out float turnAngle, out float distanceToTurn)
-    {
-        turnAngle = 0f;
-        distanceToTurn = 0f;
-
-        float currentDistance = FindClosestDistance(transform.position);
-        float endDistance = Mathf.Min(currentDistance + turnScanDistance, totalPathLength);
-
-        // Сохраняем промежуточные значения для минимизации вычислений
-        float delta = 0.1f;
-        Vector3 pointA = GetPointAtDistance(currentDistance);
-        Vector3 pointB = GetPointAtDistance(currentDistance + delta);
-        Vector3 startTangent = (pointB - pointA).normalized;
-
-        Vector3 pointC = GetPointAtDistance(endDistance - delta);
-        Vector3 pointD = GetPointAtDistance(endDistance);
-        Vector3 endTangent = (pointD - pointC).normalized;
-
-        turnAngle = Vector3.Angle(startTangent, endTangent);
-        if (turnAngle > minTurnAngle)
-        {
-            distanceToTurn = turnBrakingDistance;
-            return true;
-        }
-
-        return false;
-    }
 
     /// <summary>
     /// Обнаруживает препятствия с тегом "Obstacle" с использованием Physics.RaycastNonAlloc.
@@ -384,7 +242,7 @@ public class BotAI : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (pathCreator != null && cachedPoints.Count > 0)
+        if (PathHolder.Instance.pathCreator != null && PathHolder.Instance.cachedPoints.Count > 0)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, targetPosition);

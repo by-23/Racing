@@ -7,7 +7,7 @@ public class BotAttack : Attack
     [Header("Bot Settings")] [SerializeField]
     private float detectionRange = 20f; // Дальность обнаружения цели
 
-    [SerializeField, Range(1, 100)] private int attackChance; // Вероятность атаки (от 0 до 1)
+    [SerializeField, Range(0, 100)] private int attackChance; // Вероятность атаки (от 0 до 1)
 
     private void Update()
     {

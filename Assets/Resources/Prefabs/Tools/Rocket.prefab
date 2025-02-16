@@ -163,8 +163,8 @@ MonoBehaviour:
   followSpeed: 10
   lifetime: 15
   followImmediately: 1
-  oscillationRange: 1
-  oscillationFrequency: 1
+  oscillationRange: 0
+  oscillationFrequency: 0
 --- !u!114 &-8871661809336245487
 MonoBehaviour:
   m_ObjectHideFlags: 0

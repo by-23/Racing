@@ -16,9 +16,7 @@ public class Explosive : MonoBehaviour
     private void OnValidate()
     {
         if (!_collider)
-        {
             _collider = GetComponent<Collider>();
-        }
     }
 
     private void Awake()
@@ -29,18 +27,18 @@ public class Explosive : MonoBehaviour
 
     protected void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Vehicle vehicle) && vehicle != item.Owner)
+        if ((other.TryGetComponent(out Vehicle vehicle) && vehicle != item.Owner) || other.CompareTag("Obstacle"))
         {
             if (!RoomManager.Instance.IsOnline)
             {
-                Explode(vehicle);
+                Explode();
             }
             else
-                this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All, vehicle);
+                this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All);
         }
     }
 
-    private void Explode(Vehicle vehicle)
+    private void Explode()
     {
         Destroy(_collider);
         GameObject newExplosionFX;
@@ -57,20 +55,25 @@ public class Explosive : MonoBehaviour
         foreach (Collider collider in colliders)
         {
             Rigidbody rb = collider.GetComponent<Rigidbody>();
+            HealthController healthController = collider.GetComponentInParent<HealthController>();
+            Vehicle vehicle = collider.GetComponentInParent<Vehicle>();
             if (rb != null)
             {
                 rb.AddExplosionForce(explosionForce * 1000000, transform.position, explosionRadius,
                     upwardsModifier * 1000000);
+                if (healthController != null && item.Owner != vehicle)
+                {
+                    healthController.TakeDamage(50);
+                }
             }
         }
 
-        vehicle.healthController.TakeDamage(50);
         Destroy(gameObject);
     }
 
     [PunRPC]
-    void ExplodeRPC(Vehicle vehicle)
+    void ExplodeRPC()
     {
-        Explode(vehicle);
+        Explode();
     }
 }
