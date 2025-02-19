@@ -20,7 +20,7 @@ public class VehicleGroundDetection
         Ray ray = new Ray(vehicle.transform.position + vehicle.transform.up * 1f, -vehicle.transform.up);
         var raycastHit = new RaycastHit();
         IsGrounded = Physics.Raycast(ray, out raycastHit, RaycastDist, GroundLayers);
-        Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
+        Debug.DrawRay(ray.origin, ray.direction * 10, Color.blue);
     }
 
     public void OnDrawGizmosSelected(Vehicle vehicle)

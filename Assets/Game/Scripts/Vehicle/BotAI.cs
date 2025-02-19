@@ -32,11 +32,31 @@ public class BotAI : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float carResetTime;
 
+    [Header("Reverse Settings")] [SerializeField]
+    private float stuckVelocityThreshold = 0.1f; // Если скорость меньше – считаем, что бот не движется
+
+    [SerializeField]
+    private float stuckTimeThreshold = 2f; // Время, которое бот должен «не двигаться», чтобы считаться застрявшим
+
+    [SerializeField] private float reverseDuration = 2f; // Время реверса (движение назад)
+    [SerializeField] private float reverseAccelerationFactor = 1f; // Сила ускорения при движении назад
+
     private VehicleMovement vehicleMovement;
     private float currentSpeedMultiplier = 1f;
     internal Coroutine resetCoroutine;
     private float steeringPowerValue;
     private int currentTurnIndex = 0;
+
+    // Переменные для определения застревания
+    private float stuckTimer = 0f;
+
+    private enum BotState
+    {
+        Normal,
+        Reversing
+    }
+
+    private BotState currentState = BotState.Normal;
 
     private void Start()
     {
@@ -45,21 +65,45 @@ public class BotAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        bool isBraking = ApplyTurnBraking();
-
-        if (!isBraking)
-            vehicleMovement.ApplyAcceleration(accelerationFactor * currentSpeedMultiplier);
-
-        vehicleMovement.ApplySteering(steeringPowerValue);
-
-        // Если скорость очень мала, обнуляем движение
-        if (vehicleMovement.rb.velocity.sqrMagnitude < 0.25f && currentSpeedMultiplier <= 0f)
+        if (currentState == BotState.Normal)
         {
-            vehicleMovement.rb.velocity = Vector3.zero;
-            vehicleMovement.rb.angularVelocity = Vector3.zero;
+            bool isBraking = ApplyTurnBraking();
+            if (!isBraking)
+                vehicleMovement.ApplyAcceleration(accelerationFactor * currentSpeedMultiplier);
+
+            vehicleMovement.ApplySteering(steeringPowerValue);
+
+            // Если скорость очень мала – обнуляем движение (в нормальном режиме)
+            if (vehicleMovement.rb.velocity.sqrMagnitude < 0.25f && currentSpeedMultiplier <= 0f)
+            {
+                vehicleMovement.rb.velocity = Vector3.zero;
+                vehicleMovement.rb.angularVelocity = Vector3.zero;
+            }
+
+            FollowPath();
+
+            if (vehicleMovement.rb.velocity.magnitude < stuckVelocityThreshold)
+            {
+                stuckTimer += Time.fixedDeltaTime;
+                if (stuckTimer >= stuckTimeThreshold)
+                {
+                    StartCoroutine(ReverseRoutine());
+                    stuckTimer = 0f;
+                }
+            }
+            else
+            {
+                stuckTimer = 0f;
+            }
+        }
+        else if (currentState == BotState.Reversing)
+        {
+            vehicleMovement.ApplyAcceleration(-reverseAccelerationFactor);
+            vehicleMovement.ApplySteering(0f);
         }
 
-        FollowPath();
+        if (resetCoroutine == null)
+            resetCoroutine = StartCoroutine(ResetCarPosition());
     }
 
     private void FollowPath()
@@ -79,19 +123,11 @@ public class BotAI : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out Explosive explosive) && resetCoroutine == null)
-            resetCoroutine = StartCoroutine(ResetCarPosition());
-    }
 
     internal IEnumerator ResetCarPosition()
     {
         yield return new WaitForSeconds(carResetTime);
-
-        if (!Physics.Raycast(transform.position + Vector3.up * 1.0f,
-                Vector3.down, out RaycastHit hit, 2f, groundLayer) ||
-            hit.collider.tag != "Ground")
+        if (!vehicleMovement.groundDetection.IsGrounded)
         {
             vehicleMovement.ResetCarPosition();
         }
@@ -106,7 +142,7 @@ public class BotAI : MonoBehaviour
 
         if (currentTurnIndex < cachedTurns.Count)
         {
-            // Выбираем следующий поворот из кэша
+            // Берём следующий поворот из кэша
             float turnDistance = cachedTurns[currentTurnIndex].distance;
             targetPoint = PathHolder.Instance.GetPointAtDistance(turnDistance);
 
@@ -128,15 +164,10 @@ public class BotAI : MonoBehaviour
         Vector3 targetDirection = (targetPoint - transform.position).normalized;
         float targetAngle = Vector3.SignedAngle(transform.forward, targetDirection, Vector3.up);
 
-        // Прямое рулевое воздействие (можно добавить сглаживание, если требуется)
+        // Вычисляем рулевой отклонение
         steeringPowerValue = targetAngle * steeringSensitivity * vehicleMovement.steeringPower;
     }
 
-    /// <summary>
-    /// Применяет торможение перед поворотом.
-    /// Если расстояние до поворота меньше turnBrakingDistance и скорость выше допустимой,
-    /// применяется торможение и возвращается true.
-    /// </summary>
     private bool ApplyTurnBraking()
     {
         List<TurnInfo> cachedTurns = PathHolder.Instance.cachedTurns;
@@ -149,7 +180,7 @@ public class BotAI : MonoBehaviour
             float distanceToTurn = Vector3.Distance(transform.position, turnPoint);
             if (distanceToTurn <= turnBrakingDistance)
             {
-                // Вычисляем максимально допустимую скорость для входа в поворот
+                // Вычисляем максимально допустимую скорость для поворота
                 float allowedTurnSpeed = GetMaxSpeedForTurn(cachedTurns[currentTurnIndex].angle);
                 if (vehicleMovement.rb.velocity.magnitude > allowedTurnSpeed)
                 {
@@ -168,14 +199,11 @@ public class BotAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Вычисляет максимально допустимую скорость для входа в поворот в зависимости от его угла.
-    /// При угле 0 автомобиль может ехать со скоростью maxTurnSpeed,
-    /// а при максимальном угле – замедляется до minTurnSpeed.
+    /// Вычисляет максимально допустимую скорость для входа в поворот.
     /// </summary>
     private float GetMaxSpeedForTurn(float turnAngle)
     {
         float angleRatio = Mathf.Clamp01(turnAngle / maxTurnAngle);
-        // Метод возвращает скорость, не превышать которую можно при данном угле поворота
         return Mathf.Lerp(maxTurnSpeed, minTurnSpeed, angleRatio);
     }
 
@@ -186,7 +214,6 @@ public class BotAI : MonoBehaviour
     {
         avoidanceDirection = Vector3.zero;
         Vector3 origin = transform.position;
-        Vector3 rayOrigin = origin + transform.forward * 1.0f;
 
         float angleStep = detectionAngle / (rayCount - 1);
         float startAngle = -detectionAngle / 2f;
@@ -214,13 +241,29 @@ public class BotAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Применяет обход препятствия посредством добавления крутящего момента.
+    /// Применяет обход препятствия посредством крутящего момента.
     /// </summary>
     private void AvoidObstacle(Vector3 avoidanceDirection)
     {
         float angleToAvoidance = Vector3.SignedAngle(transform.forward, avoidanceDirection, Vector3.up);
         float steeringValue = angleToAvoidance * avoidanceStrength * vehicleMovement.steeringPower;
         vehicleMovement.rb.AddRelativeTorque(0f, steeringValue, 0f, ForceMode.Acceleration);
+    }
+
+    /// <summary>
+    /// Корутин, который переводит бота в режим реверса на заданное время, а затем возвращает в нормальный режим.
+    /// </summary>
+    private IEnumerator ReverseRoutine()
+    {
+        currentState = BotState.Reversing;
+        float timer = 0f;
+        while (timer < reverseDuration)
+        {
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        currentState = BotState.Normal;
     }
 
 #if UNITY_EDITOR
@@ -235,12 +278,6 @@ public class BotAI : MonoBehaviour
             Vector3 dir = Quaternion.Euler(0, startAngle + angleStep * i, 0) * transform.forward;
             Gizmos.DrawLine(transform.position, transform.position + dir * obstacleDetectionDistance);
         }
-
-        // Рисуем луч для проверки земли под машиной
-        Vector3 rayStart = transform.position + Vector3.up * 1.0f;
-        Vector3 rayEnd = rayStart + Vector3.down * 2f;
-        Gizmos.color = Color.white;
-        Gizmos.DrawLine(rayStart, rayEnd);
     }
 #endif
 }

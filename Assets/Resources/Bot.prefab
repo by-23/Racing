@@ -534,16 +534,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   steeringSensitivity: 0.1
   accelerationFactor: 1
-  lookAheadDistance: 30
   brakingPower: 50
   turnBrakingDistance: 60
   maxTurnSpeed: 100
   minTurnSpeed: 50
   maxTurnAngle: 20
-  obstacleDetectionDistance: 60
-  avoidanceStrength: 0.2
+  obstacleDetectionDistance: 30
+  avoidanceStrength: 0.5
   rayCount: 3
-  detectionAngle: 20
+  detectionAngle: 5
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 72
@@ -551,6 +550,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   carResetTime: 7
+  stuckVelocityThreshold: 3
+  stuckTimeThreshold: 2
+  reverseDuration: 0.5
+  reverseAccelerationFactor: 2
 --- !u!114 &-4256842069966461579
 MonoBehaviour:
   m_ObjectHideFlags: 0
