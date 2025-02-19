@@ -11,10 +11,17 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float moveTime = 1f;
     [SerializeField] private Ease easing;
     [SerializeField] private bool isAutoRotate;
-    
+
     private Vector3 _lastStableDirection;
     private float _rotationSmoothVelocity;
     private const float RotationSmoothTime = 0.3f;
+    private Quaternion savedRotation;
+
+    private void Start()
+    {
+        if (GetComponentInParent<Vehicle>())
+            savedRotation = GetComponentInParent<Vehicle>().transform.rotation;
+    }
 
     void LateUpdate()
     {
@@ -28,10 +35,10 @@ public class CameraFollow : MonoBehaviour
     {
         Vector3 basePosition = target.position + Vector3.up * distance;
         Vector3 finalPosition = basePosition + offset;
-        
+
         transform.position = Vector3.Lerp(
-            transform.position, 
-            finalPosition, 
+            transform.position,
+            finalPosition,
             Time.deltaTime * moveTime
         );
     }
@@ -40,18 +47,18 @@ public class CameraFollow : MonoBehaviour
     {
         if (!isAutoRotate)
         {
-            transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            transform.rotation = Quaternion.Euler(90f, savedRotation.eulerAngles.y, savedRotation.eulerAngles.z);
             return;
         }
 
         Vector3 horizontalForward = GetStableHorizontalDirection();
-        Quaternion targetRotation = Quaternion.Euler(90f, 0, 0) * 
-                                   Quaternion.LookRotation(horizontalForward);
+        Quaternion targetRotation = Quaternion.Euler(90f, 0, 0) *
+                                    Quaternion.LookRotation(horizontalForward);
 
         transform.rotation = SmoothDampQuaternion(
-            transform.rotation, 
-            targetRotation, 
-            ref _rotationSmoothVelocity, 
+            transform.rotation,
+            targetRotation,
+            ref _rotationSmoothVelocity,
             RotationSmoothTime
         );
     }
@@ -59,7 +66,7 @@ public class CameraFollow : MonoBehaviour
     private Vector3 GetStableHorizontalDirection()
     {
         Vector3 rawDirection = Vector3.ProjectOnPlane(target.forward, Vector3.up);
-        
+
         if (rawDirection == Vector3.zero)
             return _lastStableDirection;
 
@@ -68,14 +75,14 @@ public class CameraFollow : MonoBehaviour
     }
 
     private Quaternion SmoothDampQuaternion(
-        Quaternion current, 
-        Quaternion target, 
-        ref float velocity, 
+        Quaternion current,
+        Quaternion target,
+        ref float velocity,
         float smoothTime)
     {
         Vector3 currentEuler = current.eulerAngles;
         Vector3 targetEuler = target.eulerAngles;
-        
+
         return Quaternion.Euler(
             Mathf.SmoothDampAngle(currentEuler.x, targetEuler.x, ref velocity, smoothTime),
             Mathf.SmoothDampAngle(currentEuler.y, targetEuler.y, ref velocity, smoothTime),
@@ -86,7 +93,7 @@ public class CameraFollow : MonoBehaviour
     public void SetTarget(Transform newTarget)
     {
         this.transform.DOMove(
-                newTarget.position + Vector3.up * distance + offset, 
+                newTarget.position + Vector3.up * distance + offset,
                 moveTime
             )
             .SetEase(easing)

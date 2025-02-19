@@ -23,7 +23,7 @@ public class MusicManager : MonoBehaviour
     /// <returns></returns>
     MusicPlayer FindOrCreateMusicPlayer()
     {
-        musicPlayer = FindObjectOfType<MusicPlayer>();
+        musicPlayer = FindAnyObjectByType<MusicPlayer>();
 
         if (musicPlayer == null)
         {

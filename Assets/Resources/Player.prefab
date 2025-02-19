@@ -156,6 +156,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 2848009547644038990, guid: 57fecff18d40d214d9c2e9f1922430f7,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: e34b9dc1679d7ad419e6a9e3befd1c18, type: 3}
+  m_Resource: {fileID: 8300000, guid: e34b9dc1679d7ad419e6a9e3befd1c18, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -400,6 +401,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 2639700093
   InScenePlacedSourceGlobalObjectIdHash: 1883042892
+  DeferredDespawnTick: 0
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -407,6 +410,8 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &1816427083731817154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,6 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28604db03ff51e4a8604a4576bfb048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   playerCam: {fileID: 5285592622119876980}
   attack: {fileID: 4320569773949241135}
   triggerCallback: {fileID: 9131081407688437010}
@@ -514,6 +520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b394cfdf6167bc4f9595489845ce5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   health: 100
 --- !u!114 &3896878137984185943
 MonoBehaviour:
@@ -705,12 +712,12 @@ PrefabInstance:
     - target: {fileID: 3889416983491850618, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9956073
+      value: 0.29709592
       objectReference: {fileID: 0}
     - target: {fileID: 3889416983491850618, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.093627416
+      value: -0.9548477
       objectReference: {fileID: 0}
     - target: {fileID: 3889416983491850618, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
@@ -740,12 +747,12 @@ PrefabInstance:
     - target: {fileID: 7098195668767611313, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9956073
+      value: 0.29709592
       objectReference: {fileID: 0}
     - target: {fileID: 7098195668767611313, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.093627416
+      value: -0.9548477
       objectReference: {fileID: 0}
     - target: {fileID: 7098195668767611313, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
@@ -775,12 +782,12 @@ PrefabInstance:
     - target: {fileID: 8764160934054826998, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9956073
+      value: 0.29709592
       objectReference: {fileID: 0}
     - target: {fileID: 8764160934054826998, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.093627416
+      value: -0.9548477
       objectReference: {fileID: 0}
     - target: {fileID: 8764160934054826998, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
@@ -795,12 +802,12 @@ PrefabInstance:
     - target: {fileID: 9196701982545230596, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9956073
+      value: 0.29709592
       objectReference: {fileID: 0}
     - target: {fileID: 9196701982545230596, guid: 71f98781a624545ccae847811d71db95,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.093627416
+      value: -0.9548477
       objectReference: {fileID: 0}
     - target: {fileID: 9196701982545230596, guid: 71f98781a624545ccae847811d71db95,
         type: 3}

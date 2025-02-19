@@ -31,7 +31,7 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<GameController>();
+                instance = FindAnyObjectByType<GameController>();
                 if (instance == null)
                 {
                     var obj = new GameObject();

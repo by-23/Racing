@@ -74,15 +74,15 @@ public class BotAI : MonoBehaviour
             vehicleMovement.ApplySteering(steeringPowerValue);
 
             // Если скорость очень мала – обнуляем движение (в нормальном режиме)
-            if (vehicleMovement.rb.velocity.sqrMagnitude < 0.25f && currentSpeedMultiplier <= 0f)
+            if (vehicleMovement.rb.linearVelocity.sqrMagnitude < 0.25f && currentSpeedMultiplier <= 0f)
             {
-                vehicleMovement.rb.velocity = Vector3.zero;
+                vehicleMovement.rb.linearVelocity = Vector3.zero;
                 vehicleMovement.rb.angularVelocity = Vector3.zero;
             }
 
             FollowPath();
 
-            if (vehicleMovement.rb.velocity.magnitude < stuckVelocityThreshold)
+            if (vehicleMovement.rb.linearVelocity.magnitude < stuckVelocityThreshold)
             {
                 stuckTimer += Time.fixedDeltaTime;
                 if (stuckTimer >= stuckTimeThreshold)
@@ -182,7 +182,7 @@ public class BotAI : MonoBehaviour
             {
                 // Вычисляем максимально допустимую скорость для поворота
                 float allowedTurnSpeed = GetMaxSpeedForTurn(cachedTurns[currentTurnIndex].angle);
-                if (vehicleMovement.rb.velocity.magnitude > allowedTurnSpeed)
+                if (vehicleMovement.rb.linearVelocity.magnitude > allowedTurnSpeed)
                 {
                     vehicleMovement.ApplyBraking(brakingPower);
                     brakingApplied = true;

@@ -38,7 +38,7 @@ public class PathHolder : Singleton<PathHolder>
     }
 
     // При инициализации кэшируем повороты.
-    private void Awake()
+    protected override void Awake()
     {
         CacheTurns();
     }

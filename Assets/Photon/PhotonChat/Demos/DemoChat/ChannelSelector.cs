@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
@@ -14,19 +15,19 @@ namespace Photon.Chat.Demo
 {
     public class ChannelSelector : MonoBehaviour, IPointerClickHandler
     {
-        public string Channel;
+        public string channel;
 
         public void SetChannel(string channel)
         {
-            this.Channel = channel;
+            this.channel = channel;
             Text t = this.GetComponentInChildren<Text>();
-            t.text = this.Channel;
+            t.text = this.channel;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            ChatGui handler = FindObjectOfType<ChatGui>();
-            handler.ShowChannel(this.Channel);
+            ChatGui handler = FindAnyObjectByType<ChatGui>();
+            handler.ShowChannel(this.channel);
         }
     }
 }

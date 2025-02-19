@@ -39,6 +39,7 @@ namespace HeurekaGames.AssetHunterPRO
             {
                 sizeAsString = String.Format(((float)Math.Round(b, 1)).ToString(), "0.00") + " b";
             }
+
             return sizeAsString;
         }
 
@@ -60,7 +61,8 @@ namespace HeurekaGames.AssetHunterPRO
 
         public static string[] GetAllSceneNames()
         {
-            return (from scene in AssetDatabase.GetAllAssetPaths() where scene.EndsWith(".unity") select scene).ToArray();
+            return (from scene in AssetDatabase.GetAllAssetPaths() where scene.EndsWith(".unity") select scene)
+                .ToArray();
         }
 
         public static System.String BytesToString(long byteCount)
@@ -197,17 +199,20 @@ namespace HeurekaGames.AssetHunterPRO
             {
                 addTextureToPlayerSettingsList(ref buildTargetAssetDependencies, unknownTargetGroupIcons[i]);
             }
+
             //Loop targetgroup icons
             for (int i = 0; i < targetGroupIcons.Length; i++)
             {
                 addTextureToPlayerSettingsList(ref buildTargetAssetDependencies, targetGroupIcons[i]);
             }
+
             //Loop additional targetgroup icons
             if (additionalTargetGroupIcons != null)
                 for (int i = 0; i < additionalTargetGroupIcons.Count; i++)
                 {
                     addTextureToPlayerSettingsList(ref buildTargetAssetDependencies, additionalTargetGroupIcons[i]);
                 }
+
             //Loop splash
             for (int i = 0; i < splashLogos.Length; i++)
             {
@@ -218,7 +223,8 @@ namespace HeurekaGames.AssetHunterPRO
             addTextureToPlayerSettingsList(ref buildTargetAssetDependencies, PlayerSettings.defaultCursor);
             addTextureToPlayerSettingsList(ref buildTargetAssetDependencies, PlayerSettings.virtualRealitySplashScreen);
             addTextureToPlayerSettingsList(ref buildTargetAssetDependencies, PlayerSettings.SplashScreen.background);
-            addTextureToPlayerSettingsList(ref buildTargetAssetDependencies, PlayerSettings.SplashScreen.backgroundPortrait);
+            addTextureToPlayerSettingsList(ref buildTargetAssetDependencies,
+                PlayerSettings.SplashScreen.backgroundPortrait);
 #if !UNITY_2019_1_OR_NEWER
             addTextureToPlayerSettingsList(ref buildTargetAssetDependencies, PlayerSettings.resolutionDialogBanner);
 #endif
@@ -250,87 +256,90 @@ namespace HeurekaGames.AssetHunterPRO
                     }
 #endif
                 case BuildTargetGroup.Android:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 case BuildTargetGroup.iOS:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 case BuildTargetGroup.PS4:
-                    {
-                        Debug.Log("AH: Need " + targetGroup + " documentation to add platform specific images and assets");
-                        break;
-                    }
+                {
+                    Debug.Log("AH: Need " + targetGroup + " documentation to add platform specific images and assets");
+                    break;
+                }
                 case BuildTargetGroup.Standalone:
-                    {
-                        break;
-                    }
-                case BuildTargetGroup.Switch:
-                    {
-                        return PlayerSettings.Switch.icons.ToList();
-                    }
+                {
+                    break;
+                }
                 case BuildTargetGroup.tvOS:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 case BuildTargetGroup.WebGL:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 case BuildTargetGroup.WSA:
-                    {
-                        List<Texture2D> textures = new List<Texture2D>();
+                {
+                    List<Texture2D> textures = new List<Texture2D>();
 
 #if !UNITY_2021_1_OR_NEWER
                         //Obsolete at some point in 2021
                         textures.Add(AssetDatabase.LoadAssetAtPath<Texture2D>(PlayerSettings.WSA.packageLogo));
 #endif
 
-                        HashSet<PlayerSettings.WSAImageScale> exceptionScales = new HashSet<PlayerSettings.WSAImageScale>();
+                    HashSet<PlayerSettings.WSAImageScale> exceptionScales = new HashSet<PlayerSettings.WSAImageScale>();
 
-                        foreach (PlayerSettings.WSAImageType imageType in Enum.GetValues(typeof(PlayerSettings.WSAImageType)))
+                    foreach (PlayerSettings.WSAImageType imageType in Enum.GetValues(
+                                 typeof(PlayerSettings.WSAImageType)))
+                    {
+                        foreach (PlayerSettings.WSAImageScale imageScale in Enum.GetValues(
+                                     typeof(PlayerSettings.WSAImageScale)))
                         {
-                            foreach (PlayerSettings.WSAImageScale imageScale in Enum.GetValues(typeof(PlayerSettings.WSAImageScale)))
+                            try
                             {
-                                try
-                                {
-                                    string imagePath = PlayerSettings.WSA.GetVisualAssetsImage(imageType, imageScale);
-                                    textures.Add(AssetDatabase.LoadAssetAtPath<Texture2D>(imagePath));
-                                }
-                                catch (Exception)
-                                {
-                                    exceptionScales.Add(imageScale);
-                                    //If that scale doesn't apply to the given WSA image type
-                                }
+                                string imagePath = PlayerSettings.WSA.GetVisualAssetsImage(imageType, imageScale);
+                                textures.Add(AssetDatabase.LoadAssetAtPath<Texture2D>(imagePath));
+                            }
+                            catch (Exception)
+                            {
+                                exceptionScales.Add(imageScale);
+                                //If that scale doesn't apply to the given WSA image type
                             }
                         }
-
-                        if (exceptionScales.Count >= 1)
-                        {
-                            string scaleListString = "";
-
-                            foreach (var item in exceptionScales)
-                            {
-                                scaleListString += item.ToString() + (exceptionScales.ElementAt(exceptionScales.Count - 1) == item ? "":", ");
-                            }
-
-                            Debug.Log("GetVisualAssetsImage method missing support for WSA image scale: " + scaleListString);
-                        }
-
-                        return textures;
                     }
+
+                    if (exceptionScales.Count >= 1)
+                    {
+                        string scaleListString = "";
+
+                        foreach (var item in exceptionScales)
+                        {
+                            scaleListString += item.ToString() +
+                                               (exceptionScales.ElementAt(exceptionScales.Count - 1) == item
+                                                   ? ""
+                                                   : ", ");
+                        }
+
+                        Debug.Log("GetVisualAssetsImage method missing support for WSA image scale: " +
+                                  scaleListString);
+                    }
+
+                    return textures;
+                }
                 case BuildTargetGroup.XboxOne:
-                    {
-                        Debug.Log("AH: Need " + targetGroup + " documentation to add platform specific images and assets");
-                        break;
-                    }
+                {
+                    Debug.Log("AH: Need " + targetGroup + " documentation to add platform specific images and assets");
+                    break;
+                }
                 default:
-                    {
-                        Debug.LogWarning("AH: Targetgroup unknown: " + targetGroup);
-                        break;
-                    }
+                {
+                    Debug.LogWarning("AH: Targetgroup unknown: " + targetGroup);
+                    break;
+                }
             }
+
             return null;
         }
 

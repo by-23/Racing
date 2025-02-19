@@ -121,7 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a553fe9cfb9ae1b43af9c28ed991830c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomListParent: {fileID: 0}
   roomListItemPrefab: {fileID: 8183909011509936856, guid: 548fc98a53c456f489a3f71f0ec627a7,
     type: 3}
 --- !u!114 &2736572696894151449
@@ -158,8 +157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b36f99224fb3654dba0bd2cddd3ee0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalLaps: 1
-  finishedMenu: {fileID: 0}
   isGameStarted: 0
 --- !u!114 &7581323166912425064
 MonoBehaviour:
@@ -179,25 +176,23 @@ MonoBehaviour:
     type: 3}
   botPrefab: {fileID: 2603592718261198966, guid: 72889041c8892af47bf2e4636bbe331a,
     type: 3}
-  instantiatedBots: []
+  instantiatedPlayers: []
   spawnPoints:
-  - spawnPoint: {x: 100, y: 0, z: 50}
+  - spawnPoint: {fileID: 0}
     isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 50}
+  - spawnPoint: {fileID: 0}
     isFull: 0
-  - spawnPoint: {x: 100, y: 0, z: 65}
+  - spawnPoint: {fileID: 0}
     isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 65}
+  - spawnPoint: {fileID: 0}
     isFull: 0
-  - spawnPoint: {x: 100, y: 0, z: 80}
+  - spawnPoint: {fileID: 0}
     isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 80}
+  - spawnPoint: {fileID: 0}
     isFull: 0
-  - spawnPoint: {x: 100, y: 0, z: 95}
+  - spawnPoint: {fileID: 0}
     isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 95}
-    isFull: 0
-  - spawnPoint: {x: 115, y: 0, z: 65}
+  - spawnPoint: {fileID: 0}
     isFull: 0
   botCount: 0
 --- !u!114 &1007093837762111635
@@ -239,17 +234,17 @@ PrefabInstance:
     - target: {fileID: 3148238885663292076, guid: 929a28be7de950243b979e94eaa4f88d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -470
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 3148238885663292076, guid: 929a28be7de950243b979e94eaa4f88d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 180
+      value: 170
       objectReference: {fileID: 0}
     - target: {fileID: 3148238885663292076, guid: 929a28be7de950243b979e94eaa4f88d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18
+      value: -410
       objectReference: {fileID: 0}
     - target: {fileID: 3148238885663292076, guid: 929a28be7de950243b979e94eaa4f88d,
         type: 3}

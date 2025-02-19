@@ -29,7 +29,7 @@ public class VehicleMovement : MonoBehaviour
     [Range(0, 1)] [SerializeField] private float grip = 1f;
 
     internal bool CanMove { get; set; } = true;
-    private float ForwardSpeed => Vector3.Dot(rb.velocity, transform.forward);
+    private float ForwardSpeed => Vector3.Dot(rb.linearVelocity, transform.forward);
     internal float NormalizedForwardSpeed => Mathf.Abs(ForwardSpeed) > 0.1f ? ForwardSpeed / maxSpeed : 0f;
 
     internal int lastClosestPathIndex = 0;
@@ -49,7 +49,7 @@ public class VehicleMovement : MonoBehaviour
         if (pathCreator == null)
             pathCreator = (PathHolder.Instance != null)
                 ? PathHolder.Instance.pathCreator
-                : FindObjectOfType<PathCreator>();
+                : FindAnyObjectByType<PathCreator>();
 
         _cachedTransform = transform;
         _gameController = GameController.Instance;
@@ -118,7 +118,7 @@ public class VehicleMovement : MonoBehaviour
 
     public void ApplyBraking(float brakePower)
     {
-        Vector3 brakeForce = -rb.velocity.normalized * brakePower;
+        Vector3 brakeForce = -rb.linearVelocity.normalized * brakePower;
         rb.AddForce(brakeForce, ForceMode.Acceleration);
     }
 
@@ -147,7 +147,7 @@ public class VehicleMovement : MonoBehaviour
         if (!isGrounded)
             return;
         Vector3 right = _cachedTransform.right;
-        float lateralSpeed = Vector3.Dot(rb.velocity, right);
+        float lateralSpeed = Vector3.Dot(rb.linearVelocity, right);
         Vector3 lateralFriction = -right * ((lateralSpeed / Time.fixedDeltaTime) * grip);
         rb.AddForce(lateralFriction, ForceMode.Acceleration);
     }
@@ -157,7 +157,7 @@ public class VehicleMovement : MonoBehaviour
         if (!groundDetection.IsGrounded || !CanMove || !_gameController.isGameStarted)
             return;
 
-        float forwardSpeed = Vector3.Dot(rb.velocity, _cachedTransform.forward);
+        float forwardSpeed = Vector3.Dot(rb.linearVelocity, _cachedTransform.forward);
         float speedFactor = forwardSpeed * 0.075f;
         float clampedSteering = Mathf.Clamp(steeringInput * speedFactor, -steeringPower, steeringPower);
         float rotationTorque = clampedSteering - rb.angularVelocity.y;
@@ -174,7 +174,7 @@ public class VehicleMovement : MonoBehaviour
         rb.AddForce(forward * forceMagnitude, ForceMode.Acceleration);
 
         // Если превышена максимальная скорость, применяем компенсацию
-        float currentSpeed = rb.velocity.magnitude;
+        float currentSpeed = rb.linearVelocity.magnitude;
         if (currentSpeed > maxSpeed)
         {
             float decelerationFactor = forceMagnitude * (currentSpeed - maxSpeed) / maxSpeed;

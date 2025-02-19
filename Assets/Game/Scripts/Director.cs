@@ -17,7 +17,7 @@ public class Director : MonoBehaviour
 
     private void Start()
     {
-        mainCamera = FindObjectOfType<Camera>();
+        mainCamera = FindAnyObjectByType<Camera>();
     }
 
     public void MoveCamera(string pointName)

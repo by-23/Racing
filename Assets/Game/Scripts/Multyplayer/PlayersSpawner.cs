@@ -40,20 +40,21 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
 
     protected internal void SpawnPlayer()
     {
-        Vector3 currentSpawnPoint = Vector3.zero;
+        Transform currentSpawnPoint = null;
 
         if (!roomManager.IsOnline)
         {
             for (int i = 0; i < botCount; i++)
             {
                 currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
-                instantiatedPlayers.Add(Instantiate(botPrefab, currentSpawnPoint, Quaternion.identity));
+                instantiatedPlayers.Add(Instantiate(botPrefab, currentSpawnPoint.position, currentSpawnPoint.rotation));
                 var playerComponents = instantiatedPlayers[i].GetComponent<PlayerComponents>();
                 playerComponents.vehicle.SetBot();
             }
 
             currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
-            currentInstantiatedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
+            currentInstantiatedPlayer =
+                Instantiate(playerPrefab, currentSpawnPoint.position, currentSpawnPoint.rotation);
             instantiatedPlayers.Add(currentInstantiatedPlayer);
             var instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
             instantiatedPlayerComponents.vehicle.SetLocalPlayer();
@@ -63,7 +64,7 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
         else
         {
             currentInstantiatedPlayer =
-                PhotonNetwork.Instantiate(playerPrefab.name, currentSpawnPoint, Quaternion.identity);
+                PhotonNetwork.Instantiate(playerPrefab.name, currentSpawnPoint.position, currentSpawnPoint.rotation);
 
 
             Hashtable props = new Hashtable
@@ -84,7 +85,7 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
         }
     }
 
-    private Vector3 GetAwailableSpawnPoint(Vector3 currentSpawnPoint)
+    private Transform GetAwailableSpawnPoint(Transform currentSpawnPoint)
     {
         foreach (var spawnPoint in spawnPoints)
         {
@@ -112,6 +113,6 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
 [System.Serializable]
 public class SpawnPoint
 {
-    public Vector3 spawnPoint;
+    public Transform spawnPoint;
     public bool isFull;
 }

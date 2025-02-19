@@ -37,7 +37,7 @@ public class Follower : MonoBehaviour
     {
         if (targetVehicle && hasTarget || followImmediately)
         {
-            float targetVehicleSpeed = targetVehicle.vehicleMovement.rb.velocity.magnitude;
+            float targetVehicleSpeed = targetVehicle.vehicleMovement.rb.linearVelocity.magnitude;
             float vehicleSpeed =
                 targetVehicleSpeed < 50 ? 50 : targetVehicleSpeed;
 

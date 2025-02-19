@@ -27,7 +27,6 @@ namespace PathCreation.Examples
                     if (pathTool.autoUpdate)
                     {
                         TriggerUpdate();
-
                     }
                 }
             }
@@ -40,12 +39,13 @@ namespace PathCreation.Examples
                     SceneView.RepaintAll();
                 }
             }
-
         }
 
 
-        void TriggerUpdate() {
-            if (pathTool.pathCreator != null) {
+        void TriggerUpdate()
+        {
+            if (pathTool.pathCreator != null)
+            {
                 pathTool.TriggerUpdate();
             }
         }
@@ -71,13 +71,15 @@ namespace PathCreation.Examples
             }
         }
 
-        void OnToolDestroyed() {
-            if (pathTool != null) {
+        void OnToolDestroyed()
+        {
+            if (pathTool != null)
+            {
                 pathTool.pathCreator.pathUpdated -= OnPathModified;
             }
         }
 
- 
+
         protected virtual void Subscribe()
         {
             if (pathTool.pathCreator != null)
@@ -97,11 +99,12 @@ namespace PathCreation.Examples
                 {
                     pathTool.pathCreator = pathTool.GetComponent<PathCreator>();
                 }
-                else if (FindObjectOfType<PathCreator>())
+                else if (FindAnyObjectByType<PathCreator>())
                 {
-                    pathTool.pathCreator = FindObjectOfType<PathCreator>();
+                    pathTool.pathCreator = FindAnyObjectByType<PathCreator>();
                 }
             }
+
             return pathTool.pathCreator != null;
         }
     }
