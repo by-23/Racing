@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6360657817665283522}
   - component: {fileID: 5550134522015058979}
   - component: {fileID: 6062612061126555903}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_119
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 4844232576430782841}
   - component: {fileID: 3435879927014638002}
   - component: {fileID: 9109923563689299571}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cliff4_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ Transform:
   m_LocalScale: {x: 4.4725547, y: 4.4725547, z: 4.472555}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4256893827192850946}
+  m_Father: {fileID: 8336905996207499710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4844232576430782841
 MeshFilter:
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 2729483838998703584}
   - component: {fileID: 3742190468082905803}
   - component: {fileID: 8555690345740355792}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Rock4_001
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -484,142 +484,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8456964644338441267, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &229540573525586816
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2844032644987203511}
-  - component: {fileID: 3939351833843352313}
-  - component: {fileID: 7701031284308638685}
-  m_Layer: 0
-  m_Name: Finish
-  m_TagString: Finish
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2844032644987203511
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229540573525586816}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.9837371, z: -0, w: -0.1796146}
-  m_LocalPosition: {x: 10.759997, y: 2.25, z: -298.65002}
-  m_LocalScale: {x: 0.2, y: 0.1, z: 0.19999999}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: 159.305, z: 0}
---- !u!65 &3939351833843352313
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229540573525586816}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7701031284308638685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229540573525586816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 0
-  gameController: {fileID: 0}
---- !u!1 &339405761458514480
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6492823356461745104}
-  - component: {fileID: 2099216886566221340}
-  - component: {fileID: 6736392226262138101}
-  m_Layer: 0
-  m_Name: Checkpoint (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6492823356461745104
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 339405761458514480}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.8640992, z: 0, w: 0.50332165}
-  m_LocalPosition: {x: -30.3, y: 3.9599998, z: -210.7}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: -119.56, z: 0}
---- !u!65 &2099216886566221340
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 339405761458514480}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6736392226262138101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 339405761458514480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 3
-  gameController: {fileID: 0}
 --- !u!1 &512835037004760691
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,7 +496,7 @@ GameObject:
   - component: {fileID: 5159436769216409209}
   - component: {fileID: 2693556707280871749}
   - component: {fileID: 5248483438941273316}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_078
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -737,7 +601,7 @@ GameObject:
   - component: {fileID: 1813322001688153367}
   - component: {fileID: 1934394705584380167}
   - component: {fileID: 2996160154599781017}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_065
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -903,7 +767,7 @@ GameObject:
   - component: {fileID: 5200098855092360395}
   - component: {fileID: 4603821493080215625}
   - component: {fileID: 1970877581911895387}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_074
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -987,7 +851,7 @@ GameObject:
   - component: {fileID: 847357580778525611}
   - component: {fileID: 2363465292870605469}
   - component: {fileID: 8937242332465292844}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -1093,7 +957,7 @@ GameObject:
   - component: {fileID: 1851330136606213630}
   - component: {fileID: 8260189965638745748}
   - component: {fileID: 8643060956864214352}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_126
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -1199,7 +1063,7 @@ GameObject:
   - component: {fileID: 1503351079877927225}
   - component: {fileID: 6726434472417837514}
   - component: {fileID: 5046570293831003680}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_104
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -1305,7 +1169,7 @@ GameObject:
   - component: {fileID: 2374348769298677479}
   - component: {fileID: 5020436369178161489}
   - component: {fileID: 8761021737561077449}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (13)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -1411,7 +1275,7 @@ GameObject:
   - component: {fileID: 4253592630330638913}
   - component: {fileID: 8334049793638583353}
   - component: {fileID: 3991282085071043727}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (7)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -1517,7 +1381,7 @@ GameObject:
   - component: {fileID: 7756321051169934255}
   - component: {fileID: 5963117735948180357}
   - component: {fileID: 5887690218034625957}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (1)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -1812,7 +1676,7 @@ GameObject:
   - component: {fileID: 4750374684932716904}
   - component: {fileID: 3378219722210020379}
   - component: {fileID: 8610968874008682096}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_113
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -1918,7 +1782,7 @@ GameObject:
   - component: {fileID: 4632388830297629387}
   - component: {fileID: 8798606839728877647}
   - component: {fileID: 5544437020971059639}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_063
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -2024,7 +1888,7 @@ GameObject:
   - component: {fileID: 7344297662997295402}
   - component: {fileID: 5609127701154446456}
   - component: {fileID: 8866214256267826830}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (3)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -2129,7 +1993,7 @@ GameObject:
   - component: {fileID: 3743390183666204008}
   - component: {fileID: 4903123048417661684}
   - component: {fileID: 7791822031571782859}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_063
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -2212,7 +2076,7 @@ GameObject:
   - component: {fileID: 8960878251468937186}
   - component: {fileID: 5263176039327988558}
   - component: {fileID: 4754668658478570862}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_066
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -2296,7 +2160,7 @@ GameObject:
   - component: {fileID: 4078115250726878862}
   - component: {fileID: 2086523030648396567}
   - component: {fileID: 4763213968264583901}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (22)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -2390,74 +2254,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2228696402399645881, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &1390963129075149362
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5507139268642825331}
-  - component: {fileID: 7111402733683376197}
-  - component: {fileID: 7310489460490096463}
-  m_Layer: 0
-  m_Name: Checkpoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5507139268642825331
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1390963129075149362}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.60876137, z: 0, w: 0.7933534}
-  m_LocalPosition: {x: -61.49, y: 3.9599998, z: -178.8}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: 75, z: 0}
---- !u!65 &7111402733683376197
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1390963129075149362}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7310489460490096463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1390963129075149362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 0
-  gameController: {fileID: 0}
 --- !u!1 &1467132078005745493
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,7 +2372,7 @@ GameObject:
   - component: {fileID: 857134280802648760}
   - component: {fileID: 5382679220499851758}
   - component: {fileID: 6897945454131342618}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115 (7)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -2682,7 +2478,7 @@ GameObject:
   - component: {fileID: 1549533580324692951}
   - component: {fileID: 3288588371613139097}
   - component: {fileID: 6558087055721534850}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_120
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -2787,7 +2583,7 @@ GameObject:
   - component: {fileID: 3572754217481272568}
   - component: {fileID: 1509949143398681620}
   - component: {fileID: 7486662087021731768}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_132
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -2871,7 +2667,7 @@ GameObject:
   - component: {fileID: 805991655562402185}
   - component: {fileID: 2675377847934618567}
   - component: {fileID: 3089869339338967695}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cliff2_004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2887,11 +2683,11 @@ Transform:
   m_GameObject: {fileID: 1923581221294878990}
   serializedVersion: 2
   m_LocalRotation: {x: 0.52077657, y: -0.48399156, z: 0.43713135, w: 0.5508722}
-  m_LocalPosition: {x: -73.545876, y: 4.634439, z: -294.5651}
-  m_LocalScale: {x: 10.033886, y: 10.033885, z: 10.033885}
+  m_LocalPosition: {x: -73.54586, y: 4.634439, z: -294.5651}
+  m_LocalScale: {x: 10.033886, y: 10.033883, z: 10.033883}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4256893827192850946}
+  m_Father: {fileID: 8336905996207499710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &805991655562402185
 MeshFilter:
@@ -2977,7 +2773,7 @@ GameObject:
   - component: {fileID: 8771818034123083565}
   - component: {fileID: 2549763499616698147}
   - component: {fileID: 6981914412782348796}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (14)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -3083,7 +2879,7 @@ GameObject:
   - component: {fileID: 6652679982863893490}
   - component: {fileID: 2162357448067024330}
   - component: {fileID: 3885146704832229067}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (15)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -3295,7 +3091,7 @@ GameObject:
   - component: {fileID: 1582657899189393409}
   - component: {fileID: 4563829593795141233}
   - component: {fileID: 8724130845459017659}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Rock2_001
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -3484,7 +3280,7 @@ GameObject:
   - component: {fileID: 7325629837134932611}
   - component: {fileID: 8261855393584074588}
   - component: {fileID: 4276138367348566763}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_100
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -3696,7 +3492,7 @@ GameObject:
   - component: {fileID: 928884726056795562}
   - component: {fileID: 6661476767429045677}
   - component: {fileID: 6779419072746399807}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_118
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -3802,7 +3598,7 @@ GameObject:
   - component: {fileID: 7953195319179736562}
   - component: {fileID: 8321331949220811991}
   - component: {fileID: 6829743873589043088}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_065
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -4120,7 +3916,7 @@ GameObject:
   - component: {fileID: 1404832587294343538}
   - component: {fileID: 6835136822323394303}
   - component: {fileID: 3018326695333121404}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_098
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -4214,74 +4010,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6608564216126785947, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &2574701132530738939
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1046643232501617191}
-  - component: {fileID: 430915860634482763}
-  - component: {fileID: 930978145787205216}
-  m_Layer: 0
-  m_Name: Checkpoint (9)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1046643232501617191
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2574701132530738939}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.4051415, z: 0, w: 0.914254}
-  m_LocalPosition: {x: -68.6, y: 3.9599998, z: -285.2}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: -47.8, z: 0}
---- !u!65 &430915860634482763
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2574701132530738939}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &930978145787205216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2574701132530738939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 9
-  gameController: {fileID: 0}
 --- !u!1 &2578535810539007399
 GameObject:
   m_ObjectHideFlags: 0
@@ -4293,7 +4021,7 @@ GameObject:
   - component: {fileID: 5255858001175310427}
   - component: {fileID: 4087820136973629540}
   - component: {fileID: 7981613987655460361}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_060
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -4365,74 +4093,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &2603276116737440356
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5391985270958723277}
-  - component: {fileID: 1453996057487838926}
-  - component: {fileID: 301267616791465341}
-  m_Layer: 0
-  m_Name: Checkpoint (5)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5391985270958723277
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603276116737440356}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.5849577, z: 0, w: 0.8110638}
-  m_LocalPosition: {x: 2, y: 3.9599998, z: -231.8}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: -71.6, z: 0}
---- !u!65 &1453996057487838926
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603276116737440356}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &301267616791465341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603276116737440356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 5
-  gameController: {fileID: 0}
 --- !u!1 &2610941526346696199
 GameObject:
   m_ObjectHideFlags: 0
@@ -4464,7 +4124,6 @@ Transform:
   m_Children:
   - {fileID: 5583742398109885965}
   - {fileID: 1046290754674344071}
-  - {fileID: 7251237997537011204}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 120, z: 0}
 --- !u!1 &2630046056041960808
@@ -4585,7 +4244,7 @@ GameObject:
   - component: {fileID: 2187782143904709867}
   - component: {fileID: 846528007868205250}
   - component: {fileID: 811554045288717117}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (9)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -4723,7 +4382,7 @@ GameObject:
   - component: {fileID: 5650505935318691459}
   - component: {fileID: 6661291092244770336}
   - component: {fileID: 702937897707236806}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_055
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -4913,7 +4572,7 @@ GameObject:
   - component: {fileID: 8509124786228889563}
   - component: {fileID: 6998666129868735116}
   - component: {fileID: 8786144448694582506}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_116
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -5019,7 +4678,7 @@ GameObject:
   - component: {fileID: 4661989783157359774}
   - component: {fileID: 8782310162180736915}
   - component: {fileID: 128819534606672060}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_123
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -5125,7 +4784,7 @@ GameObject:
   - component: {fileID: 2399459033241332050}
   - component: {fileID: 6030552518127195140}
   - component: {fileID: 2881250041144100145}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115 (8)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -5231,7 +4890,7 @@ GameObject:
   - component: {fileID: 8414551214195411333}
   - component: {fileID: 6780286054614358953}
   - component: {fileID: 521992635760210890}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cliff2_013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5247,11 +4906,11 @@ Transform:
   m_GameObject: {fileID: 2993135843017568715}
   serializedVersion: 2
   m_LocalRotation: {x: 0.10339293, y: 0.709732, z: -0.6963992, w: 0.024870783}
-  m_LocalPosition: {x: -20.698145, y: 1.1141139, z: -217.27208}
-  m_LocalScale: {x: 5.059208, y: 5.0592055, z: 5.059206}
+  m_LocalPosition: {x: -20.698156, y: 1.1141139, z: -217.27208}
+  m_LocalScale: {x: 5.0592093, y: 5.0592055, z: 5.059206}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4256893827192850946}
+  m_Father: {fileID: 8336905996207499710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8414551214195411333
 MeshFilter:
@@ -5336,7 +4995,7 @@ GameObject:
   - component: {fileID: 891687783177677234}
   - component: {fileID: 2092946428360961116}
   - component: {fileID: 9189262890006914642}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_097
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -5419,7 +5078,7 @@ GameObject:
   - component: {fileID: 2110176853909948116}
   - component: {fileID: 1472117553103343702}
   - component: {fileID: 4004125533684783541}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_059
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -5502,7 +5161,7 @@ GameObject:
   - component: {fileID: 807020801165700115}
   - component: {fileID: 1513316913326112803}
   - component: {fileID: 7506718097301189876}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_072
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -5668,7 +5327,7 @@ GameObject:
   - component: {fileID: 2008138196111614247}
   - component: {fileID: 1078075398345219093}
   - component: {fileID: 1043447255852281969}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_103
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -5858,7 +5517,7 @@ GameObject:
   - component: {fileID: 711728659449242673}
   - component: {fileID: 751874542894026075}
   - component: {fileID: 5313657845532482754}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -5964,7 +5623,7 @@ GameObject:
   - component: {fileID: 7104549048489683174}
   - component: {fileID: 5968355031299764478}
   - component: {fileID: 6907852625276197464}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (23)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6070,7 +5729,7 @@ GameObject:
   - component: {fileID: 7612328942969936374}
   - component: {fileID: 6838680372989577676}
   - component: {fileID: 3923409608244806929}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane_021
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6090,7 +5749,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4256893827192850946}
+  m_Father: {fileID: 8336905996207499710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7612328942969936374
 MeshFilter:
@@ -6175,7 +5834,7 @@ GameObject:
   - component: {fileID: 1835485245498438799}
   - component: {fileID: 1270648930743998822}
   - component: {fileID: 4125052852028651986}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_054
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6259,7 +5918,7 @@ GameObject:
   - component: {fileID: 1879712274663085893}
   - component: {fileID: 5078660376028874294}
   - component: {fileID: 7679761792494357121}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (19)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6364,7 +6023,7 @@ GameObject:
   - component: {fileID: 4832200263938879742}
   - component: {fileID: 8107881164858015662}
   - component: {fileID: 8116182576394371111}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_062
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6448,7 +6107,7 @@ GameObject:
   - component: {fileID: 1974164792199911322}
   - component: {fileID: 4082256445435978247}
   - component: {fileID: 8552899295389277587}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (12)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6554,7 +6213,7 @@ GameObject:
   - component: {fileID: 5512088344352162781}
   - component: {fileID: 4952944759512256485}
   - component: {fileID: 7809582516829086678}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_122
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6660,7 +6319,7 @@ GameObject:
   - component: {fileID: 5593743540973821234}
   - component: {fileID: 1884839373007029306}
   - component: {fileID: 3200784931072321693}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_068
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6754,49 +6413,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6680463700772263659, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &3570354215837651728
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7251237997537011204}
-  m_Layer: 0
-  m_Name: Checkpoints
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7251237997537011204
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3570354215837651728}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5507139268642825331}
-  - {fileID: 7263345269145987179}
-  - {fileID: 1257046343907941229}
-  - {fileID: 6492823356461745104}
-  - {fileID: 4572372963937664755}
-  - {fileID: 5391985270958723277}
-  - {fileID: 5571032859865379052}
-  - {fileID: 3991519191249974423}
-  - {fileID: 4260309123756331005}
-  - {fileID: 1046643232501617191}
-  - {fileID: 4945483406916272982}
-  - {fileID: 2844032644987203511}
-  m_Father: {fileID: 5553788154938849576}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3605834445284265067
 GameObject:
   m_ObjectHideFlags: 0
@@ -6808,7 +6424,7 @@ GameObject:
   - component: {fileID: 8350149659648121494}
   - component: {fileID: 4448956917646337910}
   - component: {fileID: 5137094021302752734}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_086
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6892,7 +6508,7 @@ GameObject:
   - component: {fileID: 627157149842785915}
   - component: {fileID: 6604657813551459644}
   - component: {fileID: 9170084332245103760}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_060
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -6998,7 +6614,7 @@ GameObject:
   - component: {fileID: 3523546070617504857}
   - component: {fileID: 8757752649636620461}
   - component: {fileID: 6991714324731225263}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_129
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -7104,7 +6720,7 @@ GameObject:
   - component: {fileID: 1835595976340490623}
   - component: {fileID: 4786821898401741076}
   - component: {fileID: 8838185853905242031}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_102
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -7198,74 +6814,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2353234378710642629, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &3826997039730234970
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3991519191249974423}
-  - component: {fileID: 2314661047799330026}
-  - component: {fileID: 808755248761742369}
-  m_Layer: 0
-  m_Name: Checkpoint (7)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3991519191249974423
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3826997039730234970}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.23174791, z: 0, w: 0.9727759}
-  m_LocalPosition: {x: -31.48, y: 3.9599998, z: -242.76}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: 26.8, z: 0}
---- !u!65 &2314661047799330026
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3826997039730234970}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &808755248761742369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3826997039730234970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 7
-  gameController: {fileID: 0}
 --- !u!1 &3910811436803272486
 GameObject:
   m_ObjectHideFlags: 0
@@ -7466,7 +7014,7 @@ GameObject:
   - component: {fileID: 7246279288840074253}
   - component: {fileID: 9123746440496045323}
   - component: {fileID: 6715001466656262326}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_062
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -7550,7 +7098,7 @@ GameObject:
   - component: {fileID: 6669453281402797212}
   - component: {fileID: 4158588001093850708}
   - component: {fileID: 6125612910002318620}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115 (6)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -7784,9 +7332,7 @@ Transform:
   - {fileID: 8350133539543189337}
   - {fileID: 6885132711870584039}
   - {fileID: 1802314863817608594}
-  - {fileID: 71809320387261181}
   - {fileID: 1171204663076520183}
-  - {fileID: 2643800349007819426}
   - {fileID: 971692858282088690}
   - {fileID: 7920982848084116765}
   - {fileID: 8163416007896789294}
@@ -7796,7 +7342,7 @@ Transform:
   - {fileID: 1839195449033538788}
   - {fileID: 6768664259607422836}
   - {fileID: 7074121861032494735}
-  - {fileID: 3610343967826681789}
+  - {fileID: 8336905996207499710}
   - {fileID: 2008136470558828714}
   - {fileID: 8389586076609678115}
   - {fileID: 1669198756705384394}
@@ -7805,7 +7351,6 @@ Transform:
   - {fileID: 346074616085795092}
   - {fileID: 2931588822902623181}
   - {fileID: 6013128539661112485}
-  - {fileID: 8869253527851771527}
   - {fileID: 8166719993906468807}
   - {fileID: 580262745225907909}
   - {fileID: 2343306110984147140}
@@ -7814,10 +7359,8 @@ Transform:
   - {fileID: 6999754566882379641}
   - {fileID: 7294843744812572525}
   - {fileID: 674478974208760112}
-  - {fileID: 4203217902148628138}
   - {fileID: 7129420897272967231}
   - {fileID: 8328918116556765070}
-  - {fileID: 3377938702782338947}
   - {fileID: 4946193380550689746}
   - {fileID: 3052917964808134063}
   - {fileID: 4673203676233417348}
@@ -7827,10 +7370,8 @@ Transform:
   - {fileID: 441523170880538861}
   - {fileID: 1026100843955078690}
   - {fileID: 2530919622778082263}
-  - {fileID: 5396514407829832144}
   - {fileID: 399868401157440037}
   - {fileID: 8330155145134893228}
-  - {fileID: 2859889188614811764}
   - {fileID: 4925151865561777955}
   m_Father: {fileID: 5583742398109885965}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7846,7 +7387,7 @@ GameObject:
   - component: {fileID: 2655476045847458413}
   - component: {fileID: 6816865909881038184}
   - component: {fileID: 750164848991034702}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (11)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -7940,74 +7481,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2228696402399645881, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &4303628815145372103
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4945483406916272982}
-  - component: {fileID: 4064437506250784922}
-  - component: {fileID: 6928683949007667702}
-  m_Layer: 0
-  m_Name: Checkpoint (10)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4945483406916272982
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4303628815145372103}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7265746, z: 0, w: 0.6870876}
-  m_LocalPosition: {x: -3.17, y: 3.9599998, z: -287.42}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: 93.2, z: 0}
---- !u!65 &4064437506250784922
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4303628815145372103}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6928683949007667702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4303628815145372103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 10
-  gameController: {fileID: 0}
 --- !u!1 &4368057489214838597
 GameObject:
   m_ObjectHideFlags: 0
@@ -8019,7 +7492,7 @@ GameObject:
   - component: {fileID: 2607269360098761122}
   - component: {fileID: 399187167583995350}
   - component: {fileID: 8776841207678133057}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_081
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -8103,7 +7576,7 @@ GameObject:
   - component: {fileID: 3466702287185855}
   - component: {fileID: 2882966240140752841}
   - component: {fileID: 3558185218914458710}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115 (4)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -8209,7 +7682,7 @@ GameObject:
   - component: {fileID: 8850408627319244604}
   - component: {fileID: 4594154792425817209}
   - component: {fileID: 3509039619263540924}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_133
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -8315,7 +7788,7 @@ GameObject:
   - component: {fileID: 6169416610839981167}
   - component: {fileID: 937731914025016391}
   - component: {fileID: 4243859608972248435}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_066
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -8527,7 +8000,7 @@ GameObject:
   - component: {fileID: 4116040232442966149}
   - component: {fileID: 2267665252110162787}
   - component: {fileID: 8952444981038649565}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_094
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -8633,7 +8106,7 @@ GameObject:
   - component: {fileID: 3180430499646693766}
   - component: {fileID: 1320933078301578264}
   - component: {fileID: 7883904123867775869}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_099
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -8739,7 +8212,7 @@ GameObject:
   - component: {fileID: 2639430656076100393}
   - component: {fileID: 4577750283633686079}
   - component: {fileID: 3116704748471419982}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (18)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -8950,7 +8423,7 @@ GameObject:
   - component: {fileID: 3616800779423437625}
   - component: {fileID: 5508472574758814305}
   - component: {fileID: 1790958440522096911}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_058
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9033,7 +8506,7 @@ GameObject:
   - component: {fileID: 8883060121025872163}
   - component: {fileID: 3598092981561376300}
   - component: {fileID: 2161783314174877186}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_080
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9117,7 +8590,7 @@ GameObject:
   - component: {fileID: 5061620215790111810}
   - component: {fileID: 602956486123163973}
   - component: {fileID: 8578809258377307694}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (2)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9223,7 +8696,7 @@ GameObject:
   - component: {fileID: 7568346700454048104}
   - component: {fileID: 4376084835158917608}
   - component: {fileID: 8279490103203978276}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_067
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9329,7 +8802,7 @@ GameObject:
   - component: {fileID: 6066428729579575133}
   - component: {fileID: 4482245035078192288}
   - component: {fileID: 6825323338619909535}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_125
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9434,7 +8907,7 @@ GameObject:
   - component: {fileID: 4310841431340789142}
   - component: {fileID: 2374303397015191782}
   - component: {fileID: 725653706159649018}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_057
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9517,7 +8990,7 @@ GameObject:
   - component: {fileID: 1796693628008636712}
   - component: {fileID: 5804523371817498357}
   - component: {fileID: 2501204646287136192}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_073
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9601,7 +9074,7 @@ GameObject:
   - component: {fileID: 1389040768913130658}
   - component: {fileID: 5561491695742983893}
   - component: {fileID: 1657653077750436775}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_128
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9812,7 +9285,7 @@ GameObject:
   - component: {fileID: 5005722566780725782}
   - component: {fileID: 7178139749647696464}
   - component: {fileID: 6908625262128889954}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_064
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -9896,7 +9369,7 @@ GameObject:
   - component: {fileID: 3964120639595252164}
   - component: {fileID: 3375116041921557316}
   - component: {fileID: 6795449223553973172}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (10)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -10001,7 +9474,7 @@ GameObject:
   - component: {fileID: 2741207097723166194}
   - component: {fileID: 6748414386606797645}
   - component: {fileID: 3847941990069557129}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_061
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -10085,7 +9558,7 @@ GameObject:
   - component: {fileID: 2227140479886295513}
   - component: {fileID: 7133534221088064915}
   - component: {fileID: 7249129748201233050}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_114
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -10296,7 +9769,7 @@ GameObject:
   - component: {fileID: 8154682076308538754}
   - component: {fileID: 5503807448165440812}
   - component: {fileID: 2237587431590114847}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_071
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -10380,7 +9853,7 @@ GameObject:
   - component: {fileID: 1099850002287972281}
   - component: {fileID: 7927540982985526416}
   - component: {fileID: 4431063206686041875}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115 (5)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -10486,7 +9959,7 @@ GameObject:
   - component: {fileID: 3263902636320330851}
   - component: {fileID: 4337662280407299237}
   - component: {fileID: 4846953354548126946}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (24)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -10592,7 +10065,7 @@ GameObject:
   - component: {fileID: 1359908128553798922}
   - component: {fileID: 4933710946286422300}
   - component: {fileID: 5874177869793290049}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cliff4_003 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10608,11 +10081,11 @@ Transform:
   m_GameObject: {fileID: 5654725887643157406}
   serializedVersion: 2
   m_LocalRotation: {x: 0.056033283, y: 0.70488316, z: -0.70488316, w: 0.056033283}
-  m_LocalPosition: {x: -48.860046, y: 1.48, z: -210.52}
+  m_LocalPosition: {x: -48.860058, y: 1.48, z: -210.52002}
   m_LocalScale: {x: 4.4725547, y: 4.4725547, z: 4.472555}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4256893827192850946}
+  m_Father: {fileID: 8336905996207499710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1359908128553798922
 MeshFilter:
@@ -10697,7 +10170,7 @@ GameObject:
   - component: {fileID: 8009193075791230973}
   - component: {fileID: 4677409280339032126}
   - component: {fileID: 159858466147943369}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_131
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -10970,7 +10443,7 @@ GameObject:
   - component: {fileID: 8978002688744746740}
   - component: {fileID: 8611827060415693252}
   - component: {fileID: 4442065476524403722}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_105
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -11359,74 +10832,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6374318489360057050
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5571032859865379052}
-  - component: {fileID: 9067315610545560307}
-  - component: {fileID: 2284924286785611522}
-  m_Layer: 0
-  m_Name: Checkpoint (6)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5571032859865379052
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6374318489360057050}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.5849577, z: 0, w: 0.8110638}
-  m_LocalPosition: {x: -23.9, y: 3.9599998, z: -226.9}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: -71.6, z: 0}
---- !u!65 &9067315610545560307
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6374318489360057050}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2284924286785611522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6374318489360057050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 6
-  gameController: {fileID: 0}
 --- !u!1 &6412805422931672484
 GameObject:
   m_ObjectHideFlags: 0
@@ -11545,7 +10950,7 @@ GameObject:
   - component: {fileID: 2774973304790607943}
   - component: {fileID: 7553331898898693585}
   - component: {fileID: 8302056975421076644}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_124
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -11651,7 +11056,7 @@ GameObject:
   - component: {fileID: 8400305565485622315}
   - component: {fileID: 1874899074909814201}
   - component: {fileID: 1064662268284403198}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (6)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -11757,7 +11162,7 @@ GameObject:
   - component: {fileID: 8087454183268229344}
   - component: {fileID: 1945573437381330094}
   - component: {fileID: 2334584057323178776}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_117
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -11863,7 +11268,7 @@ GameObject:
   - component: {fileID: 6816018029962670881}
   - component: {fileID: 835393950403219879}
   - component: {fileID: 5321624542209973106}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_127
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -11969,7 +11374,7 @@ GameObject:
   - component: {fileID: 2322445813627205320}
   - component: {fileID: 5012138305872493376}
   - component: {fileID: 2379041933901892886}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane_058
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11989,7 +11394,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4256893827192850946}
+  m_Father: {fileID: 8336905996207499710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2322445813627205320
 MeshFilter:
@@ -12370,7 +11775,7 @@ GameObject:
   - component: {fileID: 4388971739844723729}
   - component: {fileID: 1918728301459905154}
   - component: {fileID: 1695588987672179486}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (17)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -12582,7 +11987,7 @@ GameObject:
   - component: {fileID: 747547773140580764}
   - component: {fileID: 6786891529132459155}
   - component: {fileID: 6319307244056904262}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_101
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -12688,7 +12093,7 @@ GameObject:
   - component: {fileID: 6579501516653631799}
   - component: {fileID: 2362053518374235134}
   - component: {fileID: 2660140717298684776}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Rock4_002
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -12900,7 +12305,7 @@ GameObject:
   - component: {fileID: 2244334334171889393}
   - component: {fileID: 8371722034956530322}
   - component: {fileID: 6279171008271533152}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (20)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -13005,7 +12410,7 @@ GameObject:
   - component: {fileID: 2137420423978686362}
   - component: {fileID: 166012510644781078}
   - component: {fileID: 7322175693457529361}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_070
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -13089,7 +12494,7 @@ GameObject:
   - component: {fileID: 5277941479331580405}
   - component: {fileID: 47353373572741195}
   - component: {fileID: 4875266066800873801}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_112
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -13183,74 +12588,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6332377195824486693, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &6982880616542814715
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4572372963937664755}
-  - component: {fileID: 1852239832620896644}
-  - component: {fileID: 8357831031528373920}
-  m_Layer: 0
-  m_Name: Checkpoint (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4572372963937664755
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6982880616542814715}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.5849577, z: 0, w: 0.8110638}
-  m_LocalPosition: {x: 5, y: 3.9599998, z: -211.7}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: -71.6, z: 0}
---- !u!65 &1852239832620896644
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6982880616542814715}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8357831031528373920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6982880616542814715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 4
-  gameController: {fileID: 0}
 --- !u!1 &7119290676124398695
 GameObject:
   m_ObjectHideFlags: 0
@@ -13346,7 +12683,7 @@ GameObject:
   - component: {fileID: 2807203103177657058}
   - component: {fileID: 5315766646095949229}
   - component: {fileID: 3932686054806059339}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cliff2_016
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13363,10 +12700,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7053428, y: 0.049915187, z: -0.049915187, w: 0.7053428}
   m_LocalPosition: {x: -54.785, y: 7.9250083, z: -212.93697}
-  m_LocalScale: {x: 10.813818, y: 10.813818, z: 10.813822}
+  m_LocalScale: {x: 10.813818, y: 10.813818, z: 10.813823}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4256893827192850946}
+  m_Father: {fileID: 8336905996207499710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2807203103177657058
 MeshFilter:
@@ -13452,7 +12789,7 @@ GameObject:
   - component: {fileID: 3809969827352131645}
   - component: {fileID: 121116482375608724}
   - component: {fileID: 5025240955984470236}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (25)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -13558,7 +12895,7 @@ GameObject:
   - component: {fileID: 3991096269467831273}
   - component: {fileID: 3923412172921059324}
   - component: {fileID: 2625020416948350542}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane_017
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13578,7 +12915,7 @@ Transform:
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4256893827192850946}
+  m_Father: {fileID: 8336905996207499710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3991096269467831273
 MeshFilter:
@@ -13661,9 +12998,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 705914908271434338}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Obstacles
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13804,7 +13141,7 @@ GameObject:
   - component: {fileID: 5559733902736009987}
   - component: {fileID: 6146071018190706160}
   - component: {fileID: 1663101607495153995}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_121
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -13910,7 +13247,7 @@ GameObject:
   - component: {fileID: 1300528243295888558}
   - component: {fileID: 861042181045696559}
   - component: {fileID: 5231547383839181769}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115 (2)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -14015,7 +13352,7 @@ GameObject:
   - component: {fileID: 510926812676426592}
   - component: {fileID: 3534707798853461470}
   - component: {fileID: 5887959497542970538}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_079
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -14205,7 +13542,7 @@ GameObject:
   - component: {fileID: 4499571546940193101}
   - component: {fileID: 8222580861892316290}
   - component: {fileID: 2397538781939206373}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (5)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -14299,74 +13636,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2228696402399645881, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &7373316302748126779
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7263345269145987179}
-  - component: {fileID: 7213166615877918143}
-  - component: {fileID: 8457964404328178087}
-  m_Layer: 0
-  m_Name: Checkpoint (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7263345269145987179
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7373316302748126779}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -71.64, y: 3.9599998, z: -229.28}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7213166615877918143
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7373316302748126779}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8457964404328178087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7373316302748126779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 1
-  gameController: {fileID: 0}
 --- !u!1 &7441263991592035395
 GameObject:
   m_ObjectHideFlags: 0
@@ -14378,7 +13647,7 @@ GameObject:
   - component: {fileID: 66464379467471963}
   - component: {fileID: 186881473401708056}
   - component: {fileID: 6678852127054516630}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_064
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -14673,7 +13942,7 @@ GameObject:
   - component: {fileID: 7499832928335389564}
   - component: {fileID: 8915428178046217197}
   - component: {fileID: 7690929225007500233}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_075
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -14756,7 +14025,7 @@ GameObject:
   - component: {fileID: 8287735286375482472}
   - component: {fileID: 8167891173478614370}
   - component: {fileID: 6613537751439379550}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_069
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -14840,7 +14109,7 @@ GameObject:
   - component: {fileID: 9137563277879695980}
   - component: {fileID: 7815309381924210501}
   - component: {fileID: 4052406166910290849}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_095
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -14945,7 +14214,7 @@ GameObject:
   - component: {fileID: 2234280625254126505}
   - component: {fileID: 7273033903350917450}
   - component: {fileID: 1844603239193186910}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_084
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -15028,7 +14297,7 @@ GameObject:
   - component: {fileID: 7302966555618414708}
   - component: {fileID: 1541950537185774114}
   - component: {fileID: 2419445397091458739}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_085
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -15195,7 +14464,7 @@ GameObject:
   - component: {fileID: 8793787552809075095}
   - component: {fileID: 8395325236925538972}
   - component: {fileID: 3212631112544911749}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (8)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -15289,6 +14558,45 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2228696402399645881, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
+--- !u!1 &8088823322825397007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8336905996207499710}
+  m_Layer: 3
+  m_Name: Obstacles
+  m_TagString: Obstacle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8336905996207499710
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8088823322825397007}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3610343967826681789}
+  - {fileID: 2643800349007819426}
+  - {fileID: 3377938702782338947}
+  - {fileID: 5396514407829832144}
+  - {fileID: 2859889188614811764}
+  - {fileID: 4203217902148628138}
+  - {fileID: 8869253527851771527}
+  - {fileID: 71809320387261181}
+  m_Father: {fileID: 4256893827192850946}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8109871974293018668
 GameObject:
   m_ObjectHideFlags: 0
@@ -15301,7 +14609,7 @@ GameObject:
   - component: {fileID: 1947377957074104923}
   - component: {fileID: 6629628079350222474}
   - component: {fileID: 5675057459194083353}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_096
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -15510,7 +14818,7 @@ GameObject:
   - component: {fileID: 4032645983508361043}
   - component: {fileID: 8005250017089799761}
   - component: {fileID: 1663355768678422916}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (21)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -15817,74 +15125,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4717014133672598762, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &8415941218599397169
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1257046343907941229}
-  - component: {fileID: 8493024979025243741}
-  - component: {fileID: 8203783145254736235}
-  m_Layer: 0
-  m_Name: Checkpoint (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1257046343907941229
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8415941218599397169}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.5735764, z: 0, w: 0.8191521}
-  m_LocalPosition: {x: -51.76, y: 3.9599998, z: -233.97}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: -70, z: 0}
---- !u!65 &8493024979025243741
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8415941218599397169}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8203783145254736235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8415941218599397169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 2
-  gameController: {fileID: 0}
 --- !u!1 &8457957134899977212
 GameObject:
   m_ObjectHideFlags: 0
@@ -15896,7 +15136,7 @@ GameObject:
   - component: {fileID: 2467293695964043750}
   - component: {fileID: 2375228726026899560}
   - component: {fileID: 6189164464718120826}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_082
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -15979,7 +15219,7 @@ GameObject:
   - component: {fileID: 8774730538995365469}
   - component: {fileID: 1035503589680543371}
   - component: {fileID: 275999786526603182}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_076
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -16146,7 +15386,7 @@ GameObject:
   - component: {fileID: 587066038007679477}
   - component: {fileID: 3690663119003880275}
   - component: {fileID: 2645829798529990188}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (16)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -16252,7 +15492,7 @@ GameObject:
   - component: {fileID: 4897157313283609801}
   - component: {fileID: 1577430826910701187}
   - component: {fileID: 5571543042853196319}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115 (1)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -16358,7 +15598,7 @@ GameObject:
   - component: {fileID: 8224897235084553093}
   - component: {fileID: 1956481654933325903}
   - component: {fileID: 6092828638629238986}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_061
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -16464,7 +15704,7 @@ GameObject:
   - component: {fileID: 1080983651014574187}
   - component: {fileID: 6831822498863996704}
   - component: {fileID: 3541090697592900781}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Circle_115 (3)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -16570,7 +15810,7 @@ GameObject:
   - component: {fileID: 8346545216436348513}
   - component: {fileID: 2006838310045971847}
   - component: {fileID: 4285846878610232743}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_060 (1)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -16781,7 +16021,7 @@ GameObject:
   - component: {fileID: 2484657121946111528}
   - component: {fileID: 5379624883311591782}
   - component: {fileID: 5337656063201784268}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Icosphere_056
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -17042,74 +16282,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -7197956846269478586, guid: 95f22433070466a4ca89a9835f666b47, type: 3}
---- !u!1 &8860651098593232106
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4260309123756331005}
-  - component: {fileID: 3653725619887440639}
-  - component: {fileID: 1639296351700824981}
-  m_Layer: 0
-  m_Name: Checkpoint (8)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4260309123756331005
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8860651098593232106}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.23174791, z: 0, w: 0.9727759}
-  m_LocalPosition: {x: -70.07, y: 3.9599998, z: -263.23}
-  m_LocalScale: {x: 0.19999996, y: 0.2, z: 0.19999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7251237997537011204}
-  m_LocalEulerAnglesHint: {x: 0, y: 26.8, z: 0}
---- !u!65 &3653725619887440639
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8860651098593232106}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1639296351700824981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8860651098593232106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ba737fc585f40839556723222543919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointIndex: 8
-  gameController: {fileID: 0}
 --- !u!1 &9079468463577681202
 GameObject:
   m_ObjectHideFlags: 0
@@ -17122,7 +16294,7 @@ GameObject:
   - component: {fileID: 8387640940244312093}
   - component: {fileID: 2961874435703108123}
   - component: {fileID: 780979652189259860}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube_077_1 (4)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}

@@ -80,27 +80,29 @@ public class VehicleMovement : MonoBehaviour
     public void ResetCarPosition()
     {
         var pathHolder = PathHolder.Instance;
-        if (pathHolder != null && pathHolder.pathCreator != null &&
-            pathHolder.cachedPoints.Count > lastClosestPathIndex)
+        if (pathHolder != null && pathHolder.pathCreator != null)
         {
-            // Находим ближайшую дистанцию вдоль пути с использованием кеша
-
+            // Находим ближайшую дистанцию вдоль пути
             float closestDistance =
                 pathHolder.FindClosestDistance(out lastClosestPathIndex, transform.position, lastClosestPathIndex);
             transform.position = pathHolder.GetPointAtDistance(closestDistance);
 
-            // Вычисляем направление движения: берем следующий пункт или предыдущий, если мы в конце пути
+            // Вычисляем направление движения
             Vector3 direction;
-            if (lastClosestPathIndex < pathHolder.cachedPoints.Count - 1)
-                direction = (pathHolder.cachedPoints[lastClosestPathIndex + 1] -
-                             pathHolder.cachedPoints[lastClosestPathIndex])
-                    .normalized;
-            else if (lastClosestPathIndex > 0)
-                direction = (pathHolder.cachedPoints[lastClosestPathIndex] -
-                             pathHolder.cachedPoints[lastClosestPathIndex - 1])
-                    .normalized;
+            float totalPathLength = pathHolder.TotalPathLength;
+
+            if (closestDistance + 0.1f <= totalPathLength)
+            {
+                direction = (pathHolder.GetPointAtDistance(closestDistance + 0.1f) - transform.position).normalized;
+            }
+            else if (closestDistance - 0.1f >= 0f)
+            {
+                direction = (transform.position - pathHolder.GetPointAtDistance(closestDistance - 0.1f)).normalized;
+            }
             else
-                direction = _cachedTransform.forward;
+            {
+                direction = transform.forward;
+            }
 
             transform.rotation = Quaternion.LookRotation(direction);
         }
@@ -112,6 +114,7 @@ public class VehicleMovement : MonoBehaviour
         CanMove = true;
         vehicle.healthController.Heal(100);
     }
+
 
     public void ApplyBraking(float brakePower)
     {

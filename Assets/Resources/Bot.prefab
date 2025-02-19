@@ -532,19 +532,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steeringSensitivity: 20
+  steeringSensitivity: 0.1
   accelerationFactor: 1
-  brakingPower: 300
-  minTurnAngle: 2
-  turnScanDistance: 50
-  turnBrakingDistance: 10
+  lookAheadDistance: 30
+  brakingPower: 50
+  turnBrakingDistance: 60
   maxTurnSpeed: 100
   minTurnSpeed: 50
-  maxTurnAngle: 70
+  maxTurnAngle: 20
   obstacleDetectionDistance: 60
-  avoidanceStrength: 30
+  avoidanceStrength: 0.2
   rayCount: 3
-  detectionAngle: 15
+  detectionAngle: 20
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 72
@@ -552,8 +551,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   carResetTime: 7
-  maxLateralDeviation: 8
-  deviationUpdateInterval: 2
 --- !u!114 &-4256842069966461579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,6 +601,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Monster_Truck_12B
+      objectReference: {fileID: 0}
+    - target: {fileID: 789831932391334006, guid: 71f98781a624545ccae847811d71db95,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2009071238288151911, guid: 71f98781a624545ccae847811d71db95,
         type: 3}

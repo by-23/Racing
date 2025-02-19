@@ -10,16 +10,11 @@ public class BotAI : MonoBehaviour
 
     [SerializeField] private float accelerationFactor = 1f;
 
-
     [Header("Turn Braking")] [SerializeField]
     private float brakingPower = 10f;
 
-    [SerializeField] private float minTurnAngle = 5f;
-
-    [Header("Turn Detection")] [SerializeField]
-    private float turnScanDistance = 20f;
-
-    [SerializeField] private float turnBrakingDistance = 10f;
+    [SerializeField]
+    private float turnBrakingDistance = 10f; // Дистанция, на которой начинаем тормозить перед поворотом
 
     [Header("Turn Speed Settings")] [SerializeField]
     private float maxTurnSpeed = 60f;
@@ -37,41 +32,27 @@ public class BotAI : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float carResetTime;
 
-    [Header("Path Deviation")] [SerializeField]
-    private float maxLateralDeviation = 2f; // Максимальное боковое отклонение
-
-    [SerializeField] private float deviationUpdateInterval = 2f; // Интервал обновления отклонения
-
-    private Vehicle vehicle;
     private VehicleMovement vehicleMovement;
-    private Vector3 targetPosition;
-    private Vector3 lastAvoidanceDirection;
     private float currentSpeedMultiplier = 1f;
-
-    // Параметры для случайного отклонения от маршрута
-    private float currentLateralDeviation = 0f;
-    private float deviationTimer = 0f;
-
     internal Coroutine resetCoroutine;
     private float steeringPowerValue;
+    private int currentTurnIndex = 0;
 
     private void Start()
     {
-        vehicle = GetComponent<Vehicle>();
         vehicleMovement = GetComponent<VehicleMovement>();
     }
 
-    /// <summary>
-    /// Разбивает путь на точки с шагом pathSampleStep и вычисляет накопленные расстояния.
-    /// </summary>
     private void FixedUpdate()
     {
-        ApplyTurnBraking();
+        bool isBraking = ApplyTurnBraking();
 
-        vehicleMovement.ApplyAcceleration(accelerationFactor * currentSpeedMultiplier);
+        if (!isBraking)
+            vehicleMovement.ApplyAcceleration(accelerationFactor * currentSpeedMultiplier);
+
         vehicleMovement.ApplySteering(steeringPowerValue);
 
-        // Используем sqrMagnitude для оптимизации (0.5^2 = 0.25)
+        // Если скорость очень мала, обнуляем движение
         if (vehicleMovement.rb.velocity.sqrMagnitude < 0.25f && currentSpeedMultiplier <= 0f)
         {
             vehicleMovement.rb.velocity = Vector3.zero;
@@ -83,18 +64,16 @@ public class BotAI : MonoBehaviour
 
     private void FollowPath()
     {
-        if (vehicleMovement.CanMove && PathHolder.Instance.pathCreator != null &&
+        if (vehicleMovement.CanMove &&
+            PathHolder.Instance.pathCreator != null &&
             GameController.Instance.isGameStarted)
         {
             if (DetectObstacle(out Vector3 avoidanceDirection))
             {
                 AvoidObstacle(avoidanceDirection);
-                lastAvoidanceDirection = avoidanceDirection;
             }
             else
             {
-                lastAvoidanceDirection = Vector3.zero;
-                UpdateLateralDeviation();
                 FollowCachedPath();
             }
         }
@@ -110,8 +89,8 @@ public class BotAI : MonoBehaviour
     {
         yield return new WaitForSeconds(carResetTime);
 
-        if (!Physics.Raycast(transform.position + Vector3.up * 1.0f, Vector3.down, out RaycastHit hit, 2f,
-                groundLayer) ||
+        if (!Physics.Raycast(transform.position + Vector3.up * 1.0f,
+                Vector3.down, out RaycastHit hit, 2f, groundLayer) ||
             hit.collider.tag != "Ground")
         {
             vehicleMovement.ResetCarPosition();
@@ -120,93 +99,98 @@ public class BotAI : MonoBehaviour
         resetCoroutine = null;
     }
 
-    /// <summary>
-    /// Обновляет значение бокового отклонения через заданный интервал времени.
-    /// </summary>
-    private void UpdateLateralDeviation()
-    {
-        deviationTimer += Time.deltaTime;
-        if (deviationTimer >= deviationUpdateInterval)
-        {
-            // Новое случайное отклонение в диапазоне [-maxLateralDeviation, maxLateralDeviation]
-            currentLateralDeviation = Random.Range(-maxLateralDeviation, maxLateralDeviation);
-            deviationTimer = 0f;
-        }
-    }
-
-    /// <summary>
-    /// Следование по маршруту с добавлением небольшого бокового смещения.
-    /// Находим ближайшую точку к текущей позиции и вычисляем целевую точку по lookAheadDistance.
-    /// Затем вычисляем вектор тангенса и смещаем целевую точку вбок.
-    /// </summary>
     private void FollowCachedPath()
     {
-        float currentDistance = PathHolder.Instance.FindClosestDistance(out vehicleMovement.lastClosestPathIndex,
-            transform.position, vehicleMovement.lastClosestPathIndex);
-        float targetDistance = Mathf.Min(currentDistance + PathHolder.Instance.lookAheadDistance,
-            PathHolder.Instance.totalPathLength);
-        targetPosition = PathHolder.Instance.GetPointAtDistance(targetDistance);
+        List<TurnInfo> cachedTurns = PathHolder.Instance.cachedTurns;
+        Vector3 targetPoint;
 
-        // Вычисляем тангенс маршрута в точке targetPosition (используем небольшую дельту для интерполяции)
-        float nextDistance = Mathf.Min(targetDistance + 0.1f, PathHolder.Instance.totalPathLength);
-        Vector3 forwardOnPath = (PathHolder.Instance.GetPointAtDistance(nextDistance) - targetPosition).normalized;
-
-        // Вычисляем вектор, перпендикулярный направлению движения (с учётом оси Y)
-        Vector3 lateralDirection = Vector3.Cross(Vector3.up, forwardOnPath).normalized;
-
-        // Добавляем к целевой точке смещение по боковой оси
-        targetPosition += lateralDirection * currentLateralDeviation;
-
-        Vector3 directionToTarget = (targetPosition - transform.position).normalized;
-        directionToTarget.y = 0f;
-
-        float targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
-        steeringPowerValue = targetAngle * steeringSensitivity * vehicleMovement.steeringPower;
-    }
-
-
-    private void ApplyTurnBraking()
-    {
-        if (PathHolder.Instance.TryGetUpcomingTurnInfo(out float upcomingTurnAngle, out float distanceToTurn,
-                turnScanDistance, turnBrakingDistance, minTurnAngle, transform.position,
-                vehicleMovement.lastClosestPathIndex))
+        if (currentTurnIndex < cachedTurns.Count)
         {
-            if (distanceToTurn <= turnBrakingDistance)
+            // Выбираем следующий поворот из кэша
+            float turnDistance = cachedTurns[currentTurnIndex].distance;
+            targetPoint = PathHolder.Instance.GetPointAtDistance(turnDistance);
+
+            // Если машина достаточно близко к точке поворота, переходим к следующему
+            if (Vector3.Distance(transform.position, targetPoint) < 20f)
             {
-                float minSpeedForTurn = GetMinSpeedForTurn(upcomingTurnAngle);
-                if (vehicleMovement.rb.velocity.magnitude > minSpeedForTurn)
-                {
-                    vehicleMovement.ApplyBraking(brakingPower);
-                }
+                currentTurnIndex++;
             }
         }
         else
         {
-            vehicleMovement.ApplyBraking(0f);
+            // Если поворотов больше нет, цель – конец пути
+            targetPoint = PathHolder.Instance.GetPointAtDistance(PathHolder.Instance.TotalPathLength);
         }
+
+        // Сохраняем текущую высоту машины
+        targetPoint.y = transform.position.y;
+
+        Vector3 targetDirection = (targetPoint - transform.position).normalized;
+        float targetAngle = Vector3.SignedAngle(transform.forward, targetDirection, Vector3.up);
+
+        // Прямое рулевое воздействие (можно добавить сглаживание, если требуется)
+        steeringPowerValue = targetAngle * steeringSensitivity * vehicleMovement.steeringPower;
     }
 
-    private float GetMinSpeedForTurn(float turnAngle)
+    /// <summary>
+    /// Применяет торможение перед поворотом.
+    /// Если расстояние до поворота меньше turnBrakingDistance и скорость выше допустимой,
+    /// применяется торможение и возвращается true.
+    /// </summary>
+    private bool ApplyTurnBraking()
+    {
+        List<TurnInfo> cachedTurns = PathHolder.Instance.cachedTurns;
+        bool brakingApplied = false;
+
+        if (currentTurnIndex < cachedTurns.Count)
+        {
+            float turnDistance = cachedTurns[currentTurnIndex].distance;
+            Vector3 turnPoint = PathHolder.Instance.GetPointAtDistance(turnDistance);
+            float distanceToTurn = Vector3.Distance(transform.position, turnPoint);
+            if (distanceToTurn <= turnBrakingDistance)
+            {
+                // Вычисляем максимально допустимую скорость для входа в поворот
+                float allowedTurnSpeed = GetMaxSpeedForTurn(cachedTurns[currentTurnIndex].angle);
+                if (vehicleMovement.rb.velocity.magnitude > allowedTurnSpeed)
+                {
+                    vehicleMovement.ApplyBraking(brakingPower);
+                    brakingApplied = true;
+                }
+            }
+        }
+
+        if (!brakingApplied)
+        {
+            vehicleMovement.ApplyBraking(0f);
+        }
+
+        return brakingApplied;
+    }
+
+    /// <summary>
+    /// Вычисляет максимально допустимую скорость для входа в поворот в зависимости от его угла.
+    /// При угле 0 автомобиль может ехать со скоростью maxTurnSpeed,
+    /// а при максимальном угле – замедляется до minTurnSpeed.
+    /// </summary>
+    private float GetMaxSpeedForTurn(float turnAngle)
     {
         float angleRatio = Mathf.Clamp01(turnAngle / maxTurnAngle);
+        // Метод возвращает скорость, не превышать которую можно при данном угле поворота
         return Mathf.Lerp(maxTurnSpeed, minTurnSpeed, angleRatio);
     }
 
-
     /// <summary>
-    /// Обнаруживает препятствия с тегом "Obstacle" с использованием Physics.RaycastNonAlloc.
+    /// Обнаруживает препятствия с использованием нескольких лучей (raycast).
     /// </summary>
     private bool DetectObstacle(out Vector3 avoidanceDirection)
     {
         avoidanceDirection = Vector3.zero;
         Vector3 origin = transform.position;
-        // Точка, немного вперёд от машины
         Vector3 rayOrigin = origin + transform.forward * 1.0f;
 
         float angleStep = detectionAngle / (rayCount - 1);
         float startAngle = -detectionAngle / 2f;
 
-        // Используем фиксированный массив для хранения результатов
         RaycastHit[] hits = new RaycastHit[rayCount];
 
         for (int i = 0; i < rayCount; i++)
@@ -216,9 +200,9 @@ public class BotAI : MonoBehaviour
                 Physics.RaycastNonAlloc(origin, rayDirection, hits, obstacleDetectionDistance, obstacleLayerMask);
             for (int j = 0; j < hitCount; j++)
             {
-                if (hits[j].collider.CompareTag("Obstacle"))
+                if (hits[j].collider.CompareTag("Obstacle") || hits[j].collider.CompareTag("PlayerMesh"))
                 {
-                    // Преобразуем hit.point в локальные координаты для определения стороны
+                    // Определяем, с какой стороны находится препятствие
                     Vector3 localHitPoint = transform.InverseTransformPoint(hits[j].point);
                     avoidanceDirection = (localHitPoint.x < 0f) ? transform.right : -transform.right;
                     return true;
@@ -230,7 +214,7 @@ public class BotAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Поворачивает транспортное средство для обхода обнаруженного препятствия.
+    /// Применяет обход препятствия посредством добавления крутящего момента.
     /// </summary>
     private void AvoidObstacle(Vector3 avoidanceDirection)
     {
@@ -242,12 +226,7 @@ public class BotAI : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (PathHolder.Instance.pathCreator != null && PathHolder.Instance.cachedPoints.Count > 0)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, targetPosition);
-        }
-
+        // Рисуем лучи для обнаружения препятствий
         Gizmos.color = Color.red;
         float angleStep = detectionAngle / (rayCount - 1);
         float startAngle = -detectionAngle / 2f;
@@ -257,6 +236,7 @@ public class BotAI : MonoBehaviour
             Gizmos.DrawLine(transform.position, transform.position + dir * obstacleDetectionDistance);
         }
 
+        // Рисуем луч для проверки земли под машиной
         Vector3 rayStart = transform.position + Vector3.up * 1.0f;
         Vector3 rayEnd = rayStart + Vector3.down * 2f;
         Gizmos.color = Color.white;

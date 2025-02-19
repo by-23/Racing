@@ -1,67 +1,152 @@
-﻿using System.Collections.Generic;
+﻿using UnityEngine;
 using PathCreation;
-using UnityEngine;
+using System.Collections.Generic;
+
+// Структура для хранения информации о повороте.
+public struct TurnInfo
+{
+    public float distance; // Расстояние вдоль пути, где начинается поворот.
+    public float angle; // Угол поворота (в градусах).
+}
 
 public class PathHolder : Singleton<PathHolder>
 {
-    // Кешированные точки и дистанции по пути
-    internal List<Vector3> cachedPoints = new List<Vector3>();
-    private List<float> cachedDistances = new List<float>();
-    internal float totalPathLength = 0f;
-
     [Header("Path Following")] [SerializeField]
     internal PathCreator pathCreator;
 
-    [SerializeField] internal float lookAheadDistance = 5f;
-    [SerializeField] private float pathSampleStep = 0.5f; // Расстояние между точками
+    [Header("Turn Caching Settings")] [SerializeField, Tooltip("Шаг сканирования пути для поиска поворотов")]
+    private float turnScanResolution = 0.1f;
 
-    protected void Start()
+    [SerializeField, Tooltip("Минимальный угол, чтобы считать участок поворотом (в градусах)")]
+    private float minTurnAngle = 15f;
+
+    // Кэш обнаруженных поворотов.
+    internal List<TurnInfo> cachedTurns = new List<TurnInfo>();
+
+    EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Stop;
+
+    /// <summary>
+    /// Общая длина пути, полученная из PathCreator.
+    /// </summary>
+    public float TotalPathLength
     {
-        CachePathPoints();
+        get
+        {
+            if (pathCreator == null) return 0f;
+            return pathCreator.path.length;
+        }
     }
 
-    private void CachePathPoints()
+    // При инициализации кэшируем повороты.
+    private void Awake()
     {
-        if (pathCreator == null)
+        CacheTurns();
+    }
+
+    public void CacheTurns()
+    {
+        cachedTurns.Clear();
+        float totalPathLength = TotalPathLength;
+        if (totalPathLength <= 0f)
             return;
 
-        totalPathLength = pathCreator.path.length;
-        cachedPoints.Clear();
-        cachedDistances.Clear();
-
-        // Используем for-цикл вместо while
-        for (float distance = 0f; distance <= totalPathLength; distance += pathSampleStep)
+        float d = 0f;
+        while (d < totalPathLength)
         {
-            cachedPoints.Add(pathCreator.path.GetPointAtDistance(distance, EndOfPathInstruction.Stop));
-            cachedDistances.Add(distance);
+            // Получаем касательную в текущей позиции d.
+            Vector3 startTangent = GetTangentAtDistance(d);
+            bool foundTurn = false;
+            float turnAngle = 0f;
+            float turnDistance = d;
+
+            // Сканируем вперёд от позиции d с шагом turnScanResolution.
+            for (float scan = d + turnScanResolution; scan <= totalPathLength; scan += turnScanResolution)
+            {
+                Vector3 scanTangent = GetTangentAtDistance(scan);
+                float angleDiff = Vector3.Angle(startTangent, scanTangent);
+                if (angleDiff >= minTurnAngle)
+                {
+                    foundTurn = true;
+                    turnAngle = angleDiff;
+                    turnDistance = scan;
+                    break;
+                }
+            }
+
+            if (foundTurn)
+            {
+                cachedTurns.Add(new TurnInfo { distance = turnDistance, angle = turnAngle });
+                // Смещаем начало сканирования чуть дальше найденного поворота, чтобы избежать повторного обнаружения
+                d = turnDistance + turnScanResolution;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Метод позволяет получить информацию о следующем повороте относительно текущей позиции (расстояния по пути).
+    /// Если найден поворот, возвращает true и out-параметром выдает TurnInfo.
+    /// </summary>
+    public bool GetNextTurnInfo(float currentDistance, out TurnInfo nextTurn)
+    {
+        nextTurn = new TurnInfo();
+        foreach (var turn in cachedTurns)
+        {
+            if (turn.distance > currentDistance)
+            {
+                nextTurn = turn;
+                return true;
+            }
         }
 
-        // Если последняя точка не совпадает с концом пути – добавляем её
-        if (cachedDistances.Count == 0 || cachedDistances[cachedDistances.Count - 1] < totalPathLength)
-        {
-            cachedPoints.Add(pathCreator.path.GetPointAtDistance(totalPathLength, EndOfPathInstruction.Stop));
-            cachedDistances.Add(totalPathLength);
-        }
+        return false;
     }
 
     /// <summary>
-    /// Ищет ближайшую дистанцию вдоль пути к заданной позиции, используя кеш.
+    /// Получает точку на пути по заданной дистанции.
+    /// </summary>
+    internal Vector3 GetPointAtDistance(float distance)
+    {
+        if (pathCreator == null) return Vector3.zero;
+        return pathCreator.path.GetPointAtDistance(distance, endOfPathInstruction);
+    }
+
+    /// <summary>
+    /// Возвращает нормализованный вектор касательной к пути в заданной дистанции.
+    /// </summary>
+    internal Vector3 GetTangentAtDistance(float distance)
+    {
+        const float delta = 0.1f;
+        Vector3 pointA = GetPointAtDistance(distance);
+        Vector3 pointB = GetPointAtDistance(distance + delta);
+        return (pointB - pointA).normalized;
+    }
+
+    /// <summary>
+    /// Поиск ближайшей дистанции вдоль пути к заданной позиции.
+    /// (Оставляем ваш оригинальный метод или адаптируем при необходимости)
     /// </summary>
     internal float FindClosestDistance(out int lastSavedCloseIndex, Vector3 position, int lastClosestIndex)
     {
-        if (cachedPoints.Count == 0)
-        {
-            lastSavedCloseIndex = 0;
+        lastSavedCloseIndex = 0;
+        if (pathCreator == null)
             return 0f;
-        }
 
-        int bestIndex = lastClosestIndex;
-        float bestSqrDist = (cachedPoints[bestIndex] - position).sqrMagnitude;
+        VertexPath vertexPath = pathCreator.path;
+        int numPoints = vertexPath.NumPoints;
+        if (numPoints == 0)
+            return 0f;
 
-        // Движение вперёд по кешу
-        while (bestIndex + 1 < cachedPoints.Count)
+        int bestIndex = Mathf.Clamp(lastClosestIndex, 0, numPoints - 1);
+        float bestSqrDist = (vertexPath.GetPoint(bestIndex) - position).sqrMagnitude;
+
+        while (bestIndex + 1 < numPoints)
         {
-            float nextSqrDist = (cachedPoints[bestIndex + 1] - position).sqrMagnitude;
+            float nextSqrDist = (vertexPath.GetPoint(bestIndex + 1) - position).sqrMagnitude;
             if (nextSqrDist < bestSqrDist)
             {
                 bestSqrDist = nextSqrDist;
@@ -73,10 +158,9 @@ public class PathHolder : Singleton<PathHolder>
             }
         }
 
-        // Движение назад по кешу
         while (bestIndex - 1 >= 0)
         {
-            float prevSqrDist = (cachedPoints[bestIndex - 1] - position).sqrMagnitude;
+            float prevSqrDist = (vertexPath.GetPoint(bestIndex - 1) - position).sqrMagnitude;
             if (prevSqrDist < bestSqrDist)
             {
                 bestSqrDist = prevSqrDist;
@@ -89,68 +173,13 @@ public class PathHolder : Singleton<PathHolder>
         }
 
         lastSavedCloseIndex = bestIndex;
-        return cachedDistances[bestIndex];
-    }
 
-    /// <summary>
-    /// Возвращает точку на пути по заданной дистанции с интерполяцией между кешированными точками.
-    /// </summary>
-    internal Vector3 GetPointAtDistance(float distance)
-    {
-        if (distance <= 0f)
-            return cachedPoints[0];
-        if (distance >= totalPathLength)
-            return cachedPoints[cachedPoints.Count - 1];
-
-        int low = 0, high = cachedDistances.Count - 1;
-        while (low <= high)
+        float distanceAlongPath = 0f;
+        for (int i = 1; i <= bestIndex; i++)
         {
-            int mid = low + (high - low) / 2;
-            if (cachedDistances[mid] < distance)
-                low = mid + 1;
-            else
-                high = mid - 1;
+            distanceAlongPath += Vector3.Distance(vertexPath.GetPoint(i - 1), vertexPath.GetPoint(i));
         }
 
-        int index = low;
-        if (index == 0)
-            return cachedPoints[0];
-
-        float d0 = cachedDistances[index - 1];
-        float d1 = cachedDistances[index];
-        float t = (distance - d0) / (d1 - d0);
-        return Vector3.Lerp(cachedPoints[index - 1], cachedPoints[index], t);
-    }
-
-    /// <summary>
-    /// Получает информацию о предстоящем повороте, используя кешированные данные.
-    /// </summary>
-    internal bool TryGetUpcomingTurnInfo(out float turnAngle, out float distanceToTurn,
-        float turnScanDistance, float turnBrakingDistance, float minTurnAngle, Vector3 playerPos, int lastClosestIndex)
-    {
-        turnAngle = 0f;
-        distanceToTurn = 0f;
-
-        int dummyIndex;
-        float currentDistance = FindClosestDistance(out dummyIndex, playerPos, lastClosestIndex);
-        float endDistance = Mathf.Min(currentDistance + turnScanDistance, totalPathLength);
-
-        const float delta = 0.1f;
-        Vector3 pointA = GetPointAtDistance(currentDistance);
-        Vector3 pointB = GetPointAtDistance(currentDistance + delta);
-        Vector3 startTangent = (pointB - pointA).normalized;
-
-        Vector3 pointC = GetPointAtDistance(endDistance - delta);
-        Vector3 pointD = GetPointAtDistance(endDistance);
-        Vector3 endTangent = (pointD - pointC).normalized;
-
-        turnAngle = Vector3.Angle(startTangent, endTangent);
-        if (turnAngle > minTurnAngle)
-        {
-            distanceToTurn = turnBrakingDistance;
-            return true;
-        }
-
-        return false;
+        return distanceAlongPath;
     }
 }
