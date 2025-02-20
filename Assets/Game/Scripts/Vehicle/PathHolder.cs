@@ -126,60 +126,48 @@ public class PathHolder : Singleton<PathHolder>
         return (pointB - pointA).normalized;
     }
 
-    /// <summary>
-    /// Поиск ближайшей дистанции вдоль пути к заданной позиции.
-    /// (Оставляем ваш оригинальный метод или адаптируем при необходимости)
-    /// </summary>
-    internal float FindClosestDistance(out int lastSavedCloseIndex, Vector3 position, int lastClosestIndex)
+    internal float FindClosestDistance(out int bestSegmentIndex, Vector3 position, int lastClosestIndex)
     {
-        lastSavedCloseIndex = 0;
+        bestSegmentIndex = -1;
         if (pathCreator == null)
             return 0f;
 
         VertexPath vertexPath = pathCreator.path;
         int numPoints = vertexPath.NumPoints;
-        if (numPoints == 0)
+        if (numPoints < 2)
             return 0f;
 
-        int bestIndex = Mathf.Clamp(lastClosestIndex, 0, numPoints - 1);
-        float bestSqrDist = (vertexPath.GetPoint(bestIndex) - position).sqrMagnitude;
+        float bestDistanceAlongPath = 0f;
+        float bestSqrDistance = float.MaxValue;
+        float accumulatedDistance = 0f;
 
-        while (bestIndex + 1 < numPoints)
+        // Перебираем все сегменты пути
+        for (int i = 0; i < numPoints - 1; i++)
         {
-            float nextSqrDist = (vertexPath.GetPoint(bestIndex + 1) - position).sqrMagnitude;
-            if (nextSqrDist < bestSqrDist)
+            Vector3 A = vertexPath.GetPoint(i);
+            Vector3 B = vertexPath.GetPoint(i + 1);
+            Vector3 AB = B - A;
+            float segmentLength = AB.magnitude;
+            if (segmentLength < 0.0001f)
             {
-                bestSqrDist = nextSqrDist;
-                bestIndex++;
+                accumulatedDistance += segmentLength;
+                continue;
             }
-            else
+
+            // Вычисляем параметр проекции t вдоль сегмента
+            float t = Mathf.Clamp01(Vector3.Dot(position - A, AB) / (segmentLength * segmentLength));
+            Vector3 projection = A + t * AB;
+            float sqrDist = (position - projection).sqrMagnitude;
+            if (sqrDist < bestSqrDistance)
             {
-                break;
+                bestSqrDistance = sqrDist;
+                bestDistanceAlongPath = accumulatedDistance + segmentLength * t;
+                bestSegmentIndex = i;
             }
+
+            accumulatedDistance += segmentLength;
         }
 
-        while (bestIndex - 1 >= 0)
-        {
-            float prevSqrDist = (vertexPath.GetPoint(bestIndex - 1) - position).sqrMagnitude;
-            if (prevSqrDist < bestSqrDist)
-            {
-                bestSqrDist = prevSqrDist;
-                bestIndex--;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        lastSavedCloseIndex = bestIndex;
-
-        float distanceAlongPath = 0f;
-        for (int i = 1; i <= bestIndex; i++)
-        {
-            distanceAlongPath += Vector3.Distance(vertexPath.GetPoint(i - 1), vertexPath.GetPoint(i));
-        }
-
-        return distanceAlongPath;
+        return bestDistanceAlongPath;
     }
 }

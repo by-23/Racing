@@ -32,7 +32,7 @@ public class VehicleMovement : MonoBehaviour
     private float ForwardSpeed => Vector3.Dot(rb.linearVelocity, transform.forward);
     internal float NormalizedForwardSpeed => Mathf.Abs(ForwardSpeed) > 0.1f ? ForwardSpeed / maxSpeed : 0f;
 
-    internal int lastClosestPathIndex = 0;
+    private int lastClosestPathIndex = 0;
     private Vehicle vehicle;
     private float currentTurnAngle = 0f;
     private FloatingJoystick floatingJoystick;
@@ -74,34 +74,29 @@ public class VehicleMovement : MonoBehaviour
         SpinWheels();
     }
 
-    /// <summary>
-    /// Оптимизированный метод сброса позиции автомобиля с использованием кешированного пути.
-    /// </summary>
     public void ResetCarPosition()
     {
         var pathHolder = PathHolder.Instance;
         if (pathHolder != null && pathHolder.pathCreator != null)
         {
-            // Находим ближайшую дистанцию вдоль пути
-            float closestDistance =
-                pathHolder.FindClosestDistance(out lastClosestPathIndex, transform.position, lastClosestPathIndex);
+            int bestSegmentIndex;
+            float closestDistance = pathHolder.FindClosestDistance(out bestSegmentIndex, transform.position, 0);
             transform.position = pathHolder.GetPointAtDistance(closestDistance);
 
-            // Вычисляем направление движения
-            Vector3 direction;
+            // Вычисляем точку впереди по маршруту (lookahead)
+            float lookaheadDistance = 0.1f; // можно настроить это значение
             float totalPathLength = pathHolder.TotalPathLength;
+            float nextDistance = Mathf.Clamp(closestDistance + lookaheadDistance, 0f, totalPathLength);
+            Vector3 lookAheadPoint = pathHolder.GetPointAtDistance(nextDistance);
 
-            if (closestDistance + 0.1f <= totalPathLength)
+            // Определяем направление от текущей позиции к следующей точке
+            Vector3 direction = (lookAheadPoint - transform.position).normalized;
+            if (direction == Vector3.zero)
             {
-                direction = (pathHolder.GetPointAtDistance(closestDistance + 0.1f) - transform.position).normalized;
-            }
-            else if (closestDistance - 0.1f >= 0f)
-            {
-                direction = (transform.position - pathHolder.GetPointAtDistance(closestDistance - 0.1f)).normalized;
-            }
-            else
-            {
-                direction = transform.forward;
+                // Если не удалось вычислить направление, используем касательную к пути
+                direction = pathHolder.pathCreator.path.GetTangent((int)closestDistance);
+                if (direction == Vector3.zero)
+                    direction = transform.forward;
             }
 
             transform.rotation = Quaternion.LookRotation(direction);

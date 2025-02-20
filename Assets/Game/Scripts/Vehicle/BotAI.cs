@@ -102,9 +102,54 @@ public class BotAI : MonoBehaviour
             vehicleMovement.ApplySteering(0f);
         }
 
-        if (resetCoroutine == null)
+        if ((transform.rotation.z > 75 || transform.rotation.z < -75) ||
+            (transform.rotation.x > 75 || transform.rotation.x < -75) && resetCoroutine == null)
             resetCoroutine = StartCoroutine(ResetCarPosition());
     }
+
+    /// <summary>
+    /// Постоянно отслеживает объект с тегом "Player" внутри триггер-коллайдера бота.
+    /// </summary>
+    /// <param name="other">Коллайдер объекта, находящегося в зоне триггера</param>
+    private void OnTriggerStay(Collider other)
+    {
+        if (GameController.Instance.isGameStarted && (other.CompareTag("Bot") || other.CompareTag("Player")))
+        {
+            // Получаем вектор от бота к игроку и проецируем на горизонтальную плоскость
+            Vector3 playerDirection = other.transform.position - transform.position;
+            playerDirection.y = 0f;
+            Vector3 playerDirNormalized = playerDirection.normalized;
+
+            // Определяем, насколько игрок находится впереди (значения больше ~0.5 указывают на примерно 60° перед ботом)
+            float forwardDot = Vector3.Dot(playerDirNormalized, transform.forward);
+            if (forwardDot > 0.5f)
+            {
+                float distanceToPlayer = playerDirection.magnitude;
+                // Определяем, с какой стороны находится игрок относительно направления движения
+                float sideDot = Vector3.Dot(playerDirNormalized, transform.right);
+                // Если игрок слева (отрицательное значение), объезжаем его справа, и наоборот
+                Vector3 avoidanceDirection = (sideDot < 0f) ? transform.right : -transform.right;
+                AvoidPlayer(avoidanceDirection, distanceToPlayer);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Применяет обход объекта Player, учитывая расстояние до него.
+    /// </summary>
+    /// <param name="avoidanceDirection">Направление, в котором бот должен повернуть для обхода</param>
+    /// <param name="distanceToPlayer">Расстояние до объекта Player</param>
+    private void AvoidPlayer(Vector3 avoidanceDirection, float distanceToPlayer)
+    {
+        // Чем ближе игрок, тем сильнее будет корректировка.
+        float forceMultiplier = Mathf.Clamp01(1f - (distanceToPlayer / obstacleDetectionDistance));
+        // Вычисляем угол между направлением бота и вектором объезда
+        float angleToAvoidance = Vector3.SignedAngle(transform.forward, avoidanceDirection, Vector3.up);
+        // Рассчитываем итоговое значение поворота с учётом коэффициента силы обхода
+        float steeringValue = angleToAvoidance * avoidanceStrength * vehicleMovement.steeringPower * forceMultiplier;
+        vehicleMovement.rb.AddRelativeTorque(0f, steeringValue, 0f, ForceMode.Acceleration);
+    }
+
 
     private void FollowPath()
     {
@@ -123,6 +168,48 @@ public class BotAI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Обнаруживает препятствия с использованием нескольких лучей (raycast).
+    /// </summary>
+    private bool DetectObstacle(out Vector3 avoidanceDirection)
+    {
+        avoidanceDirection = Vector3.zero;
+        Vector3 origin = transform.position;
+
+        float angleStep = detectionAngle / (rayCount - 1);
+        float startAngle = -detectionAngle / 2f;
+
+        RaycastHit[] hits = new RaycastHit[rayCount];
+
+        for (int i = 0; i < rayCount; i++)
+        {
+            Vector3 rayDirection = Quaternion.Euler(0, startAngle + angleStep * i, 0) * transform.forward;
+            int hitCount =
+                Physics.RaycastNonAlloc(origin, rayDirection, hits, obstacleDetectionDistance, obstacleLayerMask);
+            for (int j = 0; j < hitCount; j++)
+            {
+                if (hits[j].collider.CompareTag("Obstacle"))
+                {
+                    // Определяем, с какой стороны находится препятствие
+                    Vector3 localHitPoint = transform.InverseTransformPoint(hits[j].point);
+                    avoidanceDirection = (localHitPoint.x < 0f) ? transform.right : -transform.right;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Применяет обход препятствия посредством крутящего момента.
+    /// </summary>
+    private void AvoidObstacle(Vector3 avoidanceDirection)
+    {
+        float angleToAvoidance = Vector3.SignedAngle(transform.forward, avoidanceDirection, Vector3.up);
+        float steeringValue = angleToAvoidance * avoidanceStrength * vehicleMovement.steeringPower;
+        vehicleMovement.rb.AddRelativeTorque(0f, steeringValue, 0f, ForceMode.Acceleration);
+    }
 
     internal IEnumerator ResetCarPosition()
     {
@@ -207,48 +294,6 @@ public class BotAI : MonoBehaviour
         return Mathf.Lerp(maxTurnSpeed, minTurnSpeed, angleRatio);
     }
 
-    /// <summary>
-    /// Обнаруживает препятствия с использованием нескольких лучей (raycast).
-    /// </summary>
-    private bool DetectObstacle(out Vector3 avoidanceDirection)
-    {
-        avoidanceDirection = Vector3.zero;
-        Vector3 origin = transform.position;
-
-        float angleStep = detectionAngle / (rayCount - 1);
-        float startAngle = -detectionAngle / 2f;
-
-        RaycastHit[] hits = new RaycastHit[rayCount];
-
-        for (int i = 0; i < rayCount; i++)
-        {
-            Vector3 rayDirection = Quaternion.Euler(0, startAngle + angleStep * i, 0) * transform.forward;
-            int hitCount =
-                Physics.RaycastNonAlloc(origin, rayDirection, hits, obstacleDetectionDistance, obstacleLayerMask);
-            for (int j = 0; j < hitCount; j++)
-            {
-                if (hits[j].collider.CompareTag("Obstacle") || hits[j].collider.CompareTag("PlayerMesh"))
-                {
-                    // Определяем, с какой стороны находится препятствие
-                    Vector3 localHitPoint = transform.InverseTransformPoint(hits[j].point);
-                    avoidanceDirection = (localHitPoint.x < 0f) ? transform.right : -transform.right;
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Применяет обход препятствия посредством крутящего момента.
-    /// </summary>
-    private void AvoidObstacle(Vector3 avoidanceDirection)
-    {
-        float angleToAvoidance = Vector3.SignedAngle(transform.forward, avoidanceDirection, Vector3.up);
-        float steeringValue = angleToAvoidance * avoidanceStrength * vehicleMovement.steeringPower;
-        vehicleMovement.rb.AddRelativeTorque(0f, steeringValue, 0f, ForceMode.Acceleration);
-    }
 
     /// <summary>
     /// Корутин, который переводит бота в режим реверса на заданное время, а затем возвращает в нормальный режим.

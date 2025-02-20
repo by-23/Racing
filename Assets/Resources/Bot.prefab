@@ -350,7 +350,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -546,10 +546,10 @@ MonoBehaviour:
   maxTurnSpeed: 100
   minTurnSpeed: 50
   maxTurnAngle: 20
-  obstacleDetectionDistance: 30
-  avoidanceStrength: 0.5
+  obstacleDetectionDistance: 60
+  avoidanceStrength: 1
   rayCount: 3
-  detectionAngle: 5
+  detectionAngle: 7
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 72
