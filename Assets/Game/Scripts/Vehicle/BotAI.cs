@@ -134,18 +134,59 @@ public class BotAI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Применяет обход объекта Player, учитывая расстояние до него.
-    /// </summary>
-    /// <param name="avoidanceDirection">Направление, в котором бот должен повернуть для обхода</param>
-    /// <param name="distanceToPlayer">Расстояние до объекта Player</param>
     private void AvoidPlayer(Vector3 avoidanceDirection, float distanceToPlayer)
     {
-        // Чем ближе игрок, тем сильнее будет корректировка.
+        // Получаем все препятствия вокруг бота в радиусе obstacleDetectionDistance
+        Collider[] nearbyObstacles =
+            Physics.OverlapSphere(transform.position, obstacleDetectionDistance, obstacleLayerMask);
+        bool obstacleInAvoidanceDir = false;
+
+        // Проверяем, есть ли препятствия в направлении избранного пути объезда
+        foreach (Collider obstacle in nearbyObstacles)
+        {
+            // Игнорируем объекты с тегом "Player"
+            if (obstacle.CompareTag("Obstacle"))
+            {
+                // Вычисляем направление от бота к препятствию
+                Vector3 toObstacle = (obstacle.transform.position - transform.position).normalized;
+                // Если направление до препятствия почти совпадает с направлением объезда (порог можно настроить)
+                float dot = Vector3.Dot(toObstacle, avoidanceDirection);
+                if (dot > 0.1f)
+                {
+                    obstacleInAvoidanceDir = true;
+                    break;
+                }
+            }
+        }
+
+        // Если препятствие найдено в исходном направлении, пробуем переключиться на противоположное
+        if (obstacleInAvoidanceDir)
+        {
+            Vector3 flippedDirection = -avoidanceDirection;
+            bool obstacleInFlippedDir = false;
+            foreach (Collider obstacle in nearbyObstacles)
+            {
+                if (obstacle.CompareTag("Player") || obstacle.CompareTag("Bot"))
+                    continue;
+
+                Vector3 toObstacle = (obstacle.transform.position - transform.position).normalized;
+                float dot = Vector3.Dot(toObstacle, flippedDirection);
+                if (dot > 0.7f)
+                {
+                    obstacleInFlippedDir = true;
+                    break;
+                }
+            }
+
+            if (!obstacleInFlippedDir)
+            {
+                avoidanceDirection = flippedDirection;
+            }
+        }
+
+        // Чем ближе объект Player, тем сильнее корректировка
         float forceMultiplier = Mathf.Clamp01(1f - (distanceToPlayer / obstacleDetectionDistance));
-        // Вычисляем угол между направлением бота и вектором объезда
         float angleToAvoidance = Vector3.SignedAngle(transform.forward, avoidanceDirection, Vector3.up);
-        // Рассчитываем итоговое значение поворота с учётом коэффициента силы обхода
         float steeringValue = angleToAvoidance * avoidanceStrength * vehicleMovement.steeringPower * forceMultiplier;
         vehicleMovement.rb.AddRelativeTorque(0f, steeringValue, 0f, ForceMode.Acceleration);
     }

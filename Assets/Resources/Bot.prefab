@@ -552,12 +552,12 @@ MonoBehaviour:
   detectionAngle: 7
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 72
+    m_Bits: 8
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
   carResetTime: 7
-  stuckVelocityThreshold: 3
+  stuckVelocityThreshold: 5
   stuckTimeThreshold: 2
   reverseDuration: 0.5
   reverseAccelerationFactor: 2
