@@ -79,8 +79,7 @@ public class VehicleMovement : MonoBehaviour
         var pathHolder = PathHolder.Instance;
         if (pathHolder != null && pathHolder.pathCreator != null)
         {
-            int bestSegmentIndex;
-            float closestDistance = pathHolder.FindClosestDistance(out bestSegmentIndex, transform.position, 0);
+            float closestDistance = pathHolder.FindClosestDistance(out lastClosestPathIndex, transform.position, lastClosestPathIndex);
             transform.position = pathHolder.GetPointAtDistance(closestDistance);
 
             // Вычисляем точку впереди по маршруту (lookahead)

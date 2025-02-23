@@ -539,28 +539,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steeringSensitivity: 0.1
+  steeringSensitivity: 100
   accelerationFactor: 1
   brakingPower: 50
   turnBrakingDistance: 60
   maxTurnSpeed: 100
   minTurnSpeed: 50
   maxTurnAngle: 20
+  turnThresholdDistance: 20
   obstacleDetectionDistance: 60
   avoidanceStrength: 1
-  rayCount: 3
-  detectionAngle: 7
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  carResetTime: 7
+  detectionRaysCount: 3
+  detectionSpreadAngle: 15
   stuckVelocityThreshold: 5
-  stuckTimeThreshold: 2
-  reverseDuration: 0.5
-  reverseAccelerationFactor: 2
+  stuckTimeThreshold: 1
+  reverseDuration: 1
+  reverseAccelerationFactor: 1
+  carResetTime: 7
+  detourThreshold: 2
+  detourCooldown: 3
+  reverseSteeringMultiplier: 10
+  reverseAngleThreshold: 100
+  DetectionDistance: 5
+  pathBlockCheckDistance: 30
+  obstacleRecheckInterval: 0.5
+  sideOffsetMultiplier: 3
+  currentState: 0
+  currentNormalTarget: {x: 0, y: 0, z: 0}
 --- !u!114 &-4256842069966461579
 MonoBehaviour:
   m_ObjectHideFlags: 0
