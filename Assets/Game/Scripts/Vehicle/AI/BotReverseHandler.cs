@@ -56,7 +56,7 @@ public class BotReverseHandler
 
     private bool IsObstacleStillBlocking(Transform botTransform)
     {
-        return Physics.CheckSphere(botTransform.position, bot.DetectionDistance, bot.obstacleLayerMask);
+        return Physics.CheckSphere(botTransform.position, bot.detectionDistance, bot.obstacleLayerMask);
     }
 
     public void ProcessReverse(VehicleMovement vehicleMovement)

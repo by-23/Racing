@@ -32,53 +32,15 @@ public class BotPathFollower
     {
         // Направление к целевой точке
         Vector3 directionToTarget = (targetPoint - botTransform.position).normalized;
-        // Вектор объезда, вычисленный с использованием нескольких лучей
-        Vector3 avoidance = CalculateAvoidance(botTransform);
-        // Итоговое направление – сумма векторов движения к цели и объезда
-        Vector3 desiredDirection = (directionToTarget + avoidance).normalized;
 
         // Вычисляем угол поворота от текущего направления к желаемому
-        float targetAngle = Vector3.SignedAngle(botTransform.forward, desiredDirection, Vector3.up);
+        float targetAngle = Vector3.SignedAngle(botTransform.forward, directionToTarget, Vector3.up);
         SteeringPower = targetAngle * bot.steeringSensitivity * vehicleMovement.steeringPower;
 
         if (!ApplyTurnBraking(botTransform, vehicleMovement))
             vehicleMovement.ApplyAcceleration(bot.accelerationFactor);
     }
 
-    // Метод для вычисления корректирующего вектора объезда с использованием нескольких лучей
-    private Vector3 CalculateAvoidance(Transform botTransform)
-    {
-        Vector3 avoidance = Vector3.zero;
-        // Начало лучей смещается немного вперед от центра бота
-        Vector3 rayOrigin = botTransform.position + botTransform.forward * 1f;
-        int raysCount = bot.detectionRaysCount > 0 ? bot.detectionRaysCount : 1;
-        float spreadAngle = bot.detectionSpreadAngle;
-
-        // Лучи равномерно распределяются от -spreadAngle/2 до +spreadAngle/2 относительно направления вперед
-        for (int i = 0; i < raysCount; i++)
-        {
-            float angleOffset = 0f;
-            if (raysCount > 1)
-                angleOffset = -spreadAngle / 2f + i * (spreadAngle / (raysCount - 1));
-
-            // Поворачиваем вектор направления на вычисленный угол относительно вертикальной оси
-            Vector3 rayDirection = Quaternion.AngleAxis(angleOffset, Vector3.up) * botTransform.forward;
-            RaycastHit hit;
-            if (Physics.Raycast(rayOrigin, rayDirection, out hit, bot.DetectionDistance))
-            {
-                if (hit.collider.CompareTag("Bot") || hit.collider.CompareTag("Obstacle"))
-                {
-                    // Нормаль столкновения умножается на силу объезда
-                    avoidance += hit.normal * bot.avoidanceStrength;
-                }
-            }
-
-            // Для отладки можно визуализировать лучи:
-            Debug.DrawRay(rayOrigin, rayDirection * bot.obstacleDetectionDistance, Color.red);
-        }
-
-        return avoidance;
-    }
 
     public bool ApplyTurnBraking(Transform botTransform, VehicleMovement vehicleMovement)
     {

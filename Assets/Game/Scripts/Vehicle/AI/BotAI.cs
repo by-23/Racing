@@ -18,26 +18,24 @@ public class BotAI : MonoBehaviour
     public float maxTurnAngle = 90f;
     public float turnThresholdDistance = 20f;
 
-    [Header("Obstacle Handling")] public float obstacleDetectionDistance = 5f;
-    public float avoidanceStrength = 1f;
-    public LayerMask obstacleLayerMask;
-    public int detectionRaysCount = 5;
-    public float detectionSpreadAngle = 30f;
-
     [Header("Reverse Settings")] public float stuckVelocityThreshold = 0.1f;
     public float stuckTimeThreshold = 2f;
     public float reverseDuration = 2f;
     public float reverseAccelerationFactor = 1f;
     public float carResetTime = 2f;
 
-    [Header("Detour Settings")] public float detourThreshold = 2f;
+    [Header("Detour Settings")] public LayerMask obstacleLayerMask;
+    public float detourThreshold = 2f;
     public float detourCooldown = 3f;
     public float reverseSteeringMultiplier = 0.7f;
-    public float reverseAngleThreshold = 100f;
-    public float DetectionDistance = 5f;
+    public float detectionDistance = 5f;
     public float pathBlockCheckDistance = 10f;
     public float obstacleRecheckInterval = 0.5f;
     public float sideOffsetMultiplier = 1.5f;
+    public float detourDistanceMultiplier = 0.5f;
+    public float detourSpeedThreshold = 5f;
+    public float minDetourDistance = 15f;
+    public float maxDetourDistance = 30f;
 
     #endregion
 
@@ -65,8 +63,6 @@ public class BotAI : MonoBehaviour
     private void Awake()
     {
         vehicleMovement = GetComponent<VehicleMovement>();
-
-        // Инициализируем вспомогательные классы, передавая настройки (this)
         pathFollower = new BotPathFollower(this);
         obstacleHandler = new BotObstacleHandler(this);
         reverseHandler = new BotReverseHandler(this);
