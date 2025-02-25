@@ -561,10 +561,10 @@ MonoBehaviour:
   detectionDistance: 5
   pathBlockCheckDistance: 30
   obstacleRecheckInterval: 0.5
-  sideOffsetMultiplier: 3
-  detourDistanceMultiplier: 0.5
+  sideOffsetMultiplier: 0
+  detourDistanceMultiplier: 0
   detourSpeedThreshold: 5
-  minDetourDistance: 15
+  minDetourDistance: 45
   maxDetourDistance: 60
   currentState: 0
   currentNormalTarget: {x: 0, y: 0, z: 0}

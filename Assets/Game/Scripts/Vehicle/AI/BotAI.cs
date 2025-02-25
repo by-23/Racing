@@ -83,6 +83,14 @@ public class BotAI : MonoBehaviour
                 break;
         }
 
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, pathBlockCheckDistance) &&
+            (hit.transform.CompareTag("Obstacle") || hit.transform.CompareTag("PlayerMesh")))
+        {
+            obstacleHandler.HandleTriggerStay(hit.collider, transform);
+        }
+
         // Комбинируем корректировку руля из pathFollower и временную настройку (например, при обходе игрока)
         float totalSteering = pathFollower.SteeringPower + steeringAdjustment;
         vehicleMovement.ApplySteering(totalSteering);
@@ -107,12 +115,6 @@ public class BotAI : MonoBehaviour
     private void HandleReverseState()
     {
         reverseHandler.ProcessReverse(vehicleMovement);
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Obstacle") || other.CompareTag("PlayerMesh"))
-            obstacleHandler.HandleTriggerStay(other, transform);
     }
 
     private void CheckResetOrientation()

@@ -8,7 +8,6 @@ public class BotObstacleHandler
     private Vector3 detourPoint = Vector3.zero;
     private float lastObstacleCheckTime = 0f;
     private bool isObstacleStillPresent = false;
-    private float lastDetourTime = 0f;
 
     public BotObstacleHandler(BotAI bot)
     {
@@ -22,21 +21,14 @@ public class BotObstacleHandler
 
     public void HandleTriggerStay(Collider other, Transform botTransform)
     {
-        if (!ShouldProcessObstacle(other))
+        if (!(GameController.Instance.isGameStarted &&
+              bot.currentState != BotAI.BotState.Detouring))
             return;
 
         if (IsObstacleBlockingPath(botTransform))
         {
             UpdateDetourPoint(other, botTransform);
         }
-    }
-
-    private bool ShouldProcessObstacle(Collider other)
-    {
-        return GameController.Instance.isGameStarted &&
-               other.CompareTag("Obstacle") &&
-               bot.currentState != BotAI.BotState.Detouring &&
-               Time.time > lastDetourTime + bot.detourCooldown;
     }
 
     private bool IsObstacleBlockingPath(Transform botTransform)
@@ -50,8 +42,7 @@ public class BotObstacleHandler
             Color.cyan, 0.5f);
 
         if (Physics.Raycast(botTransform.position, toTarget.normalized,
-                out hit, Mathf.Min(toTarget.magnitude, bot.pathBlockCheckDistance)) &&
-            (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("PlayerMesh")))
+                out hit, Mathf.Min(toTarget.magnitude, bot.pathBlockCheckDistance)))
         {
             Debug.Log($"[Detour] Raycast hit: {hit.collider.name}");
             return true;
@@ -113,7 +104,6 @@ public class BotObstacleHandler
         {
             detourPoint = candidateDetourPoint;
             bot.currentState = BotAI.BotState.Detouring;
-            lastDetourTime = Time.time;
             isObstacleStillPresent = true;
         }
         else
@@ -146,8 +136,7 @@ public class BotObstacleHandler
         {
             RaycastHit hit;
             // Рейкаст вперёд от позиции бота на расстояние bot.pathBlockCheckDistance
-            if (Physics.Raycast(botTransform.position, botTransform.forward, out hit, bot.pathBlockCheckDistance) &&
-                (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("PlayerMesh")))
+            if (Physics.Raycast(botTransform.position, botTransform.forward, out hit, bot.pathBlockCheckDistance))
             {
                 isObstacleStillPresent = true;
                 Debug.Log($"[Detour] Obstacle detected: {hit.collider.name}");
@@ -244,7 +233,6 @@ public class BotObstacleHandler
     private void AbandonCurrentDetour()
     {
         bot.SetState(BotAI.BotState.Normal);
-        lastDetourTime = Time.time;
         isObstacleStillPresent = false;
     }
 
