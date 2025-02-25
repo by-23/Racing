@@ -52,19 +52,25 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
                 playerComponents.vehicle.SetBot();
             }
 
-            currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
-            currentInstantiatedPlayer =
-                Instantiate(playerPrefab, currentSpawnPoint.position, currentSpawnPoint.rotation);
-            instantiatedPlayers.Add(currentInstantiatedPlayer);
-            var instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
-            instantiatedPlayerComponents.vehicle.SetLocalPlayer();
+            if (!GameController.Instance.isDevMode)
+            {
+                currentSpawnPoint = GetAwailableSpawnPoint(currentSpawnPoint);
+                currentInstantiatedPlayer =
+                    Instantiate(playerPrefab, currentSpawnPoint.position, currentSpawnPoint.rotation);
+                instantiatedPlayers.Add(currentInstantiatedPlayer);
+                var instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
+                instantiatedPlayerComponents.vehicle.SetLocalPlayer();
+            }
 
             roomManager.StartGame();
         }
         else
         {
+            if (GameController.Instance.isDevMode) return;
+
             currentInstantiatedPlayer =
-                PhotonNetwork.Instantiate(playerPrefab.name, currentSpawnPoint.position, currentSpawnPoint.rotation);
+                PhotonNetwork.Instantiate(playerPrefab.name, currentSpawnPoint.position,
+                    currentSpawnPoint.rotation);
 
 
             Hashtable props = new Hashtable
@@ -76,7 +82,8 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
                 },
             };
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-            PlayerComponents instantiatedPlayerComponents = currentInstantiatedPlayer.GetComponent<PlayerComponents>();
+            PlayerComponents instantiatedPlayerComponents =
+                currentInstantiatedPlayer.GetComponent<PlayerComponents>();
             string playerName = instantiatedPlayerComponents.playerInfo.PlayerName;
             instantiatedPlayerComponents.photonView.RPC("ChangePlayerName", RpcTarget.AllBuffered, playerName);
             instantiatedPlayerComponents.vehicle.ChangePlayerName(playerName);

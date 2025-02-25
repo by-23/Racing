@@ -48,6 +48,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
     [SerializeField] internal bool isGameStarted = false;
+    [SerializeField] internal bool isDevMode = false;
 
 
     private void Awake()

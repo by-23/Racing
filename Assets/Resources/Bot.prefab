@@ -549,23 +549,22 @@ MonoBehaviour:
   turnThresholdDistance: 20
   stuckVelocityThreshold: 5
   stuckTimeThreshold: 1
-  reverseDuration: 1
+  reverseDuration: 1.5
   reverseAccelerationFactor: 1
   carResetTime: 7
+  detectionDistance: 5
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  detourThreshold: 2
-  detourCooldown: 3
+  "d\xEDstanceToReachAvoidPoint": 4
   reverseSteeringMultiplier: 10
-  detectionDistance: 5
   pathBlockCheckDistance: 30
   obstacleRecheckInterval: 0.5
-  sideOffsetMultiplier: 0
-  detourDistanceMultiplier: 0
+  sideOffsetMultiplier: 2
+  detourDistanceMultiplier: 1
   detourSpeedThreshold: 5
-  minDetourDistance: 45
-  maxDetourDistance: 60
+  minDetourDistance: 25
+  maxDetourDistance: 100
   currentState: 0
   currentNormalTarget: {x: 0, y: 0, z: 0}
 --- !u!114 &-4256842069966461579

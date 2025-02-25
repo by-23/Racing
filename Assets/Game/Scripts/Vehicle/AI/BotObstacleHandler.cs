@@ -19,10 +19,14 @@ public class BotObstacleHandler
         get { return detourPoint; }
     }
 
+    /// <summary>
+    /// Вызывается при нахождении бота в тригере препятствия.
+    /// Если бот ещё не в режиме объезда, пытается подобрать доступную точку объезда.
+    /// </summary>
     public void HandleTriggerStay(Collider other, Transform botTransform)
     {
-        if (!(GameController.Instance.isGameStarted &&
-              bot.currentState != BotAI.BotState.Detouring))
+        // Если игра не запущена или бот уже в режиме объезда – не ищем новую точку
+        if (!(GameController.Instance.isGameStarted && bot.currentState != BotAI.BotState.Detouring))
             return;
 
         if (IsObstacleBlockingPath(botTransform))
@@ -44,7 +48,6 @@ public class BotObstacleHandler
         if (Physics.Raycast(botTransform.position, toTarget.normalized,
                 out hit, Mathf.Min(toTarget.magnitude, bot.pathBlockCheckDistance)))
         {
-            Debug.Log($"[Detour] Raycast hit: {hit.collider.name}");
             return true;
         }
 
@@ -63,71 +66,86 @@ public class BotObstacleHandler
         return Physics.Raycast(start, direction, distance, bot.obstacleLayerMask);
     }
 
+    /// <summary>
+    /// Пытается подобрать точку объезда. Подбор идёт до тех пор, пока не найдётся доступный вариант
+    /// или не исчерпается максимальное число попыток. При успешном подборе бот переводится в режим Detouring,
+    /// и новая точка не подбирается, пока бот не достигнет её или не сменит своё состояние.
+    /// </summary>
     private void UpdateDetourPoint(Collider obstacle, Transform botTransform)
     {
+        // Если бот уже в режиме объезда, не подбираем новую точку
+        if (bot.currentState == BotAI.BotState.Detouring)
+            return;
+
         // Позиция и размер препятствия
         Vector3 obstaclePos = obstacle.bounds.center;
-        Vector3 obstacleSize = obstacle.bounds.size;
         Vector3 toObstacle = obstaclePos - botTransform.position;
 
-        // Получаем текущую скорость бота (предполагается, что VehicleMovement содержит свойство CurrentSpeed)
+        // Получаем текущую скорость бота
         VehicleMovement vm = botTransform.GetComponent<VehicleMovement>();
         float currentSpeed = vm != null ? vm.rb.linearVelocity.magnitude : 0f;
 
         // Определяем сторону объезда: 1 – вправо, -1 – влево
         float sideChoice = CalculateSideChoice(toObstacle, botTransform);
 
-        // Латеральное смещение определяется на основе размера препятствия:
-        // Берем проекцию полного размера препятствия на вектор, перпендикулярный направлению движения бота,
-        // делим на 2 (чтобы получить "половину" ширины) и прибавляем запас.
+        // Определяем латеральное смещение, основываясь на размере препятствия и заданном запасе
         float projectedWidth = Mathf.Abs(Vector3.Dot(obstacle.bounds.size, botTransform.right.normalized));
         float lateralOffset = (projectedWidth / 2f) + bot.sideOffsetMultiplier;
 
-        // Фронтальное смещение зависит от скорости.
-        // Чем быстрее движется бот, тем дальше вперед должна появиться точка,
-        // но оно ограничено минимальным и максимальным значениями.
-        float forwardDistance = Mathf.Clamp(currentSpeed * bot.detourDistanceMultiplier,
+        // Фронтальное смещение зависит от скорости
+        float baseForwardDistance = Mathf.Clamp(currentSpeed * bot.detourDistanceMultiplier,
             bot.minDetourDistance, bot.maxDetourDistance);
 
-        // Итоговая точка объезда = исходная позиция + смещение вперед + латеральное смещение.
-        Vector3 candidateDetourPoint = botTransform.position +
-                                       botTransform.forward * forwardDistance +
-                                       botTransform.right * (sideChoice * lateralOffset);
-        candidateDetourPoint.y = botTransform.position.y; // Сохраняем уровень по Y
-
-        Debug.DrawLine(botTransform.position, candidateDetourPoint, Color.green, 2.0f);
-        DrawDetourPointMarker(candidateDetourPoint, Color.green, 2.0f);
-
-        // Проверяем, что путь к точке объезда свободен
-        bool clearToDetour = !CheckForObstaclesBetweenPoints(botTransform.position, candidateDetourPoint);
-        if (clearToDetour && IsDetourPointValid(candidateDetourPoint))
+        int maxAttempts = 5;
+        for (int i = 0; i < maxAttempts; i++)
         {
-            detourPoint = candidateDetourPoint;
-            bot.currentState = BotAI.BotState.Detouring;
-            isObstacleStillPresent = true;
+            // Плавно увеличиваем дистанцию на каждой попытке
+            float adjustedForwardDistance = baseForwardDistance + i * 1.0f; // прибавляем 1 единицу за попытку
+
+            Vector3 candidateDetourPoint = botTransform.position +
+                                             botTransform.forward * adjustedForwardDistance +
+                                             botTransform.right * (sideChoice * lateralOffset);
+            candidateDetourPoint.y = botTransform.position.y; // сохраняем уровень по Y
+
+            // Проверяем, что точка находится перед ботом
+            Vector3 toCandidate = candidateDetourPoint - botTransform.position;
+            if (Vector3.Dot(botTransform.forward, toCandidate) <= 0)
+            {
+                // Пробуем инвертировать латеральный сдвиг
+                candidateDetourPoint = botTransform.position +
+                                       botTransform.forward * adjustedForwardDistance +
+                                       botTransform.right * (-sideChoice * lateralOffset);
+                candidateDetourPoint.y = botTransform.position.y;
+                toCandidate = candidateDetourPoint - botTransform.position;
+                if (Vector3.Dot(botTransform.forward, toCandidate) <= 0)
+                {
+                    // Если точка всё ещё позади, переходим к следующей попытке с увеличенной дистанцией
+                    continue;
+                }
+            }
+
+            Debug.DrawLine(botTransform.position, candidateDetourPoint, Color.green, 2.0f);
+            DrawDetourPointMarker(candidateDetourPoint, Color.green, 2.0f);
+
+            // Проверяем, свободен ли путь к точке объезда
+            bool clearToDetour = !CheckForObstaclesBetweenPoints(botTransform.position, candidateDetourPoint);
+            if (clearToDetour && !Physics.CheckSphere(candidateDetourPoint, 2f, bot.obstacleLayerMask))
+            {
+                // Успешно подобрана точка – сохраняем и переключаем состояние
+                detourPoint = candidateDetourPoint;
+                bot.currentState = BotAI.BotState.Detouring;
+                isObstacleStillPresent = true;
+                return; // выходим из метода, дальнейшие попытки не выполняются
+            }
         }
-        else
-        {
-            Debug.Log("[Detour] Candidate detour point is blocked or invalid.");
-        }
+        // Если ни одна из попыток не увенчалась успехом, detourPoint остаётся неизменной,
+        // и в следующих обновлениях поиск будет повторяться.
     }
 
     private float CalculateSideChoice(Vector3 toObstacle, Transform botTransform)
     {
         float dot = Vector3.Dot(toObstacle, botTransform.right);
         return dot > 0 ? -1f : 1f;
-    }
-
-
-    private bool IsDetourPointValid(Vector3 point)
-    {
-        bool valid = !Physics.CheckSphere(point, 2f, bot.obstacleLayerMask);
-        if (!valid)
-        {
-            Debug.Log($"[Detour] Detour point {point} is invalid (inside obstacle).");
-        }
-
-        return valid;
     }
 
     public void UpdateDetourState(Transform botTransform, Vector3 normalTarget)
@@ -139,7 +157,6 @@ public class BotObstacleHandler
             if (Physics.Raycast(botTransform.position, botTransform.forward, out hit, bot.pathBlockCheckDistance))
             {
                 isObstacleStillPresent = true;
-                Debug.Log($"[Detour] Obstacle detected: {hit.collider.name}");
             }
             else
             {
@@ -149,60 +166,25 @@ public class BotObstacleHandler
             lastObstacleCheckTime = Time.time;
         }
 
-
         // Если препятствие больше не мешает, отменяем объезд
         if (!isObstacleStillPresent)
         {
-            AbandonCurrentDetour();
+            bot.SetState(BotAI.BotState.Normal);
+            isObstacleStillPresent = false;
             return;
         }
 
         Debug.DrawLine(botTransform.position, normalTarget, Color.blue, 0.5f);
 
-        // Если точка объезда оказалась позади бота, а препятствие отсутствует, отменяем объезд,
-        // чтобы бот не начинал разворачиваться для возврата к ней.
-        Vector3 toDetour = detourPoint - botTransform.position;
-        if (Vector3.Dot(botTransform.forward, toDetour) < 0)
-        {
-            Debug.Log("[Detour] Detour point is behind the bot.");
-            if (!isObstacleStillPresent)
-            {
-                bot.SetState(BotAI.BotState.Normal);
-                Debug.Log("[Detour] Obstacle no longer present. Cancelling detour.");
-                return;
-            }
-        }
-
         // Если бот уже достиг (или близок к) точки объезда, переключаемся на нормальный режим
-        if (Vector3.Distance(botTransform.position, detourPoint) < bot.detourThreshold)
+        if (Vector3.Distance(botTransform.position, detourPoint) < bot.dístanceToReachAvoidPoint)
         {
             bot.SetState(BotAI.BotState.Normal);
-            Debug.Log("[Detour] Reached detour point. Switching back to Normal state.");
             return;
         }
 
-        // Определяем манёвр (прямой или задний) по скорости
-        VehicleMovement vm = botTransform.GetComponent<VehicleMovement>();
-        float currentSpeed = vm != null ? vm.rb.linearVelocity.magnitude : 0f;
-
-        if (currentSpeed < bot.detourSpeedThreshold)
-        {
-            ProcessReverseDetour(toDetour, botTransform);
-        }
-        else
-        {
-            ProcessForwardDetour(toDetour, botTransform);
-        }
-    }
-
-    private void ProcessReverseDetour(Vector3 toDetour, Transform botTransform)
-    {
-        float targetAngle = Vector3.SignedAngle(-botTransform.forward, toDetour.normalized, Vector3.up);
-        float appliedSteering = targetAngle * bot.steeringSensitivity * bot.reverseSteeringMultiplier;
-        bot.SetSteering(appliedSteering);
-        Debug.Log($"[Detour] Reverse Detour: targetAngle = {targetAngle} (applied steering: {appliedSteering})");
-        Debug.DrawRay(botTransform.position, -botTransform.forward * 5f, Color.red, 0.5f);
-        ApplyAcceleration(botTransform, true);
+        Vector3 toDetour = detourPoint - botTransform.position;
+        ProcessForwardDetour(toDetour, botTransform);
     }
 
     private void ProcessForwardDetour(Vector3 toDetour, Transform botTransform)
@@ -228,12 +210,6 @@ public class BotObstacleHandler
             vm.ApplyAcceleration(-bot.accelerationFactor);
         else
             vm.ApplyAcceleration(bot.accelerationFactor);
-    }
-
-    private void AbandonCurrentDetour()
-    {
-        bot.SetState(BotAI.BotState.Normal);
-        isObstacleStillPresent = false;
     }
 
     /// <summary>

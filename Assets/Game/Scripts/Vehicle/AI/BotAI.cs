@@ -23,17 +23,17 @@ public class BotAI : MonoBehaviour
     public float reverseDuration = 2f;
     public float reverseAccelerationFactor = 1f;
     public float carResetTime = 2f;
+    public float detectionDistance = 5f;
 
     [Header("Detour Settings")] public LayerMask obstacleLayerMask;
-    public float detourThreshold = 2f;
-    public float detourCooldown = 3f;
-    public float reverseSteeringMultiplier = 0.7f;
-    public float detectionDistance = 5f;
+
+    [FormerlySerializedAs("dístanceToAvoidPoint")] [FormerlySerializedAs("detourThreshold")]
+    public float dístanceToReachAvoidPoint = 2f;
+
     public float pathBlockCheckDistance = 10f;
     public float obstacleRecheckInterval = 0.5f;
     public float sideOffsetMultiplier = 1.5f;
     public float detourDistanceMultiplier = 0.5f;
-    public float detourSpeedThreshold = 5f;
     public float minDetourDistance = 15f;
     public float maxDetourDistance = 30f;
 
@@ -83,12 +83,12 @@ public class BotAI : MonoBehaviour
                 break;
         }
 
-
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, pathBlockCheckDistance) &&
-            (hit.transform.CompareTag("Obstacle") || hit.transform.CompareTag("PlayerMesh")))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, pathBlockCheckDistance))
         {
-            obstacleHandler.HandleTriggerStay(hit.collider, transform);
+            if (hit.transform.CompareTag("Obstacle") || hit.transform.CompareTag("Bot") ||
+                hit.transform.CompareTag("Player"))
+                obstacleHandler.HandleTriggerStay(hit.collider, transform);
         }
 
         // Комбинируем корректировку руля из pathFollower и временную настройку (например, при обходе игрока)

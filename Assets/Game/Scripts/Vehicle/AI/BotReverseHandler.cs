@@ -38,13 +38,7 @@ public class BotReverseHandler
         float timer = 0f;
         while (timer < bot.reverseDuration)
         {
-            if (previousStateBeforeReverse == BotAI.BotState.Detouring)
-            {
-                Vector3 toDetour = bot.ObstacleHandler.DetourPoint - botTransform.position;
-                float angle = Vector3.SignedAngle(-botTransform.forward, toDetour.normalized, Vector3.up);
-                bot.SetSteering(angle * bot.steeringSensitivity * bot.reverseSteeringMultiplier);
-            }
-
+            bot.SetSteering(0f);
             timer += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
@@ -54,6 +48,7 @@ public class BotReverseHandler
             ? BotAI.BotState.Detouring
             : BotAI.BotState.Normal;
     }
+
 
     private bool IsObstacleStillBlocking(Transform botTransform)
     {
