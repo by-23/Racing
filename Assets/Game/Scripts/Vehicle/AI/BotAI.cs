@@ -111,8 +111,8 @@ public class BotAI : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        // Передаём обработку столкновений классу-обработчику препятствий
-        obstacleHandler.HandleTriggerStay(other, transform);
+        if (other.CompareTag("Obstacle") || other.CompareTag("PlayerMesh"))
+            obstacleHandler.HandleTriggerStay(other, transform);
     }
 
     private void CheckResetOrientation()

@@ -14,7 +14,8 @@ public class BotReverseHandler
 
     public void CheckStuck(VehicleMovement vehicleMovement, Transform botTransform)
     {
-        if (vehicleMovement.rb.linearVelocity.magnitude < bot.stuckVelocityThreshold)
+        if (GameController.Instance.isGameStarted &&
+            vehicleMovement.rb.linearVelocity.magnitude < bot.stuckVelocityThreshold)
         {
             stuckTimer += Time.fixedDeltaTime;
             if (stuckTimer >= bot.stuckTimeThreshold)
@@ -29,7 +30,7 @@ public class BotReverseHandler
         }
     }
 
-    public IEnumerator ReverseRoutine(VehicleMovement vehicleMovement, Transform botTransform)
+    private IEnumerator ReverseRoutine(VehicleMovement vehicleMovement, Transform botTransform)
     {
         previousStateBeforeReverse = bot.currentState;
         bot.currentState = BotAI.BotState.Reversing;

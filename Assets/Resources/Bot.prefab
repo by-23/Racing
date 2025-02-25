@@ -547,18 +547,14 @@ MonoBehaviour:
   minTurnSpeed: 50
   maxTurnAngle: 20
   turnThresholdDistance: 20
-  obstacleDetectionDistance: 60
-  avoidanceStrength: 1
-  obstacleLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  detectionRaysCount: 3
-  detectionSpreadAngle: 15
   stuckVelocityThreshold: 5
   stuckTimeThreshold: 1
   reverseDuration: 1
   reverseAccelerationFactor: 1
   carResetTime: 7
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   detourThreshold: 2
   detourCooldown: 3
   reverseSteeringMultiplier: 10
@@ -567,6 +563,7 @@ MonoBehaviour:
   obstacleRecheckInterval: 0.5
   sideOffsetMultiplier: 3
   detourDistanceMultiplier: 0.5
+  detourSpeedThreshold: 5
   minDetourDistance: 15
   maxDetourDistance: 60
   currentState: 0

@@ -25,7 +25,7 @@ public class BotObstacleHandler
         if (!ShouldProcessObstacle(other))
             return;
 
-        if (IsObstacleBlockingPath(other, botTransform))
+        if (IsObstacleBlockingPath(botTransform))
         {
             UpdateDetourPoint(other, botTransform);
         }
@@ -39,7 +39,7 @@ public class BotObstacleHandler
                Time.time > lastDetourTime + bot.detourCooldown;
     }
 
-    private bool IsObstacleBlockingPath(Collider obstacle, Transform botTransform)
+    private bool IsObstacleBlockingPath(Transform botTransform)
     {
         Vector3 toTarget = bot.currentNormalTarget - botTransform.position;
         RaycastHit hit;
@@ -50,11 +50,11 @@ public class BotObstacleHandler
             Color.cyan, 0.5f);
 
         if (Physics.Raycast(botTransform.position, toTarget.normalized,
-                out hit, Mathf.Min(toTarget.magnitude, bot.pathBlockCheckDistance),
-                bot.obstacleLayerMask))
+                out hit, Mathf.Min(toTarget.magnitude, bot.pathBlockCheckDistance)) &&
+            (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("PlayerMesh")))
         {
             Debug.Log($"[Detour] Raycast hit: {hit.collider.name}");
-            return hit.collider == obstacle;
+            return true;
         }
 
         return false;
@@ -106,8 +106,6 @@ public class BotObstacleHandler
 
         Debug.DrawLine(botTransform.position, candidateDetourPoint, Color.green, 2.0f);
         DrawDetourPointMarker(candidateDetourPoint, Color.green, 2.0f);
-        Debug.Log($"[Detour] Candidate Detour Point: {candidateDetourPoint}, " +
-                  $"ForwardDistance: {forwardDistance}, LateralOffset: {lateralOffset}, Side: {sideChoice}");
 
         // Проверяем, что путь к точке объезда свободен
         bool clearToDetour = !CheckForObstaclesBetweenPoints(botTransform.position, candidateDetourPoint);
@@ -117,7 +115,6 @@ public class BotObstacleHandler
             bot.currentState = BotAI.BotState.Detouring;
             lastDetourTime = Time.time;
             isObstacleStillPresent = true;
-            Debug.Log("[Detour] Detour point set. Switching to Detouring state.");
         }
         else
         {
@@ -125,13 +122,12 @@ public class BotObstacleHandler
         }
     }
 
-    // Вычисляет, с какой стороны (1 для вправо, -1 для влево) должен быть объезд,
-    // исходя из позиции препятствия относительно направления бота.
     private float CalculateSideChoice(Vector3 toObstacle, Transform botTransform)
     {
-        Vector3 rightPerp = Vector3.Cross(toObstacle.normalized, Vector3.up);
-        return Vector3.Dot(rightPerp, botTransform.right) > 0 ? 1f : -1f;
+        float dot = Vector3.Dot(toObstacle, botTransform.right);
+        return dot > 0 ? -1f : 1f;
     }
+
 
     private bool IsDetourPointValid(Vector3 point)
     {
@@ -150,8 +146,8 @@ public class BotObstacleHandler
         {
             RaycastHit hit;
             // Рейкаст вперёд от позиции бота на расстояние bot.pathBlockCheckDistance
-            if (Physics.Raycast(botTransform.position, botTransform.forward, out hit, bot.pathBlockCheckDistance,
-                    bot.obstacleLayerMask))
+            if (Physics.Raycast(botTransform.position, botTransform.forward, out hit, bot.pathBlockCheckDistance) &&
+                (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("PlayerMesh")))
             {
                 isObstacleStillPresent = true;
                 Debug.Log($"[Detour] Obstacle detected: {hit.collider.name}");
@@ -198,8 +194,7 @@ public class BotObstacleHandler
 
         // Определяем манёвр (прямой или задний) по скорости
         VehicleMovement vm = botTransform.GetComponent<VehicleMovement>();
-        float currentSpeed = vm != null ? vm.rb.velocity.magnitude : 0f;
-        Debug.Log($"[Detour] Current speed: {currentSpeed}");
+        float currentSpeed = vm != null ? vm.rb.linearVelocity.magnitude : 0f;
 
         if (currentSpeed < bot.detourSpeedThreshold)
         {
@@ -226,7 +221,6 @@ public class BotObstacleHandler
         float targetAngle = Vector3.SignedAngle(botTransform.forward, toDetour.normalized, Vector3.up);
         float appliedSteering = targetAngle * bot.steeringSensitivity;
         bot.SetSteering(appliedSteering);
-        Debug.Log($"[Detour] Forward Detour: targetAngle = {targetAngle} (applied steering: {appliedSteering})");
         Debug.DrawRay(botTransform.position, botTransform.forward * 5f, Color.green, 0.5f);
         if (!bot.HasTurnBraking(botTransform))
             ApplyAcceleration(botTransform, false);
@@ -252,8 +246,6 @@ public class BotObstacleHandler
         bot.SetState(BotAI.BotState.Normal);
         lastDetourTime = Time.time;
         isObstacleStillPresent = false;
-        Debug.Log(
-            "[Detour] No obstacle present along path. Abandoning current detour and switching back to Normal state.");
     }
 
     /// <summary>
