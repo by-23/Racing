@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Follower : MonoBehaviour
 {
     internal Vehicle targetVehicle;
 
     [SerializeField] private float speed;
-    [SerializeField] private float followSpeed;
+    [SerializeField] private float addedSpeed;
     [SerializeField] private float lifetime = 15f;
     [SerializeField] private bool followImmediately;
 
@@ -29,13 +30,13 @@ public class Follower : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         item = GetComponent<Item>();
-        if (followImmediately)
-            targetVehicle = GetNearestTarget();
+        if (followImmediately && TryGetNearestTarget(out Vehicle nearestTarget))
+            targetVehicle = nearestTarget;
     }
 
     private void FixedUpdate()
     {
-        if (targetVehicle && hasTarget || followImmediately)
+        if (targetVehicle && (hasTarget || followImmediately))
         {
             float targetVehicleSpeed = targetVehicle.vehicleMovement.rb.linearVelocity.magnitude;
             float vehicleSpeed =
@@ -48,7 +49,7 @@ public class Follower : MonoBehaviour
 
             Vector3 movement = (transform.forward + new Vector3(horizontalOscillation, 0f, 0f)).normalized;
 
-            rb.transform.Translate(movement * ((vehicleSpeed + followSpeed) * Time.deltaTime), Space.World);
+            rb.transform.Translate(movement * ((vehicleSpeed + addedSpeed) * Time.deltaTime), Space.World);
         }
 
         else
@@ -66,10 +67,10 @@ public class Follower : MonoBehaviour
         }
     }
 
-    private Vehicle GetNearestTarget()
+    private Boolean TryGetNearestTarget(out Vehicle nearestTarget)
     {
         float minDistance = float.MaxValue;
-        Vehicle nearestTarget = null;
+        nearestTarget = null;
 
         foreach (var player in PlayersSpawner.Instance.instantiatedPlayers)
         {
@@ -96,7 +97,14 @@ public class Follower : MonoBehaviour
             }
         }
 
-        return nearestTarget;
+        if (nearestTarget == null)
+        {
+            // print("No target found");
+            return false;
+            
+        }
+        
+        return true;
     }
 
 

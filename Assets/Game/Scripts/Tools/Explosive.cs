@@ -46,7 +46,11 @@ public class Explosive : MonoBehaviour
             newExplosionFX = PhotonNetwork.Instantiate("CFXR Explosion Smoke 2 Solo (HDR)", transform.position,
                 quaternion.identity);
         else
+        {
             newExplosionFX = Instantiate(explosionFXPrefab.gameObject);
+            print("Instantiated");
+        }
+
         newExplosionFX.transform.position = transform.position;
         newExplosionFX.gameObject.SetActive(true);
 

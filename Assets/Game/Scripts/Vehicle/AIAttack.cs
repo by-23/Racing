@@ -11,6 +11,7 @@ public class BotAttack : Attack
 
     private void Update()
     {
+        print(GameController.Instance.isGameStarted);
         if (GameController.Instance.isGameStarted)
             DetectAndAttack();
     }
@@ -21,6 +22,7 @@ public class BotAttack : Attack
         Ray ray = new Ray(muzzlePosition.position, muzzlePosition.forward);
         if (Time.time >= nextTimeToShoot && Physics.Raycast(ray, out RaycastHit hit, detectionRange))
         {
+            print(hit.collider.CompareTag("PlayerMesh"));
             if (hit.collider.CompareTag("PlayerMesh"))
             {
                 int randomValue = UnityEngine.Random.Range(1, 100);
