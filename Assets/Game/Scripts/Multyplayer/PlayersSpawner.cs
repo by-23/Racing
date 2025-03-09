@@ -88,7 +88,7 @@ public class PlayersSpawner : Singleton<PlayersSpawner>
             instantiatedPlayerComponents.photonView.RPC("ChangePlayerName", RpcTarget.AllBuffered, playerName);
             instantiatedPlayerComponents.vehicle.ChangePlayerName(playerName);
             instantiatedPlayerComponents.photonView.Owner.NickName = playerName;
-            MainMenu.Instance.AddPlayerUI(instantiatedPlayerComponents.photonView.Owner);
+            MyMainMenu.Instance.AddPlayerUI(instantiatedPlayerComponents.photonView.Owner);
         }
     }
 

@@ -5,13 +5,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class FunctionalButtons : Singleton<FunctionalButtons>
 {
     public Vehicle vehicle;
-    public Attack attack;
+    public ItemsController itemsController;
     public Button gasButton;
     public Button brakeButton;
     public Button fireButton;
@@ -105,7 +106,7 @@ public class FunctionalButtons : Singleton<FunctionalButtons>
 
     public void FirePressed()
     {
-        attack.TryFire();
+        itemsController.ActivateTool(0);
     }
 
     private void OnDestroy()

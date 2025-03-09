@@ -26,10 +26,8 @@ public class VehicleGroundDetection
     public void OnDrawGizmosSelected(Vehicle vehicle)
     {
 #if UNITY_EDITOR
-        var direction = -vehicle.transform.up;
-        var length = RaycastDist;
-
-        Debug.DrawRay(vehicle.transform.position, direction * length, Color.magenta);
+        Debug.DrawRay(vehicle.transform.position + vehicle.transform.up * 1f, -vehicle.transform.up * RaycastDist,
+            Color.magenta);
 #endif
     }
 }

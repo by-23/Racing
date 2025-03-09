@@ -4,7 +4,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Follower : MonoBehaviour
+public class Follower : MonoBehaviour, IDistantAttacking
 {
     internal Vehicle targetVehicle;
 
@@ -18,7 +18,7 @@ public class Follower : MonoBehaviour
     public float oscillationFrequency = 1f;
     private float timeCounter = 0f;
 
-    private Item item;
+    private Item _item;
     private Rigidbody rb;
 
     private void OnEnable()
@@ -28,8 +28,10 @@ public class Follower : MonoBehaviour
 
     private void Start()
     {
+        _item = GetComponent<Item>();
         rb = GetComponent<Rigidbody>();
-        item = GetComponent<Item>();
+        _item.OnDeactivate += Deactivate;
+        _item.OnReactivate += Reactivate;
         if (followImmediately && TryGetNearestTarget(out Vehicle nearestTarget))
             targetVehicle = nearestTarget;
     }
@@ -60,7 +62,7 @@ public class Follower : MonoBehaviour
 
     public void SetTarget(Vehicle foundedTarget)
     {
-        if (!hasTarget && foundedTarget != item.Owner)
+        if (!hasTarget && foundedTarget != _item.Owner)
         {
             targetVehicle = foundedTarget;
             hasTarget = true;
@@ -72,41 +74,50 @@ public class Follower : MonoBehaviour
         float minDistance = float.MaxValue;
         nearestTarget = null;
 
-        foreach (var player in PlayersSpawner.Instance.instantiatedPlayers)
-        {
-            if (player == null || player == item.Owner.gameObject)
-                continue;
 
-            // Переводим позицию цели в локальные координаты владельца
-            Vector3 localPos = item.Owner.transform.InverseTransformPoint(player.transform.position);
-
-            // Если цель не перед игроком (например, сзади или на уровне), пропускаем её
-            if (localPos.z <= 0)
-                continue;
-
-            // Можно дополнительно ограничить угол (например, 45°)
-            // float angle = Mathf.Atan2(Mathf.Abs(localPos.x), localPos.z) * Mathf.Rad2Deg;
-            // if (angle > 45f)
-            //     continue;
-
-            float distance = localPos.magnitude;
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                nearestTarget = player.GetComponent<Vehicle>();
-            }
-        }
+        // foreach (var player in PlayersSpawner.Instance.instantiatedPlayers)
+        // {
+        //     if (player == null || player == _item.Owner.gameObject)
+        //         continue;
+        //
+        //     // Переводим позицию цели в локальные координаты владельца
+        //     Vector3 localPos = _item.Owner.transform.InverseTransformPoint(player.transform.position);
+        //
+        //     // Если цель не перед игроком (например, сзади или на уровне), пропускаем её
+        //     if (localPos.z <= 0)
+        //         continue;
+        //
+        //     // Можно дополнительно ограничить угол (например, 45°)
+        //     // float angle = Mathf.Atan2(Mathf.Abs(localPos.x), localPos.z) * Mathf.Rad2Deg;
+        //     // if (angle > 45f)
+        //     //     continue;
+        //
+        //     float distance = localPos.magnitude;
+        //     if (distance < minDistance)
+        //     {
+        //         minDistance = distance;
+        //         nearestTarget = player.GetComponent<Vehicle>();
+        //     }
+        // }
 
         if (nearestTarget == null)
         {
             // print("No target found");
             return false;
-            
         }
-        
+
         return true;
     }
 
+    private void Deactivate()
+    {
+        enabled = false;
+    }
+
+    private void Reactivate()
+    {
+        enabled = true;
+    }
 
     private IEnumerator DespawnAfterLifetime()
     {
@@ -122,9 +133,9 @@ public class Follower : MonoBehaviour
         }
     }
 
-    public void OnDespawn()
+    private void OnDestroy()
     {
-        hasTarget = false;
-        targetVehicle = null;
+        _item.OnDeactivate -= Deactivate;
+        _item.OnReactivate -= Reactivate;
     }
 }

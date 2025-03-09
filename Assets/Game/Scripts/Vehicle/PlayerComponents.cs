@@ -1,22 +1,17 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using AYellowpaper.SerializedCollections;
 using Photon.Pun;
 using Unity.Netcode;
 using UnityEngine;
 
-[RequireComponent(typeof(NetworkObject))]
 [RequireComponent(typeof(Vehicle))]
 [RequireComponent(typeof(PlayerInfo))]
-[RequireComponent(typeof(Attack))]
+[RequireComponent(typeof(ItemsController))]
 [RequireComponent(typeof(HealthController))]
 public class PlayerComponents : MonoBehaviour
 {
     [SerializeField] public NetworkObject networkObject;
     [SerializeField] public Vehicle vehicle;
     [SerializeField] public PlayerInfo playerInfo;
-    [SerializeField] public Attack attack;
+    [SerializeField] public ItemsController itemsController;
     [SerializeField] public HealthController healthController;
     [SerializeField] public PhotonView photonView;
     [SerializeField] public CameraFollow cameraFollow;
@@ -26,7 +21,7 @@ public class PlayerComponents : MonoBehaviour
         if (networkObject == null) networkObject = GetComponent<NetworkObject>();
         if (vehicle == null) vehicle = GetComponent<Vehicle>();
         if (playerInfo == null) playerInfo = GetComponent<PlayerInfo>();
-        if (attack == null) attack = GetComponent<Attack>();
+        if (itemsController == null) itemsController = GetComponent<ItemsController>();
         if (healthController == null) healthController = GetComponent<HealthController>();
         if (photonView == null) photonView = GetComponent<PhotonView>();
         if (cameraFollow == null) cameraFollow = GetComponentInChildren<CameraFollow>();

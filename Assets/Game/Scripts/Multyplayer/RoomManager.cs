@@ -11,7 +11,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public static RoomManager Instance;
     private bool isOnline;
 
-    [SerializeField] private MainMenu mainMenu;
+    [SerializeField] private MyMainMenu mainMenu;
     [SerializeField] protected internal Director direktor;
     [SerializeField] private int maxPlayersInLobby = 4;
     [SerializeField] private PlayersSpawner playerSpawner;

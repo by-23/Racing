@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using AYellowpaper.SerializedCollections;
-using PathCreation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
@@ -47,8 +42,8 @@ public class GameController : MonoBehaviourPunCallbacks
     #endregion
 
 
-    [SerializeField] internal bool isGameStarted = false;
-    [SerializeField] internal bool isDevMode = false;
+    [SerializeField] internal bool isGameStarted = true;
+    [SerializeField] internal bool isDevMode = true;
 
 
     private void Awake()

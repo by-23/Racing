@@ -300,8 +300,8 @@ GameObject:
   - component: {fileID: 5505003984607041509}
   - component: {fileID: 2817538194188812170}
   - component: {fileID: 2604161214765010509}
-  - component: {fileID: 3365895076832356282}
-  - component: {fileID: -8554887327945055041}
+  - component: {fileID: 3391775898630260023}
+  - component: {fileID: 8704497027745435374}
   - component: {fileID: 1816427083731817154}
   - component: {fileID: 374649462817665367}
   - component: {fileID: 9178862210767006648}
@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: -7637648645194494759}
   - component: {fileID: -4256842069966461579}
   - component: {fileID: -8441199704336409492}
+  - component: {fileID: -4283097896424799985}
   m_Layer: 6
   m_Name: Bot
   m_TagString: Bot
@@ -385,7 +386,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &3365895076832356282
+--- !u!114 &3391775898630260023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -397,7 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1388826236
+  GlobalObjectIdHash: 844497834
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -410,7 +411,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &-8554887327945055041
+--- !u!114 &8704497027745435374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -456,7 +457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   playerCam: {fileID: 5285592622119876980}
-  attack: {fileID: -4256842069966461579}
+  itemsController: {fileID: 0}
   triggerCallback: {fileID: 9131081407688437010}
   healthController: {fileID: 1940173394000298594}
   vehicleMovement: {fileID: 374649462817665367}
@@ -467,7 +468,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a559cabf2e74119a7d0e89821ecc93c, type: 3}
   m_Name: 
@@ -481,7 +482,7 @@ MonoBehaviour:
     RaycastDist: 2
   gravity: 20
   fallGravity: 50
-  maxSpeed: 100
+  maxSpeed: 200
   acceleration: 30
   wheelsRotationSpeed: 100
   wheelsTurnPercentage: 1
@@ -534,12 +535,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steeringSensitivity: 100
+  steeringSensitivity: 1
   accelerationFactor: 1
   brakingPower: 50
   turnBrakingDistance: 60
@@ -550,19 +551,17 @@ MonoBehaviour:
   stuckVelocityThreshold: 5
   stuckTimeThreshold: 1
   reverseDuration: 1.5
-  reverseAccelerationFactor: 1
+  reverseAccelerationFactor: 1.5
   carResetTime: 7
   detectionDistance: 5
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 8
   "d\xEDstanceToReachAvoidPoint": 4
-  reverseSteeringMultiplier: 10
   pathBlockCheckDistance: 30
   obstacleRecheckInterval: 0.5
-  sideOffsetMultiplier: 2
+  sideOffsetMultiplier: 1
   detourDistanceMultiplier: 1
-  detourSpeedThreshold: 5
   minDetourDistance: 25
   maxDetourDistance: 100
   currentState: 0
@@ -579,13 +578,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e58d82627ca35e4c82c48b669742854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: -8871661809336245487, guid: 0f4be7d8747bb694fa377f4fbc11941a, type: 3}
-  photonView: {fileID: -8554887327945055041}
+  items:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  photonView: {fileID: 0}
   muzzlePosition: {fileID: 5663055877064385965}
   vehicle: {fileID: 1816427083731817154}
-  fireRate: 20
+  fireRate: 2
   detectionRange: 50
-  attackChance: 0
+  attackChance: 100
 --- !u!114 &-8441199704336409492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -598,13 +600,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f35055dd7b19c4ca13f8296927fcc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkObject: {fileID: 3365895076832356282}
+  networkObject: {fileID: 3391775898630260023}
   vehicle: {fileID: 1816427083731817154}
   playerInfo: {fileID: 9178862210767006648}
-  attack: {fileID: -4256842069966461579}
+  itemsController: {fileID: -4256842069966461579}
   healthController: {fileID: 1940173394000298594}
-  photonView: {fileID: -8554887327945055041}
+  photonView: {fileID: 8704497027745435374}
   cameraFollow: {fileID: 0}
+--- !u!195 &-4283097896424799985
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &841632710170942201
 PrefabInstance:
   m_ObjectHideFlags: 0

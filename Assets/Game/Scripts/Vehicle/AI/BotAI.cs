@@ -93,6 +93,7 @@ public class BotAI : MonoBehaviour
 
         // Комбинируем корректировку руля из pathFollower и временную настройку (например, при обходе игрока)
         float totalSteering = pathFollower.SteeringPower + steeringAdjustment;
+
         vehicleMovement.ApplySteering(totalSteering);
         steeringAdjustment = 0f;
 
@@ -165,5 +166,12 @@ public class BotAI : MonoBehaviour
     public void SetState(BotState newState)
     {
         currentState = newState;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        // Если target точка установлена, рисуем сферу (радиус можно настроить)
+        Gizmos.DrawSphere(currentNormalTarget, 1f);
     }
 }

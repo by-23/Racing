@@ -9,7 +9,7 @@ public class VehicleMovement : MonoBehaviour
     [SerializeField] private float gravity = 20f;
     [SerializeField] private float fallGravity = 50f;
     [SerializeField] private float maxSpeed = 50f;
-    [SerializeField] private float acceleration = 20f;
+    [SerializeField] private float acceleration = 30f;
 
     [Header("Wheels")] [SerializeField] private float wheelsRotationSpeed = 100f;
     [SerializeField] private float wheelsTurnPercentage = 1f;
@@ -59,7 +59,6 @@ public class VehicleMovement : MonoBehaviour
     {
         if (!vehicle.isLocalPlayer)
             return;
-
         bool isGrounded = groundDetection.IsGrounded;
         PerformGroundCheck();
         ApplyGravity(isGrounded);
@@ -79,7 +78,8 @@ public class VehicleMovement : MonoBehaviour
         var pathHolder = PathHolder.Instance;
         if (pathHolder != null && pathHolder.pathCreator != null)
         {
-            float closestDistance = pathHolder.FindClosestDistance(out lastClosestPathIndex, transform.position, lastClosestPathIndex);
+            float closestDistance =
+                pathHolder.FindClosestDistance(out lastClosestPathIndex, transform.position, lastClosestPathIndex);
             transform.position = pathHolder.GetPointAtDistance(closestDistance);
 
             // Вычисляем точку впереди по маршруту (lookahead)
@@ -166,12 +166,12 @@ public class VehicleMovement : MonoBehaviour
         float forceMagnitude = accelerationInput * acceleration;
         Vector3 forward = _cachedTransform.forward;
         rb.AddForce(forward * forceMagnitude, ForceMode.Acceleration);
-
         // Если превышена максимальная скорость, применяем компенсацию
         float currentSpeed = rb.linearVelocity.magnitude;
         if (currentSpeed > maxSpeed)
         {
             float decelerationFactor = forceMagnitude * (currentSpeed - maxSpeed) / maxSpeed;
+
             rb.AddForce(-forward * decelerationFactor, ForceMode.Acceleration);
         }
     }

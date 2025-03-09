@@ -1,17 +1,17 @@
 ﻿using Unity.Netcode;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Vehicle : NetworkBehaviour
 {
     [SerializeField] private Camera playerCam;
-    [SerializeField] private Attack attack;
+    [SerializeField] private ItemsController itemsController;
     [SerializeField] private TriggerCallBack triggerCallback;
     [SerializeField] internal HealthController healthController;
     [SerializeField] internal VehicleMovement vehicleMovement;
-
-    internal bool isLocalPlayer;
+    [SerializeField] internal bool isLocalPlayer;
 
     private void Awake()
     {
@@ -34,7 +34,7 @@ public class Vehicle : NetworkBehaviour
     internal void SetLocalPlayer()
     {
         FunctionalButtons.Instance.vehicle = this;
-        FunctionalButtons.Instance.attack = attack;
+        FunctionalButtons.Instance.itemsController = itemsController;
         FunctionalButtons.Instance.ListenToHealthController(healthController);
         isLocalPlayer = true;
         playerCam.gameObject.SetActive(true);

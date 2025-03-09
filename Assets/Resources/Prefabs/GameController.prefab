@@ -158,6 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGameStarted: 0
+  isDevMode: 1
 --- !u!114 &7581323166912425064
 MonoBehaviour:
   m_ObjectHideFlags: 0

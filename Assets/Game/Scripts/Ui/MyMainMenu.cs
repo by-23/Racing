@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class MainMenu : Singleton<MainMenu>
+public class MyMainMenu : Singleton<MyMainMenu>
 {
     [SerializeField] protected Button goButton;
 

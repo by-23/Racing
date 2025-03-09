@@ -144,9 +144,10 @@ MonoBehaviour:
     type: 3}
   upwardsModifier: 2
   _collider: {fileID: 7419360478070821159}
-  _layerMask:
+  layerMask:
     serializedVersion: 2
     m_Bits: 64
+  activationType: 1
 --- !u!114 &8944204557024383111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 100
-  followSpeed: 10
+  addedSpeed: 10
   lifetime: 15
   followImmediately: 1
   oscillationRange: 0
@@ -177,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50f27ea9186940988b0d203084a99bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  beingDeactivatedDuration: 5
 --- !u!1001 &2596101998293807677
 PrefabInstance:
   m_ObjectHideFlags: 0

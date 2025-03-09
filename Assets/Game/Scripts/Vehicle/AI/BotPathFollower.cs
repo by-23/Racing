@@ -36,11 +36,10 @@ public class BotPathFollower
         // Вычисляем угол поворота от текущего направления к желаемому
         float targetAngle = Vector3.SignedAngle(botTransform.forward, directionToTarget, Vector3.up);
         SteeringPower = targetAngle * bot.steeringSensitivity * vehicleMovement.steeringPower;
-
+        // Debug.Log(directionToTarget);
         if (!ApplyTurnBraking(botTransform, vehicleMovement))
             vehicleMovement.ApplyAcceleration(bot.accelerationFactor);
     }
-
 
     public bool ApplyTurnBraking(Transform botTransform, VehicleMovement vehicleMovement)
     {
