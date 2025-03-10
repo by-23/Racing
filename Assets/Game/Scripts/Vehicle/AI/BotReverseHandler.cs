@@ -15,7 +15,7 @@ public class BotReverseHandler
     public void CheckStuck(VehicleMovement vehicleMovement, Transform botTransform)
     {
         if (GameController.Instance.isGameStarted &&
-            vehicleMovement.rb.linearVelocity.magnitude < bot.stuckVelocityThreshold)
+            vehicleMovement._rb.linearVelocity.magnitude < bot.stuckVelocityThreshold)
         {
             stuckTimer += Time.fixedDeltaTime;
             if (stuckTimer >= bot.stuckTimeThreshold)

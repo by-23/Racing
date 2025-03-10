@@ -51,7 +51,7 @@ public class BotPathFollower
             if (distanceToTurn <= bot.turnBrakingDistance)
             {
                 float allowedSpeed = GetMaxSpeedForTurn(turns[currentTurnIndex].angle);
-                if (vehicleMovement.rb.linearVelocity.magnitude > allowedSpeed)
+                if (vehicleMovement._rb.linearVelocity.magnitude > allowedSpeed)
                 {
                     vehicleMovement.ApplyBraking(bot.brakingPower);
                     return true;

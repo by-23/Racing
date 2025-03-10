@@ -40,7 +40,7 @@ public class Follower : MonoBehaviour, IDistantAttacking
     {
         if (targetVehicle && (hasTarget || followImmediately))
         {
-            float targetVehicleSpeed = targetVehicle.vehicleMovement.rb.linearVelocity.magnitude;
+            float targetVehicleSpeed = targetVehicle.vehicleMovement._rb.linearVelocity.magnitude;
             float vehicleSpeed =
                 targetVehicleSpeed < 50 ? 50 : targetVehicleSpeed;
 

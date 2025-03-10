@@ -83,7 +83,7 @@ public class BotObstacleHandler
 
         // Получаем текущую скорость бота
         VehicleMovement vm = botTransform.GetComponent<VehicleMovement>();
-        float currentSpeed = vm != null ? vm.rb.linearVelocity.magnitude : 0f;
+        float currentSpeed = vm != null ? vm._rb.linearVelocity.magnitude : 0f;
 
         // Определяем сторону объезда: 1 – вправо, -1 – влево
         float sideChoice = CalculateSideChoice(toObstacle, botTransform);
@@ -103,8 +103,8 @@ public class BotObstacleHandler
             float adjustedForwardDistance = baseForwardDistance + i * 1.0f; // прибавляем 1 единицу за попытку
 
             Vector3 candidateDetourPoint = botTransform.position +
-                                             botTransform.forward * adjustedForwardDistance +
-                                             botTransform.right * (sideChoice * lateralOffset);
+                                           botTransform.forward * adjustedForwardDistance +
+                                           botTransform.right * (sideChoice * lateralOffset);
             candidateDetourPoint.y = botTransform.position.y; // сохраняем уровень по Y
 
             // Проверяем, что точка находится перед ботом

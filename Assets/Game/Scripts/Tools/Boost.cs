@@ -10,15 +10,15 @@ public class Boost : MonoBehaviour
     {
         item = GetComponent<Item>();
         item.OnInit += ApplyBoost;
-        
     }
 
 
     internal void ApplyBoost()
     {
-        item.Owner.vehicleMovement.rb.AddForce(item.Owner.transform.forward * speedMultiplier, ForceMode.Impulse);
+        item.Owner.vehicleMovement._rb.AddForce(item.Owner.transform.forward * speedMultiplier, ForceMode.Impulse);
         Destroy(this.gameObject);
     }
+
     private void OnDestroy()
     {
         item.OnInit -= ApplyBoost;

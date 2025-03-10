@@ -4,11 +4,13 @@ using UnityEngine;
 public class VehicleInput : MonoBehaviour
 {
     private VehicleMovement vehicleMovement;
+    private VehicleDriving vehicleDriving;
     private float newSteeringPower = 0f;
 
     private void Awake()
     {
         vehicleMovement = GetComponent<VehicleMovement>();
+        vehicleDriving = GetComponent<VehicleDriving>();
     }
 
     private void Update()
@@ -21,7 +23,7 @@ public class VehicleInput : MonoBehaviour
 #endif
             newSteeringPower = turnInput * vehicleMovement.steeringPower;
 
-            vehicleMovement.TurnWheels(turnInput * 30f);
+            vehicleDriving.TurnWheels(turnInput * 30f);
 
             if (UnityEngine.Input.GetKeyDown(KeyCode.R))
             {
