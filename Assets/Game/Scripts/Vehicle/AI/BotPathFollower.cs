@@ -1,40 +1,13 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using PathCreation;
+﻿using UnityEngine;
 
 public class BotPathFollower
 {
     private BotAI bot;
     public float SteeringPower { get; private set; } = 0f;
-    private int currentTurnIndex = 0;
 
     public BotPathFollower(BotAI bot)
     {
         this.bot = bot;
-    }
-
-    /// <summary>
-    /// Возвращает целевую точку для движения бота.
-    /// Если есть ещё кешированные повороты, выбирается позиция следующего поворота.
-    /// При приближении к повороту индекс увеличивается.
-    /// </summary>
-    public Vector3 GetTargetPoint(Vector3 botPosition)
-    {
-        List<TurnInfo> turns = PathHolder.Instance.cachedTurns;
-        if (currentTurnIndex < turns.Count)
-        {
-            // Используем кешированную позицию поворота
-            Vector3 point = turns[currentTurnIndex].position;
-            if (Vector3.Distance(botPosition, point) < bot.turnThresholdDistance)
-                currentTurnIndex++;
-            return point;
-        }
-
-        // Если поворотов больше нет, возвращаем позицию последнего поворота,
-        // либо Vector3.zero, если кеш пуст.
-        if (turns.Count > 0)
-            return turns[turns.Count - 1].position;
-        return Vector3.zero;
     }
 
     /// <summary>
@@ -67,30 +40,51 @@ public class BotPathFollower
     /// </summary>
     public bool ApplyTurnBraking(Transform botTransform, VehicleMovement vehicleMovement)
     {
-        List<TurnInfo> turns = PathHolder.Instance.cachedTurns;
-        if (currentTurnIndex < turns.Count)
+        var path = EzPath.Instance;
+
+        // Получаем позицию поворота.
+        Vector3 turnPoint = path.GetNextNearestPoint(botTransform).pointTransform.position;
+        float distanceToTurn = Vector3.Distance(botTransform.position, turnPoint);
+
+        if (distanceToTurn <= bot.turnBrakingDistance)
         {
-            // Получаем позицию поворота из кеша.
-            Vector3 turnPoint = turns[currentTurnIndex].position;
-            float distanceToTurn = Vector3.Distance(botTransform.position, turnPoint);
-            if (distanceToTurn <= bot.turnBrakingDistance)
+            // Вычисляем максимально допустимую скорость для поворота
+            float allowedSpeed = GetMaxSpeedForTurn(path.GetNextNearestPoint(botTransform).angle);
+
+            // Если реальная скорость выше допустимой — тормозим
+            if (vehicleMovement._rb.linearVelocity.magnitude > allowedSpeed)
             {
-                float allowedSpeed = GetMaxSpeedForTurn(turns[currentTurnIndex].angle);
-                if (vehicleMovement._rb.linearVelocity.magnitude > allowedSpeed)
-                {
-                    vehicleMovement.ApplyBraking(bot.brakingPower);
-                    return true;
-                }
+                // distanceFactor от 0 до 1 показывает, как близко мы к повороту
+                float distanceFactor = 1f - (distanceToTurn / bot.turnBrakingDistance);
+                distanceFactor = Mathf.Clamp01(distanceFactor);
+
+                // Усиливаем торможение в зависимости от distanceFactor
+                float dynamicBrakingPower =
+                    bot.brakingPower * distanceFactor * vehicleMovement._rb.linearVelocity.magnitude;
+
+                vehicleMovement.ApplyBraking(dynamicBrakingPower);
+
+                return true;
             }
         }
 
         return false;
     }
 
+
     private float GetMaxSpeedForTurn(float angle)
     {
-        return Mathf.Lerp(bot.maxTurnSpeed, bot.minTurnSpeed, Mathf.Clamp01(angle / bot.maxTurnAngle));
+        // Считаем отношение угла к максимальному
+        float normalized = Mathf.Clamp01(angle / bot.maxTurnAngle);
+
+        // Инвертируем его, чтобы при маленьком угле было ближе к 1, а при большом — к 0
+        float inverted = 1f - normalized;
+
+        // Теперь делаем Lerp так, чтобы при inverted=1 скорость была минимальная (сильное торможение),
+        // а при inverted=0 скорость была максимальная.
+        return Mathf.Lerp(bot.maxTurnSpeed, bot.minTurnSpeed, inverted);
     }
+
 
     public void SetSteering(float value)
     {

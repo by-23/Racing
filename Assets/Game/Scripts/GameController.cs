@@ -41,7 +41,6 @@ public class GameController : MonoBehaviourPunCallbacks
 
     #endregion
 
-    public Transform[] targets; // Массив точек маршрута
     [SerializeField] internal bool isGameStarted = true;
     [SerializeField] internal bool isDevMode = true;
 

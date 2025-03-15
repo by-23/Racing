@@ -157,17 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b36f99224fb3654dba0bd2cddd3ee0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   isGameStarted: 0
-  isDevMode: 1
+  isDevMode: 0
 --- !u!114 &7581323166912425064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,7 +210,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInfoUIPrefab: {fileID: -7615637054289674736, guid: 71a4d38262a151a4a8bd06178b1064fb,
     type: 3}
-  playerInfoListUI: {fileID: 0}
+  playerInfoListUI: {fileID: 5766890372983592644, guid: 71a4d38262a151a4a8bd06178b1064fb,
+    type: 3}
   ControlsUI:
   - {fileID: 0}
   - {fileID: 0}

@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 5505003984607041509}
-  distance: 5
+  distance: -60
   offset: {x: 0, y: 90, z: 0}
   moveTime: 99999
   easing: 0
@@ -303,6 +303,7 @@ GameObject:
   - component: {fileID: 2835823211572818209}
   - component: {fileID: 1816427083731817154}
   - component: {fileID: 7756040254207786816}
+  - component: {fileID: 5085808755067491257}
   - component: {fileID: 434645814503051999}
   - component: {fileID: 9178862210767006648}
   - component: {fileID: 4320569773949241135}
@@ -426,7 +427,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   playerCam: {fileID: 5285592622119876980}
-  itemsController: {fileID: 0}
+  itemsController: {fileID: 4320569773949241135}
   triggerCallback: {fileID: 9131081407688437010}
   healthController: {fileID: 1940173394000298594}
   vehicleMovement: {fileID: 7756040254207786816}
@@ -443,20 +444,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a559cabf2e74119a7d0e89821ecc93c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 2604161214765010509}
-  pathCreator: {fileID: 0}
+  maxSpeed: 50
+  acceleration: 30
+  gravity: 20
+  fallGravity: 50
+  steeringPower: 3
+  grip: 1
   groundDetection:
     GroundLayers:
       serializedVersion: 2
       m_Bits: 256
     RaycastDist: 2
-  gravity: 20
-  fallGravity: 50
-  maxSpeed: 100
-  acceleration: 50
+--- !u!114 &5085808755067491257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9b7745cf85248e78dab3feb12bf5240, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   wheelsRotationSpeed: 100
-  wheelsTurnPercentage: 1
-  wheelsTurnSpeed: 20
+  wheelsTurnPercentage: 0.75
+  wheelsTurnSpeed: 15
   FLwheel: {fileID: 7579504468426392392}
   FRwheel: {fileID: 8218675226597591311}
   BLwheel: {fileID: 8362951169830265341}
@@ -465,8 +478,6 @@ MonoBehaviour:
   FRwheelPivot: {fileID: 4863678122757719716}
   BLwheelPivot: {fileID: 4495598245989721323}
   BRwheelPivot: {fileID: 7581854656528536154}
-  steeringPower: 3
-  grip: 1
 --- !u!114 &434645814503051999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -499,7 +510,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8c0a7a5feeadb341b6a7e6d4d51385d, type: 3}
   m_Name: 

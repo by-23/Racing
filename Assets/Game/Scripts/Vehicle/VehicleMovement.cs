@@ -14,7 +14,6 @@ public class VehicleMovement : MonoBehaviour
     private VehicleGroundDetection _groundDetection;
     private FloatingJoystick _joystick;
     private GameController _gameController;
-    private VehicleMovement _vehicleMovement;
     internal Vehicle _vehicle;
     private int lastClosestPathIndex;
     internal float NormalizedForwardSpeed => Mathf.Abs(ForwardSpeed) > 0.1f ? ForwardSpeed / maxSpeed : 0f;
@@ -26,7 +25,6 @@ public class VehicleMovement : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _vehicleMovement = GetComponent<VehicleMovement>();
         _vehicle = GetComponent<Vehicle>();
         _groundDetection = groundDetection;
         _joystick = FunctionalButtons.Instance.floatingJoystick;
@@ -41,7 +39,6 @@ public class VehicleMovement : MonoBehaviour
         CurrentSteeringInput = _joystick.Horizontal;
         float accelerationInput = _joystick.Vertical;
 
-        ApplySteering(CurrentSteeringInput);
         ApplyAcceleration(accelerationInput);
         ApplyLateralFriction(groundDetection.IsGrounded);
         ApplyGravity(groundDetection.IsGrounded);
@@ -59,17 +56,24 @@ public class VehicleMovement : MonoBehaviour
     {
         if (!_groundDetection.IsGrounded || !CanMove) return;
 
+        // Получаем скорость в локальных координатах (ось Z – вперед)
+        Vector3 localVelocity = transform.InverseTransformDirection(_rb.velocity);
+        if (Mathf.Abs(localVelocity.z) < .5f)
+        {
+            // Если скорость слишком мала, обнуляем угловую скорость (опционально)
+            _rb.angularVelocity = Vector3.zero;
+            return;
+        }
+
         float steeringForce = Mathf.Clamp(steeringInput, -steeringPower, steeringPower);
         float rotationTorque = steeringForce - _rb.angularVelocity.y;
         _rb.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
-
-        // Debug.DrawLine(transform.position, transform.forward * 10 + (Vector3.up * 2),
-        //     Color.Lerp(Color.green, Color.red, Mathf.Abs(rotationTorque) / 2));
     }
+
 
     internal void ApplyAcceleration(float accelerationInput)
     {
-        if (!_groundDetection.IsGrounded || !_vehicleMovement.CanMove) return;
+        if (!_groundDetection.IsGrounded || !CanMove) return;
 
         Vector3 forwardForce = transform.forward * (accelerationInput * acceleration);
         _rb.AddForce(forwardForce, ForceMode.Acceleration);
@@ -94,25 +98,10 @@ public class VehicleMovement : MonoBehaviour
 
     public void ResetCarPosition()
     {
-        var pathHolder = PathHolder.Instance;
-        if (pathHolder?.pathCreator != null)
-        {
-            float closestDistance =
-                pathHolder.FindClosestDistance(out lastClosestPathIndex, transform.position, lastClosestPathIndex);
-            transform.position = pathHolder.GetPointAtDistance(closestDistance);
-
-            float lookaheadDistance = 0.1f;
-            float nextDistance = Mathf.Clamp(closestDistance + lookaheadDistance, 0f, pathHolder.TotalPathLength);
-            Vector3 direction = (pathHolder.GetPointAtDistance(nextDistance) - transform.position).normalized;
-
-            transform.rotation = Quaternion.LookRotation(direction != Vector3.zero
-                ? direction
-                : pathHolder.pathCreator.path.GetTangent((int)closestDistance));
-        }
-        else
-        {
-            transform.rotation = Quaternion.identity;
-        }
+        var ezPath = EzPath.Instance;
+        var pointTransform = ezPath.GetNextNearestPoint(transform);
+        transform.position = pointTransform.pointTransform.position;
+        transform.rotation = pointTransform.pointTransform.rotation;
 
         CanMove = true;
         _vehicle.healthController.Heal(100);

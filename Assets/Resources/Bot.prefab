@@ -303,15 +303,13 @@ GameObject:
   - component: {fileID: 3391775898630260023}
   - component: {fileID: 8704497027745435374}
   - component: {fileID: 1816427083731817154}
+  - component: {fileID: -7354268976612679949}
   - component: {fileID: 374649462817665367}
   - component: {fileID: 9178862210767006648}
   - component: {fileID: 1940173394000298594}
   - component: {fileID: -7637648645194494759}
   - component: {fileID: -4256842069966461579}
   - component: {fileID: -8441199704336409492}
-  - component: {fileID: -4283097896424799985}
-  - component: {fileID: -7354268976612679949}
-  - component: {fileID: 6342158084040994133}
   m_Layer: 6
   m_Name: Bot
   m_TagString: Bot
@@ -464,6 +462,29 @@ MonoBehaviour:
   healthController: {fileID: 1940173394000298594}
   vehicleMovement: {fileID: 374649462817665367}
   isLocalPlayer: 0
+--- !u!114 &-7354268976612679949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9b7745cf85248e78dab3feb12bf5240, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wheelsRotationSpeed: 200
+  wheelsTurnPercentage: 15
+  wheelsTurnSpeed: 15
+  FLwheel: {fileID: 7579504468426392392}
+  FRwheel: {fileID: 8218675226597591311}
+  BLwheel: {fileID: 8362951169830265341}
+  BRwheel: {fileID: 4492314644109699971}
+  FLwheelPivot: {fileID: 3220881276712684939}
+  FRwheelPivot: {fileID: 4863678122757719716}
+  BLwheelPivot: {fileID: 4495598245989721323}
+  BRwheelPivot: {fileID: 7581854656528536154}
 --- !u!114 &374649462817665367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,8 +497,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a559cabf2e74119a7d0e89821ecc93c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 200
-  acceleration: 30
+  maxSpeed: 100
+  acceleration: 50
   gravity: 20
   fallGravity: 50
   steeringPower: 3
@@ -529,13 +550,12 @@ MonoBehaviour:
   steeringSensitivity: 1
   accelerationFactor: 1
   steeringDeadZone: 10
-  turnSmoothing: 0.5
-  brakingPower: 50
-  turnBrakingDistance: 60
-  maxTurnSpeed: 100
-  minTurnSpeed: 50
-  maxTurnAngle: 20
-  turnThresholdDistance: 20
+  turnSmoothing: 10
+  brakingPower: 10
+  turnBrakingDistance: 20
+  maxTurnSpeed: 50
+  minTurnSpeed: 10
+  maxTurnAngle: 180
   stuckVelocityThreshold: 5
   stuckTimeThreshold: 1
   reverseDuration: 1.5
@@ -595,75 +615,6 @@ MonoBehaviour:
   healthController: {fileID: 1940173394000298594}
   photonView: {fileID: 8704497027745435374}
   cameraFollow: {fileID: 0}
---- !u!195 &-4283097896424799985
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 0
-  m_AgentTypeID: 0
-  m_Radius: 3
-  m_Speed: 100
-  m_Acceleration: 30
-  avoidancePriority: 50
-  m_AngularSpeed: 360
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!114 &-7354268976612679949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9b7745cf85248e78dab3feb12bf5240, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wheelsRotationSpeed: 2000
-  wheelsTurnPercentage: 15
-  wheelsTurnSpeed: 15
-  FLwheel: {fileID: 7579504468426392392}
-  FRwheel: {fileID: 8218675226597591311}
-  BLwheel: {fileID: 8362951169830265341}
-  BRwheel: {fileID: 4492314644109699971}
-  FLwheelPivot: {fileID: 3220881276712684939}
-  FRwheelPivot: {fileID: 4863678122757719716}
-  BLwheelPivot: {fileID: 4495598245989721323}
-  BRwheelPivot: {fileID: 7581854656528536154}
---- !u!114 &6342158084040994133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07742a11b35d4baba714b27ac028e784, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: 90
-  baseSpeed: 100
-  slowdownDistance: 150
-  lookaheadDistance: 15
-  reachedDistanceThreshold: 5
-  reachedVelocityThreshold: 100
-  waypointSize: 0.5
-  waypointColor: {r: 0, g: 0, b: 1, a: 1}
-  currentWaypointColor: {r: 1, g: 0, b: 0, a: 1}
-  pathColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  lookaheadColor: {r: 0, g: 1, b: 1, a: 1}
-  currentTargetLineColor: {r: 1, g: 0, b: 1, a: 1}
 --- !u!1001 &841632710170942201
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using PathCreation;
 using UnityEngine.Serialization;
 
 public class BotAI : MonoBehaviour
@@ -18,7 +17,6 @@ public class BotAI : MonoBehaviour
     [Header("Turn Speed Settings")] public float maxTurnSpeed = 60f;
     public float minTurnSpeed = 20f;
     public float maxTurnAngle = 90f;
-    public float turnThresholdDistance = 20f;
 
     [Header("Reverse Settings")] public float stuckVelocityThreshold = 0.1f;
     public float stuckTimeThreshold = 2f;
@@ -42,6 +40,7 @@ public class BotAI : MonoBehaviour
     #endregion
 
     private VehicleMovement vehicleMovement;
+    private EzPath ezPath;
 
     // Вспомогательные классы
     private BotPathFollower pathFollower;
@@ -60,11 +59,14 @@ public class BotAI : MonoBehaviour
     [HideInInspector] public Vector3 currentNormalTarget;
     private float steeringAdjustment = 0f;
     internal Coroutine resetCoroutine = null;
+    private VehicleDriving vehicleDriving;
 
 
     private void Awake()
     {
         vehicleMovement = GetComponent<VehicleMovement>();
+        vehicleDriving = GetComponent<VehicleDriving>();
+        ezPath = EzPath.Instance;
         pathFollower = new BotPathFollower(this);
         obstacleHandler = new BotObstacleHandler(this);
         reverseHandler = new BotReverseHandler(this);
@@ -97,7 +99,10 @@ public class BotAI : MonoBehaviour
         // Комбинируем корректировку руля из pathFollower и временную настройку (например, при обходе игрока)
         float totalSteering = pathFollower.SteeringPower + steeringAdjustment;
 
+        vehicleDriving.TurnWheels(totalSteering / 75f);
+
         vehicleMovement.ApplySteering(totalSteering);
+
         steeringAdjustment = 0f;
 
         CheckResetOrientation();
@@ -105,7 +110,7 @@ public class BotAI : MonoBehaviour
 
     private void HandleNormalState()
     {
-        currentNormalTarget = pathFollower.GetTargetPoint(transform.position);
+        currentNormalTarget = ezPath.GetNextNearestPoint(transform).pointTransform.position;
         pathFollower.ProcessPathFollowing(transform, currentNormalTarget, vehicleMovement);
         reverseHandler.CheckStuck(vehicleMovement, transform);
     }
@@ -175,6 +180,6 @@ public class BotAI : MonoBehaviour
     {
         Gizmos.color = Color.red;
         // Если target точка установлена, рисуем сферу (радиус можно настроить)
-        Gizmos.DrawSphere(currentNormalTarget, 3f);
+        Gizmos.DrawSphere(currentNormalTarget, 2f);
     }
 }

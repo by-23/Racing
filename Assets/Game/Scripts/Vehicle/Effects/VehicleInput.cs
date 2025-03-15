@@ -15,25 +15,25 @@ public class VehicleInput : MonoBehaviour
 
     private void Update()
     {
+        float moveInput = Input.GetAxisRaw("Vertical");
+        vehicleMovement.ApplyAcceleration(moveInput);
+
+        float turnInput = Input.GetAxisRaw("Horizontal");
+        newSteeringPower = turnInput * vehicleMovement.steeringPower;
+        Vector3 velocity = vehicleMovement._rb.linearVelocity;
+        float dot = Vector3.Dot(transform.forward, velocity);
+        if (dot < 0)
         {
-#if UNITY_STANDALONE || UNITY_WEBGL
-            float turnInput = UnityEngine.Input.GetAxisRaw("Horizontal");
-#elif UNITY_ANDROID || UNITY_IOS
-                float turnInput = floatingJoystick.Horizontal;
-#endif
-            newSteeringPower = turnInput * vehicleMovement.steeringPower;
-
-            vehicleDriving.TurnWheels(turnInput * 30f);
-
-            if (UnityEngine.Input.GetKeyDown(KeyCode.R))
-            {
-                vehicleMovement.ResetCarPosition();
-            }
+            newSteeringPower = -newSteeringPower;
         }
-    }
 
-    private void FixedUpdate()
-    {
         vehicleMovement.ApplySteering(newSteeringPower);
+
+        vehicleDriving.TurnWheels(turnInput * 30f);
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            vehicleMovement.ResetCarPosition();
+        }
     }
 }
