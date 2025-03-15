@@ -106,8 +106,9 @@ public class BotController : MonoBehaviour
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
+        _gameController = GameController.Instance;
         // Рисуем точки маршрута и линии между ними
-        if (_gameController.targets != null && _gameController.targets.Length > 0)
+        if (_gameController.targets.Length > 0)
         {
             for (int i = 0; i < _gameController.targets.Length; i++)
             {
@@ -119,7 +120,7 @@ public class BotController : MonoBehaviour
                 if (i < _gameController.targets.Length - 1 && _gameController.targets[i + 1] != null)
                 {
                     Gizmos.color = pathColor;
-                    Gizmos.DrawLine(_gameController.targets[i].position, _gameController.targets[i + 1].position);
+                    // Gizmos.DrawLine(_gameController.targets[i].position, _gameController.targets[i + 1].position);
                 }
             }
         }
@@ -131,7 +132,7 @@ public class BotController : MonoBehaviour
 
             // Вектор к текущей цели
             Gizmos.color = currentTargetLineColor;
-            Gizmos.DrawLine(transform.position, currentTarget.position);
+            // Gizmos.DrawLine(transform.position, currentTarget.position);
 
             // Вычисляем lookahead точку
             Vector3 lookaheadPoint = currentTarget.position;
@@ -144,7 +145,7 @@ public class BotController : MonoBehaviour
 
             // Вектор к lookahead точке
             Gizmos.color = lookaheadColor;
-            Gizmos.DrawLine(transform.position, lookaheadPoint);
+            // Gizmos.DrawLine(transform.position, lookaheadPoint);
             Gizmos.DrawWireSphere(lookaheadPoint, 0.3f);
 
             // Рисуем угол поворота

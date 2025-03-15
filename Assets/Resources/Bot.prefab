@@ -471,7 +471,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a559cabf2e74119a7d0e89821ecc93c, type: 3}
   m_Name: 
@@ -521,13 +521,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   steeringSensitivity: 1
   accelerationFactor: 1
+  steeringDeadZone: 10
+  turnSmoothing: 0.5
   brakingPower: 50
   turnBrakingDistance: 60
   maxTurnSpeed: 100
@@ -600,7 +602,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 3
   m_Speed: 100
@@ -645,12 +647,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07742a11b35d4baba714b27ac028e784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets: []
   rotationSpeed: 90
   baseSpeed: 100
   slowdownDistance: 150

@@ -9,6 +9,8 @@ public class BotAI : MonoBehaviour
 
     [Header("Vehicle Settings")] public float steeringSensitivity = 1f;
     public float accelerationFactor = 1f;
+    public float steeringDeadZone;
+    public float turnSmoothing;
 
     [Header("Turn Braking")] public float brakingPower = 10f;
     public float turnBrakingDistance = 10f;
@@ -86,8 +88,9 @@ public class BotAI : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, pathBlockCheckDistance))
         {
-            if (hit.transform.CompareTag("Obstacle") || hit.transform.CompareTag("Bot") ||
-                hit.transform.CompareTag("Player"))
+            if (hit.transform.CompareTag("Obstacle")
+                // || hit.transform.CompareTag("Bot") || hit.transform.CompareTag("Player")
+               )
                 obstacleHandler.HandleTriggerStay(hit.collider, transform);
         }
 
@@ -172,6 +175,6 @@ public class BotAI : MonoBehaviour
     {
         Gizmos.color = Color.red;
         // Если target точка установлена, рисуем сферу (радиус можно настроить)
-        Gizmos.DrawSphere(currentNormalTarget, 1f);
+        Gizmos.DrawSphere(currentNormalTarget, 3f);
     }
 }

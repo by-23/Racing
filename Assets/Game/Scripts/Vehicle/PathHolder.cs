@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using PathCreation;
 using System.Collections.Generic;
 
-// Структура для хранения информации о повороте.
+// Расширенная структура для хранения информации о повороте.
+[Serializable]
 public struct TurnInfo
 {
     public float distance; // Расстояние вдоль пути, где начинается поворот.
     public float angle; // Угол поворота (в градусах).
+    public Vector3 position; // Вычисленная позиция поворота на пути.
 }
 
 public class PathHolder : Singleton<PathHolder>
@@ -43,6 +46,36 @@ public class PathHolder : Singleton<PathHolder>
         CacheTurns();
     }
 
+    /// <summary>
+    /// Метод для вычисления точки на пути по заданной дистанции с использованием вершин пути.
+    /// Не использует pathCreator.path.GetPointAtDistance.
+    /// </summary>
+    private Vector3 GetPointFromVertexPath(float distance)
+    {
+        if (pathCreator == null) return Vector3.zero;
+        VertexPath vertexPath = pathCreator.path;
+        int numPoints = vertexPath.NumPoints;
+        if (numPoints < 2)
+            return Vector3.zero;
+
+        float accumulatedDistance = 0f;
+        for (int i = 0; i < numPoints - 1; i++)
+        {
+            Vector3 A = vertexPath.GetPoint(i);
+            Vector3 B = vertexPath.GetPoint(i + 1);
+            float segmentLength = Vector3.Distance(A, B);
+            if (accumulatedDistance + segmentLength >= distance)
+            {
+                float t = (distance - accumulatedDistance) / segmentLength;
+                return Vector3.Lerp(A, B, t);
+            }
+
+            accumulatedDistance += segmentLength;
+        }
+
+        return vertexPath.GetPoint(numPoints - 1);
+    }
+
     public void CacheTurns()
     {
         cachedTurns.Clear();
@@ -75,8 +108,10 @@ public class PathHolder : Singleton<PathHolder>
 
             if (foundTurn)
             {
-                cachedTurns.Add(new TurnInfo { distance = turnDistance, angle = turnAngle });
-                // Смещаем начало сканирования чуть дальше найденного поворота, чтобы избежать повторного обнаружения
+                // Вычисляем позицию поворота с помощью вершин пути.
+                Vector3 turnPosition = GetPointFromVertexPath(turnDistance);
+                cachedTurns.Add(new TurnInfo { distance = turnDistance, angle = turnAngle, position = turnPosition });
+                // Смещаем начало сканирования чуть дальше найденного поворота, чтобы избежать повторного обнаружения.
                 d = turnDistance + turnScanResolution;
             }
             else

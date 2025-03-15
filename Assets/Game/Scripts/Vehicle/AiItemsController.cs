@@ -69,6 +69,6 @@ public class AiItemsController : ItemsController
         }
 
         // Для визуализации луча в редакторе (опционально)
-        Debug.DrawRay(muzzlePosition.position, muzzlePosition.forward * detectionRange, Color.red);
+        // Debug.DrawRay(muzzlePosition.position, muzzlePosition.forward * detectionRange, Color.red);
     }
 }

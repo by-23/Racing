@@ -57,13 +57,14 @@ public class VehicleMovement : MonoBehaviour
 
     internal void ApplySteering(float steeringInput)
     {
-        if (!_groundDetection.IsGrounded || CanMove) return;
+        if (!_groundDetection.IsGrounded || !CanMove) return;
 
-        float speedFactor = _vehicleMovement.ForwardSpeed * 0.075f;
-        float steeringForce = Mathf.Clamp(steeringInput * speedFactor, -steeringPower, steeringPower);
+        float steeringForce = Mathf.Clamp(steeringInput, -steeringPower, steeringPower);
         float rotationTorque = steeringForce - _rb.angularVelocity.y;
-        print(rotationTorque);
         _rb.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
+
+        // Debug.DrawLine(transform.position, transform.forward * 10 + (Vector3.up * 2),
+        //     Color.Lerp(Color.green, Color.red, Mathf.Abs(rotationTorque) / 2));
     }
 
     internal void ApplyAcceleration(float accelerationInput)

@@ -157,6 +157,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b36f99224fb3654dba0bd2cddd3ee0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targets:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   isGameStarted: 0
   isDevMode: 1
 --- !u!114 &7581323166912425064
