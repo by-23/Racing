@@ -6,36 +6,42 @@ public class BotAI : MonoBehaviour
 {
     #region Settings
 
-    [Header("Vehicle Settings")] public float steeringSensitivity = 1f;
-    public float accelerationFactor = 1f;
-    public float steeringDeadZone;
-    public float turnSmoothing;
+    [Header("Vehicle Settings")] [SerializeField]
+    internal float steeringSensitivity = 1f;
+
+    [SerializeField] internal float accelerationFactor = 1f;
+    [SerializeField] internal float steeringDeadZone;
+    [SerializeField] internal float turnSmoothing;
+
 
     [Header("Turn Braking")] public float brakingPower = 10f;
-    public float turnBrakingDistance = 10f;
+    [SerializeField] internal float turnBrakingDistance = 10f;
 
     [Header("Turn Speed Settings")] public float maxTurnSpeed = 60f;
-    public float minTurnSpeed = 20f;
-    public float maxTurnAngle = 90f;
+    [SerializeField] internal float minTurnSpeed = 20f;
+    [SerializeField] internal float maxTurnAngle = 90f;
 
-    [Header("Reverse Settings")] public float stuckVelocityThreshold = 0.1f;
-    public float stuckTimeThreshold = 2f;
-    public float reverseDuration = 2f;
-    public float reverseAccelerationFactor = 1f;
-    public float carResetTime = 2f;
-    public float detectionDistance = 5f;
+    [Header("Reverse Settings")] [SerializeField]
+    internal float stuckVelocityThreshold = 0.1f;
 
-    [Header("Detour Settings")] public LayerMask obstacleLayerMask;
+    [SerializeField] internal float stuckTimeThreshold = 2f;
+    [SerializeField] internal float reverseDuration = 2f;
+    [SerializeField] internal float reverseAccelerationFactor = 1f;
+    [SerializeField] private float carResetTime = 2f;
+    [SerializeField] internal float detectionDistance = 5f;
 
-    [FormerlySerializedAs("dístanceToAvoidPoint")] [FormerlySerializedAs("detourThreshold")]
-    public float dístanceToReachAvoidPoint = 2f;
+    [Header("Detour Settings")] [SerializeField]
+    internal LayerMask obstacleLayerMask;
 
-    public float pathBlockCheckDistance = 10f;
-    public float obstacleRecheckInterval = 0.5f;
-    public float sideOffsetMultiplier = 1.5f;
-    public float detourDistanceMultiplier = 0.5f;
-    public float minDetourDistance = 15f;
-    public float maxDetourDistance = 30f;
+    [FormerlySerializedAs("dístanceToAvoidPoint")] [FormerlySerializedAs("detourThreshold")] [SerializeField]
+    internal float dístanceToReachAvoidPoint = 2f;
+
+    [SerializeField] internal float pathBlockCheckDistance = 10f;
+    [SerializeField] internal float obstacleRecheckInterval = 0.5f;
+    [SerializeField] internal float sideOffsetMultiplier = 1.5f;
+    [SerializeField] internal float detourDistanceMultiplier = 0.5f;
+    [SerializeField] internal float minDetourDistance = 15f;
+    [SerializeField] internal float maxDetourDistance = 30f;
 
     #endregion
 
@@ -98,7 +104,7 @@ public class BotAI : MonoBehaviour
 
         // Комбинируем корректировку руля из pathFollower и временную настройку (например, при обходе игрока)
         float totalSteering = pathFollower.SteeringPower + steeringAdjustment;
-
+        
         vehicleDriving.TurnWheels(totalSteering / 75f);
 
         vehicleMovement.ApplySteering(totalSteering);

@@ -36,7 +36,8 @@ public class VehicleDriving : MonoBehaviour
 
     public void TurnWheels(float turnInput)
     {
-        float targetAngle = turnInput * wheelsTurnPercentage;
+        float targetAngle = Mathf.Clamp(turnInput, -wheelsTurnPercentage,
+            wheelsTurnPercentage);
         currentTurnAngle = Mathf.Lerp(currentTurnAngle, targetAngle, Time.deltaTime * wheelsTurnSpeed);
 
         FLwheelPivot.localRotation = Quaternion.Euler(0, currentTurnAngle, 0);

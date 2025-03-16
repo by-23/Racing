@@ -475,7 +475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheelsRotationSpeed: 200
-  wheelsTurnPercentage: 15
+  wheelsTurnPercentage: 135
   wheelsTurnSpeed: 15
   FLwheel: {fileID: 7579504468426392392}
   FRwheel: {fileID: 8218675226597591311}
@@ -550,12 +550,12 @@ MonoBehaviour:
   steeringSensitivity: 1
   accelerationFactor: 1
   steeringDeadZone: 10
-  turnSmoothing: 10
-  brakingPower: 10
-  turnBrakingDistance: 20
+  turnSmoothing: 20
+  brakingPower: 5
+  turnBrakingDistance: 50
   maxTurnSpeed: 50
-  minTurnSpeed: 10
-  maxTurnAngle: 180
+  minTurnSpeed: 20
+  maxTurnAngle: 90
   stuckVelocityThreshold: 5
   stuckTimeThreshold: 1
   reverseDuration: 1.5

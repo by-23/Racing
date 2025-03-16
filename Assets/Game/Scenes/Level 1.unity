@@ -28234,7 +28234,7 @@ Transform:
   m_GameObject: {fileID: 679902366}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.2588191, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 5.233333, y: 0, z: 3.6000001}
+  m_LocalPosition: {x: 4.8999996, y: 0, z: 3.6000001}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -31689,6 +31689,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6122062379142562641, guid: fdc55fa08e8e4524793c956e95c21538,
     type: 3}
   m_PrefabInstance: {fileID: 754673814}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &759339339 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7619819537990394061, guid: 0ee43ad44838dd249939a2b7562822a8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1623037869974509301}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &759551174
 PrefabInstance:
@@ -43217,7 +43223,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1623037869974509301}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 759339339}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 430caa96c4fcb5f43b1832d30d02edb4, type: 3}
@@ -49317,13 +49323,13 @@ MonoBehaviour:
   - pointTransform: {fileID: 2052238575}
     angle: 86.93821
   - pointTransform: {fileID: 281137471}
-    angle: 89.198715
+    angle: 34.190594
   - pointTransform: {fileID: 679902367}
-    angle: 126.52882
+    angle: 67.72723
   - pointTransform: {fileID: 1681175321}
-    angle: 127.50803
+    angle: 121.17314
   - pointTransform: {fileID: 1934455710}
-    angle: 144.32567
+    angle: 146.86711
   - pointTransform: {fileID: 609234816}
     angle: 127.28089
   - pointTransform: {fileID: 1961941053}
@@ -69706,7 +69712,7 @@ Transform:
   m_GameObject: {fileID: 1681175320}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 6.133333, y: 0, z: 2.9333334}
+  m_LocalPosition: {x: 6.2999997, y: 0, z: 2.7}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -88032,7 +88038,8 @@ MonoBehaviour:
   steeringSensitivity: 1
   accelerationFactor: 1
   steeringDeadZone: 10
-  turnSmoothing: 10
+  turnSmoothing: 15
+  wheelTurnAngle: 135
   brakingPower: 2
   turnBrakingDistance: 50
   maxTurnSpeed: 50
@@ -88387,6 +88394,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Main Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774182042130775255, guid: 0ee43ad44838dd249939a2b7562822a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774182042130775255, guid: 0ee43ad44838dd249939a2b7562822a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774182042130775255, guid: 0ee43ad44838dd249939a2b7562822a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 759339339}
+    - target: {fileID: 7774182042130775255, guid: 0ee43ad44838dd249939a2b7562822a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774182042130775255, guid: 0ee43ad44838dd249939a2b7562822a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774182042130775255, guid: 0ee43ad44838dd249939a2b7562822a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774182042130775255, guid: 0ee43ad44838dd249939a2b7562822a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7844406499210294044, guid: 0ee43ad44838dd249939a2b7562822a8,
         type: 3}
@@ -89148,8 +89190,6 @@ GameObject:
   - component: {fileID: 1940173394143098756}
   - component: {fileID: 4966529966744834195}
   - component: {fileID: 782172332645427594}
-  - component: {fileID: 4940274140574512361}
-  - component: {fileID: 9178862210642566751}
   m_Layer: 6
   m_Name: Bot
   m_TagString: Bot
@@ -90290,28 +90330,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b63400d67c4a77248b70a5876834cb3a, type: 3}
---- !u!195 &4940274140574512361
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718388942224}
-  m_Enabled: 0
-  m_AgentTypeID: 0
-  m_Radius: 3
-  m_Speed: 100
-  m_Acceleration: 30
-  avoidancePriority: 50
-  m_AngularSpeed: 360
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &4966529966744834195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90737,7 +90755,7 @@ PrefabInstance:
     - target: {fileID: 4994464550669025003, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
       propertyPath: isDevMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4994464550669025003, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
@@ -94004,54 +94022,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerName: 
---- !u!114 &9178862210642566751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718388942224}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07742a11b35d4baba714b27ac028e784, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: 90
-  baseSpeed: 100
-  slowdownDistance: 150
-  lookaheadDistance: 15
-  reachedDistanceThreshold: 5
-  reachedVelocityThreshold: 100
-  agent: {fileID: 0}
-  currentTargetIndex: 0
-  vehicleDriving: {fileID: 0}
-  _gameController: {fileID: 0}
-  waypointSize: 0.5
-  waypointColor:
-    r: 0
-    g: 0
-    b: 1
-    a: 1
-  currentWaypointColor:
-    r: 1
-    g: 0
-    b: 0
-    a: 1
-  pathColor:
-    r: 1
-    g: 0.92156863
-    b: 0.015686275
-    a: 1
-  lookaheadColor:
-    r: 0
-    g: 1
-    b: 1
-    a: 1
-  currentTargetLineColor:
-    r: 1
-    g: 0
-    b: 1
-    a: 1
 --- !u!114 &9178862210642566752
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -57,7 +57,7 @@ public class VehicleMovement : MonoBehaviour
         if (!_groundDetection.IsGrounded || !CanMove) return;
 
         // Получаем скорость в локальных координатах (ось Z – вперед)
-        Vector3 localVelocity = transform.InverseTransformDirection(_rb.velocity);
+        Vector3 localVelocity = transform.InverseTransformDirection(_rb.linearVelocity);
         if (Mathf.Abs(localVelocity.z) < .5f)
         {
             // Если скорость слишком мала, обнуляем угловую скорость (опционально)

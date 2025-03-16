@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 5505003984607041509}
-  distance: -60
+  distance: 0
   offset: {x: 0, y: 90, z: 0}
   moveTime: 99999
   easing: 0
