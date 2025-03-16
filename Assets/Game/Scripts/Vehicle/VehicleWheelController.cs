@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class VehicleDriving : MonoBehaviour
+public class VehicleWheelController : MonoBehaviour
 {
     [Header("Wheels")] [SerializeField] private float wheelsRotationSpeed = 100f;
     [SerializeField] private float wheelsTurnPercentage = 1f;

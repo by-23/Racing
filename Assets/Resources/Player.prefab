@@ -444,8 +444,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a559cabf2e74119a7d0e89821ecc93c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 50
-  acceleration: 30
+  maxSpeed: 100
+  acceleration: 50
   gravity: 20
   fallGravity: 50
   steeringPower: 3
@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheelsRotationSpeed: 100
-  wheelsTurnPercentage: 0.75
+  wheelsTurnPercentage: 135
   wheelsTurnSpeed: 15
   FLwheel: {fileID: 7579504468426392392}
   FRwheel: {fileID: 8218675226597591311}

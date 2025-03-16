@@ -305,9 +305,9 @@ GameObject:
   - component: {fileID: 1816427083731817154}
   - component: {fileID: -7354268976612679949}
   - component: {fileID: 374649462817665367}
+  - component: {fileID: -7637648645194494759}
   - component: {fileID: 9178862210767006648}
   - component: {fileID: 1940173394000298594}
-  - component: {fileID: -7637648645194494759}
   - component: {fileID: -4256842069966461579}
   - component: {fileID: -8441199704336409492}
   m_Layer: 6
@@ -457,7 +457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   playerCam: {fileID: 5285592622119876980}
-  itemsController: {fileID: 0}
+  itemsController: {fileID: -4256842069966461579}
   triggerCallback: {fileID: 9131081407688437010}
   healthController: {fileID: 1940173394000298594}
   vehicleMovement: {fileID: 374649462817665367}
@@ -508,6 +508,45 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 256
     RaycastDist: 2
+--- !u!114 &-7637648645194494759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603592718261198966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steeringSensitivity: 1
+  accelerationFactor: 1
+  steeringDeadZone: 10
+  turnSmoothing: 20
+  brakingPower: 5
+  turnBrakingDistance: 50
+  maxTurnSpeed: 60
+  minTurnSpeed: 30
+  maxTurnAngle: 90
+  stuckVelocityThreshold: 5
+  stuckTimeThreshold: 1
+  reverseDuration: 1.5
+  reverseAccelerationFactor: 1.5
+  carResetTime: 7
+  detectionDistance: 5
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  "d\xEDstanceToReachAvoidPoint": 4
+  pathBlockCheckDistance: 30
+  obstacleRecheckInterval: 0.5
+  sideOffsetMultiplier: 1
+  detourDistanceMultiplier: 1
+  minDetourDistance: 25
+  maxDetourDistance: 100
+  currentState: 0
+  currentNormalTarget: {x: 0, y: 0, z: 0}
 --- !u!114 &9178862210767006648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -535,45 +574,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   health: 100
---- !u!114 &-7637648645194494759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603592718261198966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27220c8e6c44498a9d6e1b4ac8b25fc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  steeringSensitivity: 1
-  accelerationFactor: 1
-  steeringDeadZone: 10
-  turnSmoothing: 20
-  brakingPower: 5
-  turnBrakingDistance: 50
-  maxTurnSpeed: 50
-  minTurnSpeed: 20
-  maxTurnAngle: 90
-  stuckVelocityThreshold: 5
-  stuckTimeThreshold: 1
-  reverseDuration: 1.5
-  reverseAccelerationFactor: 1.5
-  carResetTime: 7
-  detectionDistance: 5
-  obstacleLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  "d\xEDstanceToReachAvoidPoint": 4
-  pathBlockCheckDistance: 30
-  obstacleRecheckInterval: 0.5
-  sideOffsetMultiplier: 1
-  detourDistanceMultiplier: 1
-  minDetourDistance: 25
-  maxDetourDistance: 100
-  currentState: 0
-  currentNormalTarget: {x: 0, y: 0, z: 0}
 --- !u!114 &-4256842069966461579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,7 +590,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  photonView: {fileID: 0}
+  photonView: {fileID: 8704497027745435374}
   muzzlePosition: {fileID: 5663055877064385965}
   vehicle: {fileID: 1816427083731817154}
   fireRate: 2
