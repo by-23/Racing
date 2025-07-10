@@ -45,8 +45,9 @@ public class BotAI : MonoBehaviour
 
     #endregion
 
+    [SerializeField] private EzPath ezPath;
+
     private VehicleMovement vehicleMovement;
-    private EzPath ezPath;
 
     // Вспомогательные классы
     private BotPathFollower pathFollower;
@@ -72,10 +73,11 @@ public class BotAI : MonoBehaviour
     {
         vehicleMovement = GetComponent<VehicleMovement>();
         _vehicleWheelController = GetComponent<VehicleWheelController>();
-        ezPath = EzPath.Instance;
         pathFollower = new BotPathFollower(this);
         obstacleHandler = new BotObstacleHandler(this);
         reverseHandler = new BotReverseHandler(this);
+        if (ezPath == null)
+            ezPath = EzPath.Instance;
     }
 
     private void FixedUpdate()
