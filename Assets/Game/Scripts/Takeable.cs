@@ -1,17 +1,33 @@
+using System;
+using NTC.Pool;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Takeable : MonoBehaviour
 {
-    private Item item;
-    [SerializeField] private ItemVariant[] itemVariants;
+    [SerializeField] private Item[] itemVariants;
+    [field: SerializeField]
+    public Item item { get; private set; }
+    private Collider collider;
+    private Rigidbody rb;
+    private Renderer render;
 
+    private void Awake()
+    {
+        if (item == null)
+            item = itemVariants[Random.Range(0, itemVariants.Length)];
+        collider = GetComponent<Collider>();
+        rb = GetComponent<Rigidbody>();
+        render = GetComponent<Renderer>();
+
+    }
     private void Start()
     {
-        if (itemVariants != null && itemVariants.Length > 0)
+
+
+        if (item != null)
         {
-            int randomIndex = Random.Range(0, itemVariants.Length);
-            item = itemVariants[randomIndex].item;
-            SetColor(itemVariants[randomIndex].color);
+            SetColor(item.color);
         }
     }
 
@@ -23,11 +39,17 @@ public class Takeable : MonoBehaviour
             renderer.material.color = color;
         }
     }
-}
 
-[System.Serializable]
-public class ItemVariant
-{
-    public Item item;
-    public Color color;
+    public void DestroyItem()
+    {
+        if (item == null)
+            return;
+        if (collider != null)
+            collider.enabled = false;
+        if (rb != null)
+            rb.isKinematic = true;
+        if (render != null)
+            render.enabled = false;
+        NightPool.Despawn(gameObject, .1f);
+    }
 }

@@ -11,8 +11,9 @@ public class AiItemsController : ItemsController
 
     [SerializeField, Range(0, 100)] private int attackChance; // Вероятность атаки (от 0 до 1)
 
-    private void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
+        base.OnTriggerEnter(other);
         if (other.TryGetComponent(out IAttacking attacker) && attacker.Item.Owner != this.vehicle)
         {
             TryDefense();
@@ -25,7 +26,7 @@ public class AiItemsController : ItemsController
             TryAttack();
     }
 
-    protected void TryDefense()
+    private void TryDefense()
     {
         if (GameController.Instance.isGameStarted)
         {
@@ -48,12 +49,13 @@ public class AiItemsController : ItemsController
             Ray ray = new Ray(muzzlePosition.position, muzzlePosition.forward);
             if (Physics.Raycast(ray, out RaycastHit hit, detectionRange))
             {
-                if (hit.collider.GetComponent<Vehicle>())
+                if (hit.collider.transform.parent != null && hit.collider.transform.parent.GetComponent<Vehicle>())
                 {
                     for (int i = 0; i < items.Length; i++)
                     {
                         if (items[i] != null && items[i].GetComponent<IDistantAttacking>() != null)
                         {
+
                             if (Time.time >= nextTimeToShoot && GameController.Instance.isGameStarted)
                             {
                                 ActivateTool(i);

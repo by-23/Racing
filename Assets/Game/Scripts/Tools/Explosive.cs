@@ -98,7 +98,6 @@ public class Explosive : MonoBehaviour, IAttacking
 
     private void Deactivate()
     {
-        print("!");
         enabled = false;
     }
 

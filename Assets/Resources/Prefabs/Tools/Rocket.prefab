@@ -138,16 +138,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2f4fa05544544a187bd573233a30778, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionForce: 2
-  explosionRadius: 10
   explosionFXPrefab: {fileID: 725748389856807712, guid: 00f60d0e78f493e42b98cc88e5f16e12,
     type: 3}
+  explosionForce: 2
+  explosionRadius: 10
   upwardsModifier: 2
   _collider: {fileID: 7419360478070821159}
   layerMask:
     serializedVersion: 2
     m_Bits: 64
   activationType: 1
+  damage: 50
 --- !u!114 &8944204557024383111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,6 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beingDeactivatedDuration: 5
+  color: {r: 1, g: 0, b: 0, a: 0}
 --- !u!1001 &2596101998293807677
 PrefabInstance:
   m_ObjectHideFlags: 0

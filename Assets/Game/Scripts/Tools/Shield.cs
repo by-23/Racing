@@ -43,7 +43,6 @@ public class Shield : MonoBehaviour, IDefensive
     {
         if (other.TryGetComponent(out IAttacking attacker) && attacker.Item.Owner != _item.Owner)
         {
-            print(attacker.Item.Owner);
             Defense(attacker);
         }
     }

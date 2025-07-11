@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beingDeactivatedDuration: 5
+  color: {r: 0.84955835, g: 0, b: 1, a: 0}
 --- !u!114 &-7077389047745546043
 MonoBehaviour:
   m_ObjectHideFlags: 0

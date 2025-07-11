@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 public class Item : MonoBehaviour
 {
     [SerializeField] private float beingDeactivatedDuration = 5f;
+    public Color color;
 
     internal Vehicle Owner { get; private set; }
     public event Action OnInit;

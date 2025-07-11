@@ -29578,8 +29578,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 691872920}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 107.11023, y: 1.4120888, z: 49.160835}
+  m_LocalRotation: {x: -0, y: -0.6995672, z: -0, w: 0.7145669}
+  m_LocalPosition: {x: 72.98309, y: 1.4120888, z: 198.97221}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29591,7 +29591,7 @@ Transform:
   - {fileID: 2085126371}
   - {fileID: 1640900829}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -88.785, z: 0}
 --- !u!1001 &692762189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50718,6 +50718,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1180690000}
   - component: {fileID: 1180690001}
+  - component: {fileID: 1180690002}
   m_Layer: 0
   m_Name: Points
   m_TagString: Untagged
@@ -50841,6 +50842,36 @@ MonoBehaviour:
     angle: 102.275024
   - pointTransform: {fileID: 1313790579}
     angle: 0
+--- !u!114 &1180690002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180689999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056ba02e621264f0ca32a50804d76df5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolsToSpawn:
+  - toolPrefab: {fileID: 560588891828814570, guid: a4abd9fa5aba2684b8e233d25d7cd8a6,
+      type: 3}
+    spawnProbability: 1
+  maxSimultaneousTools: 200
+  spawnInterval: 5
+  toolLifetime: 360
+  minDistanceBetweenTools: 10
+  sideOffsetRange: {x: -5, y: 5}
+  forwardOffsetRange: {x: 0, y: 0}
+  heightOffset: 1
+  pathCheckDistance: 20
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 1151
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &1180754636
 GameObject:
   m_ObjectHideFlags: 0
@@ -89920,6 +89951,7 @@ MonoBehaviour:
   detourDistanceMultiplier: 0.5
   minDetourDistance: 15
   maxDetourDistance: 30
+  ezPath: {fileID: 0}
   currentState: 0
   currentNormalTarget: {x: 0, y: 0, z: 0}
 --- !u!1 &1614916296670277945
@@ -92614,12 +92646,12 @@ PrefabInstance:
     - target: {fileID: 4994464550669025003, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
       propertyPath: isDevMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4994464550669025003, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
       propertyPath: isGameStarted
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5503011290821233461, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}

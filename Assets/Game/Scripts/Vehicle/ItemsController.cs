@@ -1,5 +1,6 @@
 using System;
 using Game.Scripts.Interfaces;
+using NTC.Pool;
 using Photon.Pun;
 using Unity.Mathematics;
 using UnityEngine;
@@ -39,6 +40,36 @@ public class ItemsController : MonoBehaviour
             SetupItem(itemObj);
         }
         items[index] = null;
+
+        // Смещаем все элементы после активированного на одну позицию назад
+        for (int i = index; i < items.Length - 1; i++)
+        {
+            items[i] = items[i + 1];
+        }
+        items[items.Length - 1] = null;
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<Takeable>(out var takeableObject))
+        {
+            var item = takeableObject.item;
+            if (TryAddItem(item))
+                takeableObject.DestroyItem();
+        }
+    }
+
+    private bool TryAddItem(Item item)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i] == null)
+            {
+                items[i] = item;
+                return true;
+            }
+        }
+        return false;
     }
 
     private void SetupItem(GameObject itemObj)

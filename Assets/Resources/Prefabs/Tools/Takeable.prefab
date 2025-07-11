@@ -60,6 +60,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -104,7 +107,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-4135698210461075803
 MonoBehaviour:
@@ -119,11 +122,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemVariants:
-  - item: {fileID: -8871661809336245487, guid: f7960b60e5f98ca4f9813d58661e2c17, type: 3}
-    color: {r: 1, g: 0.60384053, b: 0.6, a: 0.4}
-  - item: {fileID: 823709582306054355, guid: 3c9a3d72afd6c714db69270b46eab244, type: 3}
-    color: {r: 1, g: 0.7015315, b: 0.6, a: 0.4}
-  - item: {fileID: 6741958122296277812, guid: 21c6802a175ca20408363a9a220fe0a7, type: 3}
-    color: {r: 0.6, g: 1, b: 0.9666666, a: 0.4}
-  - item: {fileID: -8871661809336245487, guid: 0f4be7d8747bb694fa377f4fbc11941a, type: 3}
-    color: {r: 1, g: 0.6039216, b: 0.6, a: 0.4}
+  - {fileID: -8871661809336245487, guid: 0f4be7d8747bb694fa377f4fbc11941a, type: 3}
+  <item>k__BackingField: {fileID: 0}
