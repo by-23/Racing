@@ -1,10 +1,7 @@
-﻿using System;
-using Photon.Pun;
+﻿using Photon.Pun;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
-
-public class Explosive : MonoBehaviour, IAttacking
+public class Explosive : MonoBehaviour, IAttacking, IItemEffect
 {
     private enum ActivationType
     {
@@ -32,12 +29,9 @@ public class Explosive : MonoBehaviour, IAttacking
     private void Awake()
     {
         _item = GetComponent<Item>();
-        _item.OnDeactivate += Deactivate;
-        _item.OnReactivate += Reactivate;
-        _item.OnInit += Init;
     }
 
-    private void Init()
+    public void Activate(Vehicle owner)
     {
         if (activationType == ActivationType.Instantly)
             Attack();
@@ -46,6 +40,7 @@ public class Explosive : MonoBehaviour, IAttacking
     protected void OnTriggerEnter(Collider other)
     {
         if (activationType != ActivationType.OnTrigger) return;
+
         if ((!other.TryGetComponent(out Vehicle vehicle) || vehicle == _item.Owner) &&
             !other.CompareTag("Obstacle")) return;
 
@@ -96,22 +91,16 @@ public class Explosive : MonoBehaviour, IAttacking
             enabled = false;
     }
 
-    private void Deactivate()
+    public void Deactivate()
     {
         enabled = false;
     }
 
-    private void Reactivate()
+    public void Reactivate()
     {
         enabled = true;
     }
 
-    private void OnDestroy()
-    {
-        _item.OnDeactivate -= Deactivate;
-        _item.OnReactivate -= Reactivate;
-        _item.OnInit -= Init;
-    }
 
     [PunRPC]
     void ExplodeRPC()

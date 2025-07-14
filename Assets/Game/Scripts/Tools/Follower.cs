@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Serialization;
-
-public class Follower : MonoBehaviour, IDistantAttacking
+public class Follower : MonoBehaviour, IDistantAttacking, IItemEffect
 {
     internal Vehicle targetVehicle;
 
@@ -30,10 +28,13 @@ public class Follower : MonoBehaviour, IDistantAttacking
     {
         _item = GetComponent<Item>();
         rb = GetComponent<Rigidbody>();
-        _item.OnDeactivate += Deactivate;
-        _item.OnReactivate += Reactivate;
         if (followImmediately && TryGetNearestTarget(out Vehicle nearestTarget))
             targetVehicle = nearestTarget;
+    }
+
+    public void Activate(Vehicle owner)
+    {
+        transform.SetParent(owner.muzzlePosition);
     }
 
     private void FixedUpdate()
@@ -74,47 +75,20 @@ public class Follower : MonoBehaviour, IDistantAttacking
         float minDistance = float.MaxValue;
         nearestTarget = null;
 
-
-        // foreach (var player in PlayersSpawner.Instance.instantiatedPlayers)
-        // {
-        //     if (player == null || player == _item.Owner.gameObject)
-        //         continue;
-        //
-        //     // Переводим позицию цели в локальные координаты владельца
-        //     Vector3 localPos = _item.Owner.transform.InverseTransformPoint(player.transform.position);
-        //
-        //     // Если цель не перед игроком (например, сзади или на уровне), пропускаем её
-        //     if (localPos.z <= 0)
-        //         continue;
-        //
-        //     // Можно дополнительно ограничить угол (например, 45°)
-        //     // float angle = Mathf.Atan2(Mathf.Abs(localPos.x), localPos.z) * Mathf.Rad2Deg;
-        //     // if (angle > 45f)
-        //     //     continue;
-        //
-        //     float distance = localPos.magnitude;
-        //     if (distance < minDistance)
-        //     {
-        //         minDistance = distance;
-        //         nearestTarget = player.GetComponent<Vehicle>();
-        //     }
-        // }
-
         if (nearestTarget == null)
         {
-            // print("No target found");
             return false;
         }
 
         return true;
     }
 
-    private void Deactivate()
+    public void Deactivate()
     {
         enabled = false;
     }
 
-    private void Reactivate()
+    public void Reactivate()
     {
         enabled = true;
     }
@@ -133,9 +107,4 @@ public class Follower : MonoBehaviour, IDistantAttacking
         }
     }
 
-    private void OnDestroy()
-    {
-        _item.OnDeactivate -= Deactivate;
-        _item.OnReactivate -= Reactivate;
-    }
 }

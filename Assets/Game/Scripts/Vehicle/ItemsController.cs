@@ -1,16 +1,9 @@
-using System;
-using Game.Scripts.Interfaces;
-using NTC.Pool;
 using Photon.Pun;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 public class ItemsController : MonoBehaviour
 {
     [SerializeField] protected Item[] items = new Item[3];
     [SerializeField] private PhotonView photonView;
-    [SerializeField] protected Transform muzzlePosition;
     [SerializeField] protected Vehicle vehicle;
     [SerializeField] protected float fireRate = 1f;
     protected float nextTimeToShoot = 0f;
@@ -35,8 +28,7 @@ public class ItemsController : MonoBehaviour
         else
         {
             // Создаём снаряд стандартным способом
-            itemObj = Instantiate(items[index].gameObject, muzzlePosition.position, muzzlePosition.rotation);
-            // Прямо устанавливаем параметры снаряда
+            itemObj = Instantiate(items[index].gameObject, vehicle.muzzlePosition.position, vehicle.muzzlePosition.rotation);
             SetupItem(itemObj);
         }
         items[index] = null;
@@ -75,7 +67,7 @@ public class ItemsController : MonoBehaviour
     private void SetupItem(GameObject itemObj)
     {
         if (itemObj.TryGetComponent(out Item item))
-            item.Init(vehicle);
+            item.Activate(vehicle);
     }
 
     [PunRPC]

@@ -1,9 +1,6 @@
-﻿using System;
-using Game.Scripts.Interfaces;
+﻿using Game.Scripts.Interfaces;
 using UnityEngine;
-using UnityEngine.Serialization;
-
-public class Shield : MonoBehaviour, IDefensive
+public class Shield : MonoBehaviour, IDefensive, IItemEffect
 {
     private enum DeactivationType
     {
@@ -20,17 +17,21 @@ public class Shield : MonoBehaviour, IDefensive
         Init();
     }
 
-    private void Start()
+    private void Awake()
     {
         Init();
         ShieldTimer();
-        _item.OnDeactivate += Deactivate;
-        _item.OnReactivate += Reactivate;
     }
 
     private void Init()
     {
         if (!_item) _item = GetComponent<Item>();
+    }
+
+    public void Activate(Vehicle owner)
+    {
+        transform.SetParent(owner.transform);
+        transform.position = owner.transform.position;
     }
 
     private async Awaitable ShieldTimer()
@@ -60,19 +61,14 @@ public class Shield : MonoBehaviour, IDefensive
         }
     }
 
-    private void Deactivate()
+    public void Deactivate()
     {
         enabled = false;
     }
 
-    private void Reactivate()
+    public void Reactivate()
     {
         enabled = true;
     }
 
-    private void OnDestroy()
-    {
-        _item.OnDeactivate -= Deactivate;
-        _item.OnReactivate -= Reactivate;
-    }
 }

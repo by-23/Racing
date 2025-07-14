@@ -432,6 +432,8 @@ MonoBehaviour:
   healthController: {fileID: 1940173394000298594}
   vehicleMovement: {fileID: 7756040254207786816}
   isLocalPlayer: 0
+  muzzlePosition: {fileID: 5663055877064385965}
+  functionalButtons: {fileID: 0}
 --- !u!114 &7756040254207786816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,7 +522,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   photonView: {fileID: 3896878137984185943}
-  muzzlePosition: {fileID: 5663055877064385965}
   vehicle: {fileID: 1816427083731817154}
   fireRate: 1
 --- !u!114 &1940173394000298594

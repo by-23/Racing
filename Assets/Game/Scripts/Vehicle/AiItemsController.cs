@@ -1,6 +1,4 @@
-using System;
 using Game.Scripts.Interfaces;
-using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -47,7 +45,7 @@ public class AiItemsController : ItemsController
         int randomValue = Random.Range(1, 100);
         if (randomValue <= attackChance)
         {
-            Ray ray = new Ray(muzzlePosition.position, muzzlePosition.forward);
+            Ray ray = new Ray(vehicle.muzzlePosition.position, vehicle.muzzlePosition.forward);
             if (Physics.Raycast(ray, out RaycastHit hit, detectionRange, layer))
             {
                 if (hit.collider.transform.parent != null && hit.collider.transform.parent.GetComponentInParent<Vehicle>())

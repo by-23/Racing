@@ -1,26 +1,17 @@
-﻿using System;
-using UnityEngine;
-
-public class Boost : MonoBehaviour
+﻿using UnityEngine;
+public class Boost : MonoBehaviour, IItemEffect
 {
     [SerializeField] private float speedMultiplier = 3;
-    private Item item;
 
-    private void Awake()
+    public void Activate(Vehicle owner)
     {
-        item = GetComponent<Item>();
-        item.OnInit += ApplyBoost;
-    }
-
-
-    internal void ApplyBoost()
-    {
-        item.Owner.vehicleMovement._rb.AddForce(item.Owner.transform.forward * speedMultiplier, ForceMode.Impulse);
+        owner.vehicleMovement._rb.AddForce(owner.transform.forward * speedMultiplier, ForceMode.Impulse);
         Destroy(this.gameObject);
     }
-
-    private void OnDestroy()
+    public void Deactivate()
     {
-        item.OnInit -= ApplyBoost;
+    }
+    public void Reactivate()
+    {
     }
 }

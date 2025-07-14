@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 public class VehicleMovement : MonoBehaviour
 {
     [SerializeField] private float maxSpeed = 50f;
@@ -27,7 +26,7 @@ public class VehicleMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _vehicle = GetComponent<Vehicle>();
         _groundDetection = groundDetection;
-        _joystick = FunctionalButtons.Instance.floatingJoystick;
+        _joystick = FindAnyObjectByType<FunctionalButtons>().floatingJoystick;
         _gameController = GameController.Instance;
         groundDetection.Initialize(_vehicle);
     }

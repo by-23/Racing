@@ -1,7 +1,7 @@
-﻿using Unity.Netcode;
+﻿using Photon.Pun;
+using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
-using Photon.Pun;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Vehicle : NetworkBehaviour
@@ -12,11 +12,18 @@ public class Vehicle : NetworkBehaviour
     [SerializeField] internal HealthController healthController;
     [SerializeField] internal VehicleMovement vehicleMovement;
     [SerializeField] internal bool isLocalPlayer;
+    [SerializeField] public Transform muzzlePosition;
+    [SerializeField] private FunctionalButtons functionalButtons;
 
     private void Awake()
     {
         triggerCallback.OnTriggerEntered += OnTriggerEntered;
         healthController.OnDeath += OnDeath;
+    }
+
+    private void Init()
+    {
+        if (!functionalButtons) functionalButtons = FindAnyObjectByType<FunctionalButtons>();
     }
 
     private void OnTriggerEntered(Collider other)
@@ -30,12 +37,11 @@ public class Vehicle : NetworkBehaviour
 
     private void OnDeath() => vehicleMovement.CanMove = false;
 
-
     internal void SetLocalPlayer()
     {
-        FunctionalButtons.Instance.vehicle = this;
-        FunctionalButtons.Instance.itemsController = itemsController;
-        FunctionalButtons.Instance.ListenToHealthController(healthController);
+        functionalButtons.vehicle = this;
+        functionalButtons.itemsController = itemsController;
+        functionalButtons.ListenToHealthController(healthController);
         isLocalPlayer = true;
         playerCam.gameObject.SetActive(true);
         vehicleMovement.enabled = true;
@@ -59,4 +65,12 @@ public class Vehicle : NetworkBehaviour
         triggerCallback.OnTriggerEntered -= OnTriggerEntered;
         healthController.OnDeath -= OnDeath;
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        Init();
+        EditorUtility.SetDirty(this);
+    }
+#endif
 }

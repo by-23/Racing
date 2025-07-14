@@ -1,15 +1,8 @@
-using System;
-using System.Collections;
 using Photon.Pun;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
-
-public class FunctionalButtons : Singleton<FunctionalButtons>
+public class FunctionalButtons : MonoBehaviour
 {
     public Vehicle vehicle;
     public ItemsController itemsController;
