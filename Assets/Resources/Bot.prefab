@@ -594,9 +594,12 @@ MonoBehaviour:
   photonView: {fileID: 8704497027745435374}
   muzzlePosition: {fileID: 5663055877064385965}
   vehicle: {fileID: 1816427083731817154}
-  fireRate: 2
+  fireRate: 5
   detectionRange: 50
   attackChance: 100
+  layer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &-8441199704336409492
 MonoBehaviour:
   m_ObjectHideFlags: 0

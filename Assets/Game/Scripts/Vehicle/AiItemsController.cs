@@ -10,6 +10,7 @@ public class AiItemsController : ItemsController
     private float detectionRange = 20f; // Дальность обнаружения цели
 
     [SerializeField, Range(0, 100)] private int attackChance; // Вероятность атаки (от 0 до 1)
+    [SerializeField] private LayerMask layer;
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -47,9 +48,9 @@ public class AiItemsController : ItemsController
         if (randomValue <= attackChance)
         {
             Ray ray = new Ray(muzzlePosition.position, muzzlePosition.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, detectionRange))
+            if (Physics.Raycast(ray, out RaycastHit hit, detectionRange, layer))
             {
-                if (hit.collider.transform.parent != null && hit.collider.transform.parent.GetComponent<Vehicle>())
+                if (hit.collider.transform.parent != null && hit.collider.transform.parent.GetComponentInParent<Vehicle>())
                 {
                     for (int i = 0; i < items.Length; i++)
                     {
