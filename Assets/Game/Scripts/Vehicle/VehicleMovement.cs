@@ -8,13 +8,18 @@ public class VehicleMovement : MonoBehaviour
     [Range(0, 3)] [SerializeField] internal float steeringPower = 1.5f;
     [Range(0, 1)] [SerializeField] internal float grip = 1f;
     [SerializeField] internal VehicleGroundDetection groundDetection = new VehicleGroundDetection();
+    [Header("Flip Settings")]
+    [SerializeField] private float flipTorque = 15f;
+    [SerializeField, Range(0, 1)] private float flipCheckAngle = 0.5f;
 
     internal Rigidbody _rb;
     private VehicleGroundDetection _groundDetection;
-    private FloatingJoystick _joystick;
     private GameController _gameController;
     internal Vehicle _vehicle;
     private int lastClosestPathIndex;
+
+    internal float HorizontalInput { get; set; }
+    internal float VerticalInput { get; set; }
     internal float NormalizedForwardSpeed => Mathf.Abs(ForwardSpeed) > 0.1f ? ForwardSpeed / maxSpeed : 0f;
     internal bool CanMove { get; set; } = true;
     internal float ForwardSpeed => Vector3.Dot(_rb.linearVelocity, transform.forward);
@@ -26,7 +31,6 @@ public class VehicleMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _vehicle = GetComponent<Vehicle>();
         _groundDetection = groundDetection;
-        _joystick = FindAnyObjectByType<FunctionalButtons>().floatingJoystick;
         _gameController = GameController.Instance;
         groundDetection.Initialize(_vehicle);
     }
@@ -34,10 +38,8 @@ public class VehicleMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (!_vehicle.isLocalPlayer || !_gameController.isGameStarted) return;
-        CurrentSteeringInput = _joystick.Horizontal;
-        float accelerationInput = _joystick.Vertical;
 
-        ApplyAcceleration(accelerationInput);
+        ApplyFlipTorque(HorizontalInput, VerticalInput);
         ApplyLateralFriction(groundDetection.IsGrounded);
         ApplyGravity(groundDetection.IsGrounded);
         PerformGroundCheck();
@@ -86,6 +88,18 @@ public class VehicleMovement : MonoBehaviour
         if (!isGrounded) return;
         Vector3 lateralFriction = -transform.right * (Vector3.Dot(_rb.linearVelocity, transform.right) * grip);
         _rb.AddForce(lateralFriction, ForceMode.Acceleration);
+    }
+
+    private void ApplyFlipTorque(float horizontalInput, float verticalInput)
+    {
+        if (groundDetection.IsGrounded) return;
+
+        float upDot = Vector3.Dot(transform.up, Vector3.up);
+
+        if (Mathf.Abs(upDot) < flipCheckAngle && verticalInput > 0.1f && Mathf.Abs(horizontalInput) > 0.1f)
+        {
+            _rb.AddRelativeTorque(new Vector3(0, 0, horizontalInput * flipTorque), ForceMode.Acceleration);
+        }
     }
 
     public void ApplyBraking(float brakePower)

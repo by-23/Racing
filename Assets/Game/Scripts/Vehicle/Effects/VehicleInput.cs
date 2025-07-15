@@ -29,6 +29,9 @@ public class VehicleInput : MonoBehaviour
                 turnInput = _joystick.Horizontal;
         }
 
+        vehicleMovement.VerticalInput = moveInput;
+        vehicleMovement.HorizontalInput = turnInput;
+        
         vehicleMovement.ApplyAcceleration(moveInput);
 
         newSteeringPower = turnInput * vehicleMovement.steeringPower;
