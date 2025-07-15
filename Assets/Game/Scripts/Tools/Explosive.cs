@@ -1,6 +1,8 @@
 ﻿using Photon.Pun;
 using Unity.Mathematics;
 using UnityEngine;
+using System.Collections;
+using System.Threading.Tasks;
 
 public class Explosive : MonoBehaviour, IAttacking, IItemEffect
 {
@@ -18,6 +20,7 @@ public class Explosive : MonoBehaviour, IAttacking, IItemEffect
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private ActivationType activationType;
     [SerializeField] private float damage = 50;
+    [SerializeField] private float attackDelay = 0;
     private Item _item;
     public Item Item => _item;
 
@@ -51,8 +54,12 @@ public class Explosive : MonoBehaviour, IAttacking, IItemEffect
             this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All);
     }
 
-    public void TryAttack()
+    public async void TryAttack()
     {
+        await Task.Delay((int)(attackDelay * 1000));
+
+        if (this == null) return;
+
         if (activationType == ActivationType.OnTrigger)
             Destroy(_collider);
         ApplyFX();
@@ -111,7 +118,7 @@ public class Explosive : MonoBehaviour, IAttacking, IItemEffect
     {
         _collider.enabled = false;
         ApplyFX();
-       Destroy(gameObject);
+        Destroy(gameObject);
     }
 
 

@@ -25,7 +25,9 @@ public class Item : MonoBehaviour
     {
         Owner = owner;
         foreach (var effect in effects)
+        {
             effect.Value.Activate(owner);
+        }
     }
 
     internal void Deactivate()
