@@ -1,15 +1,9 @@
 ﻿using Game.Scripts.Interfaces;
 using UnityEngine;
+
 public class Shield : MonoBehaviour, IDefensive, IItemEffect
 {
-    private enum DeactivationType
-    {
-        Destroy,
-        Deactivate
-    }
-
     [SerializeField] private float shieldDuration = 10f;
-    [SerializeField] private DeactivationType shieldDeactivationType;
     [SerializeField] private Item _item;
 
     private void OnValidate()
@@ -50,15 +44,7 @@ public class Shield : MonoBehaviour, IDefensive, IItemEffect
 
     public void Defense(IAttacking attacker)
     {
-        switch (shieldDeactivationType)
-        {
-            case DeactivationType.Deactivate:
-                attacker.Item.Deactivate();
-                break;
-            case DeactivationType.Destroy:
-                Destroy(attacker.Item.gameObject);
-                break;
-        }
+        attacker.Item.Deactivate();
     }
 
     public void Deactivate()
@@ -70,5 +56,4 @@ public class Shield : MonoBehaviour, IDefensive, IItemEffect
     {
         enabled = true;
     }
-
 }

@@ -3,5 +3,5 @@
 public interface IAttacking
 {
     public Item Item { get; }
-    public void Attack();
+    public void TryAttack();
 }

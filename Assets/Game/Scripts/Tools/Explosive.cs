@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using Unity.Mathematics;
 using UnityEngine;
+
 public class Explosive : MonoBehaviour, IAttacking, IItemEffect
 {
     private enum ActivationType
@@ -34,7 +35,7 @@ public class Explosive : MonoBehaviour, IAttacking, IItemEffect
     public void Activate(Vehicle owner)
     {
         if (activationType == ActivationType.Instantly)
-            Attack();
+            TryAttack();
     }
 
     protected void OnTriggerEnter(Collider other)
@@ -45,24 +46,16 @@ public class Explosive : MonoBehaviour, IAttacking, IItemEffect
             !other.CompareTag("Obstacle")) return;
 
         if (!RoomManager.Instance.IsOnline)
-            Attack();
+            TryAttack();
         else
             this.GetComponent<PhotonView>().RPC("ExplodeRPC", RpcTarget.All);
     }
 
-    public void Attack()
+    public void TryAttack()
     {
         if (activationType == ActivationType.OnTrigger)
             Destroy(_collider);
-        GameObject newExplosionFX;
-        if (RoomManager.Instance.IsOnline)
-            newExplosionFX = PhotonNetwork.Instantiate("CFXR Explosion Smoke 2 Solo (HDR)", transform.position,
-                quaternion.identity);
-        else
-            newExplosionFX = Instantiate(explosionFXPrefab.gameObject);
-
-        newExplosionFX.transform.position = transform.position;
-        newExplosionFX.gameObject.SetActive(true);
+        ApplyFX();
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, layerMask);
         foreach (Collider collider in colliders)
@@ -72,16 +65,9 @@ public class Explosive : MonoBehaviour, IAttacking, IItemEffect
             Vehicle vehicle = collider.GetComponentInParent<Vehicle>();
             if (rb != null)
             {
-                if (activationType == ActivationType.OnTrigger || _item.Owner != vehicle)
-                {
-                    rb.AddExplosionForce(explosionForce * 1000000, transform.position, explosionRadius,
-                        upwardsModifier * 1000000);
-                }
+                ApplyForce(vehicle, rb);
 
-                if (healthController != null && _item.Owner != vehicle)
-                {
-                    healthController.TakeDamage(damage);
-                }
+                ApplyDamage(healthController, vehicle);
             }
         }
 
@@ -91,20 +77,47 @@ public class Explosive : MonoBehaviour, IAttacking, IItemEffect
             enabled = false;
     }
 
-    public void Deactivate()
+    private void ApplyDamage(HealthController healthController, Vehicle vehicle)
     {
-        enabled = false;
+        if (healthController != null && _item.Owner != vehicle)
+        {
+            healthController.TakeDamage(damage);
+        }
     }
 
-    public void Reactivate()
+    private void ApplyForce(Vehicle vehicle, Rigidbody rb)
     {
-        enabled = true;
+        if (activationType == ActivationType.OnTrigger || _item.Owner != vehicle)
+        {
+            rb.AddExplosionForce(explosionForce * 1000000, transform.position, explosionRadius,
+                upwardsModifier * 1000000);
+        }
+    }
+
+    private void ApplyFX()
+    {
+        GameObject newExplosionFX;
+        if (RoomManager.Instance.IsOnline)
+            newExplosionFX = PhotonNetwork.Instantiate("CFXR Explosion Smoke 2 Solo (HDR)", transform.position,
+                quaternion.identity);
+        else
+            newExplosionFX = Instantiate(explosionFXPrefab.gameObject);
+
+        newExplosionFX.transform.position = transform.position;
+        newExplosionFX.gameObject.SetActive(true);
+    }
+
+    public void Deactivate()
+    {
+        _collider.enabled = false;
+        ApplyFX();
+       Destroy(gameObject);
     }
 
 
     [PunRPC]
     void ExplodeRPC()
     {
-        Attack();
+        TryAttack();
     }
 }

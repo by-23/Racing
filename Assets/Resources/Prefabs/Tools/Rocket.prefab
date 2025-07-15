@@ -181,6 +181,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50f27ea9186940988b0d203084a99bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effects:
+  - _underlyingValue: {fileID: 2318116514584095892}
+  - _underlyingValue: {fileID: 8944204557024383111}
   beingDeactivatedDuration: 5
   color: {r: 1, g: 0, b: 0, a: 0}
 --- !u!1001 &2596101998293807677

@@ -2,6 +2,7 @@
 using AYellowpaper;
 using UnityEditor;
 using UnityEngine;
+
 public class Item : MonoBehaviour
 {
     [SerializeField] private InterfaceReference<IItemEffect, MonoBehaviour>[] effects;
@@ -15,7 +16,8 @@ public class Item : MonoBehaviour
     {
         if (effects == null || effects.Length < 1)
         {
-            effects = GetComponents<IItemEffect>().Select(effect => new InterfaceReference<IItemEffect, MonoBehaviour>(effect)).ToArray();
+            effects = GetComponents<IItemEffect>()
+                .Select(effect => new InterfaceReference<IItemEffect, MonoBehaviour>(effect)).ToArray();
         }
     }
 
@@ -24,18 +26,12 @@ public class Item : MonoBehaviour
         Owner = owner;
         foreach (var effect in effects)
             effect.Value.Activate(owner);
-
     }
 
-    internal async Awaitable Deactivate()
+    internal void Deactivate()
     {
         foreach (var effect in effects)
             effect.Value.Deactivate();
-
-        await Awaitable.WaitForSecondsAsync(beingDeactivatedDuration);
-        foreach (var effect in effects)
-            effect.Value.Reactivate();
-
     }
 
 #if UNITY_EDITOR
@@ -51,5 +47,4 @@ public interface IItemEffect
 {
     public void Activate(Vehicle owner);
     public void Deactivate();
-    public void Reactivate();
 }

@@ -10528,9 +10528,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - {fileID: 6741958122296277812, guid: bef0f0873f1faa045bee945791b3a5ff, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: -8871661809336245487, guid: 0f4be7d8747bb694fa377f4fbc11941a, type: 3}
+  - {fileID: -8871661809336245487, guid: 0f4be7d8747bb694fa377f4fbc11941a, type: 3}
+  - {fileID: -8871661809336245487, guid: 0f4be7d8747bb694fa377f4fbc11941a, type: 3}
   photonView: {fileID: 0}
   vehicle: {fileID: 1816427083604600612}
   fireRate: 2

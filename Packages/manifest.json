@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.nighttraincode.nightpool": "file:/Users/macbook/Downloads/Telegram Desktop/NightPool",
+    "com.nighttraincode.nightpool": "file:H:/Unity/Плагины/NightPool",
     "com.unity.adaptiveperformance.google.android": "1.3.1",
     "com.unity.adaptiveperformance.samsung.android": "5.0.0",
     "com.unity.ai.navigation": "2.0.6",
