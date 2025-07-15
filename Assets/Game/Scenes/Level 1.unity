@@ -4668,12 +4668,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 103680765}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &103959936 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4988056739653549908, guid: 71f98781a624545ccae847811d71db95,
-    type: 3}
-  m_PrefabInstance: {fileID: 841632710312849183}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &106888360
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -90672,6 +90666,8 @@ MonoBehaviour:
   healthController: {fileID: 1940173394143098756}
   vehicleMovement: {fileID: 374649462944220337}
   isLocalPlayer: 1
+  muzzlePosition: {fileID: 0}
+  functionalButtons: {fileID: 821247883}
 --- !u!114 &1940173394143098756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92238,11 +92234,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   photonView: {fileID: 0}
-  muzzlePosition: {fileID: 103959936}
   vehicle: {fileID: 1816427083604600612}
   fireRate: 2
   detectionRange: 50
   attackChance: 100
+  layer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &4987286397611599971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92646,12 +92644,12 @@ PrefabInstance:
     - target: {fileID: 4994464550669025003, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
       propertyPath: isDevMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4994464550669025003, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}
       propertyPath: isGameStarted
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5503011290821233461, guid: b2a949fa24f377f47acb73d27c80f326,
         type: 3}

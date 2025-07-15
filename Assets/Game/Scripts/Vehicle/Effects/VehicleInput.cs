@@ -1,24 +1,36 @@
-﻿using System;
-using UnityEngine;
-
+﻿using UnityEngine;
 public class VehicleInput : MonoBehaviour
 {
     private VehicleMovement vehicleMovement;
     private VehicleWheelController _vehicleWheelController;
     private float newSteeringPower = 0f;
+    private FloatingJoystick _joystick;
+
 
     private void Awake()
     {
         vehicleMovement = GetComponent<VehicleMovement>();
         _vehicleWheelController = GetComponent<VehicleWheelController>();
+        _joystick = FindAnyObjectByType<FunctionalButtons>()?.floatingJoystick;
+
     }
 
     private void Update()
     {
         float moveInput = Input.GetAxisRaw("Vertical");
+        float turnInput = Input.GetAxisRaw("Horizontal");
+
+        if (_joystick != null)
+        {
+            if (Mathf.Abs(_joystick.Vertical) > Mathf.Abs(moveInput))
+                moveInput = _joystick.Vertical;
+
+            if (Mathf.Abs(_joystick.Horizontal) > Mathf.Abs(turnInput))
+                turnInput = _joystick.Horizontal;
+        }
+
         vehicleMovement.ApplyAcceleration(moveInput);
 
-        float turnInput = Input.GetAxisRaw("Horizontal");
         newSteeringPower = turnInput * vehicleMovement.steeringPower;
         Vector3 velocity = vehicleMovement._rb.linearVelocity;
         float dot = Vector3.Dot(transform.forward, velocity);

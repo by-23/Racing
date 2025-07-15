@@ -34,7 +34,6 @@ public class VehicleMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (!_vehicle.isLocalPlayer || !_gameController.isGameStarted) return;
-
         CurrentSteeringInput = _joystick.Horizontal;
         float accelerationInput = _joystick.Vertical;
 

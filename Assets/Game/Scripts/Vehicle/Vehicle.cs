@@ -19,6 +19,7 @@ public class Vehicle : NetworkBehaviour
     {
         triggerCallback.OnTriggerEntered += OnTriggerEntered;
         healthController.OnDeath += OnDeath;
+        Init();
     }
 
     private void Init()
