@@ -151,6 +151,7 @@ MonoBehaviour:
     m_Bits: 64
   activationType: 1
   damage: 50
+  attackDelay: 0
 --- !u!114 &8944204557024383111
 MonoBehaviour:
   m_ObjectHideFlags: 0

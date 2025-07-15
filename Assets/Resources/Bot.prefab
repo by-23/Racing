@@ -600,7 +600,7 @@ MonoBehaviour:
   attackChance: 100
   layer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!114 &-8441199704336409492
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+
 public class Follower : MonoBehaviour, IDistantAttacking, IItemEffect
 {
     internal Vehicle targetVehicle;
@@ -34,7 +35,7 @@ public class Follower : MonoBehaviour, IDistantAttacking, IItemEffect
 
     public void Activate(Vehicle owner)
     {
-        transform.SetParent(owner.muzzlePosition);
+        transform.position = owner.muzzlePosition.position;
     }
 
     private void FixedUpdate()
@@ -106,5 +107,4 @@ public class Follower : MonoBehaviour, IDistantAttacking, IItemEffect
             Destroy(gameObject);
         }
     }
-
 }

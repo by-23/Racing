@@ -122,5 +122,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemVariants:
+  - {fileID: 823709582306054355, guid: f174c197f7c92754fa4a5be1c05c4dd3, type: 3}
+  - {fileID: 6741958122296277812, guid: bef0f0873f1faa045bee945791b3a5ff, type: 3}
+  - {fileID: 823709582306054355, guid: 3c9a3d72afd6c714db69270b46eab244, type: 3}
   - {fileID: -8871661809336245487, guid: 0f4be7d8747bb694fa377f4fbc11941a, type: 3}
+  - {fileID: 6741958122296277812, guid: 21c6802a175ca20408363a9a220fe0a7, type: 3}
   <item>k__BackingField: {fileID: 0}
