@@ -1,16 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Photon.Pun;
-using Photon.Realtime;
-
 public class GameController : MonoBehaviourPunCallbacks
 {
+    public event Action OnRankingsChanged;
+    
     #region Fields
 
     /// <summary>
     ///     The instance.
     /// </summary>
     private static GameController instance;
+    private readonly List<Vehicle> _vehicles = new List<Vehicle>();
 
     #endregion
 
@@ -43,6 +47,34 @@ public class GameController : MonoBehaviourPunCallbacks
 
     [SerializeField] internal bool isGameStarted = true;
     [SerializeField] internal bool isDevMode = true;
+
+    public void ReportCheckpointPassed()
+    {
+        OnRankingsChanged?.Invoke();
+    }
+
+    public void RegisterVehicle(Vehicle vehicle)
+    {
+        if (!_vehicles.Contains(vehicle))
+        {
+            _vehicles.Add(vehicle);
+        }
+    }
+
+    public void UnregisterVehicle(Vehicle vehicle)
+    {
+        if (_vehicles.Contains(vehicle))
+        {
+            _vehicles.Remove(vehicle);
+        }
+    }
+
+    public List<Vehicle> GetRankedVehicles()
+    {
+        // Сортируем машины по убыванию их прогресса.
+        // Машины с большим ProgressDistance будут первыми в списке.
+        return _vehicles.OrderByDescending(v => v.vehicleMovement.ProgressDistance).ToList();
+    }
 
 
     private void Awake()

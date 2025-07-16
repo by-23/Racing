@@ -15,6 +15,11 @@ public class Vehicle : NetworkBehaviour
     [SerializeField] public Transform muzzlePosition;
     [SerializeField] private FunctionalButtons functionalButtons;
 
+    private void Start()
+    {
+        GameController.Instance.RegisterVehicle(this);
+    }
+
     private void Awake()
     {
         triggerCallback.OnTriggerEntered += OnTriggerEntered;
@@ -63,6 +68,9 @@ public class Vehicle : NetworkBehaviour
 
     public override void OnDestroy()
     {
+        if(GameController.Instance != null)
+            GameController.Instance.UnregisterVehicle(this);
+            
         triggerCallback.OnTriggerEntered -= OnTriggerEntered;
         healthController.OnDeath -= OnDeath;
     }

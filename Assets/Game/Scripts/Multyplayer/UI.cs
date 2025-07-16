@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
-
+using UnityEngine.Serialization;
 public class UI : Singleton<UI>
 {
     private PhotonView photonView;
 
     [SerializeField]
-    internal Dictionary<int, PlayerInfoUI> instantiatedPlayerInfoUIs = new Dictionary<int, PlayerInfoUI>();
+    internal Dictionary<int, LapInfoUI> instantiatedPlayerInfoUIs = new Dictionary<int, LapInfoUI>();
 
-    [SerializeField] private PlayerInfoUI playerInfoUIPrefab;
+    [FormerlySerializedAs("playerInfoUIPrefab")]
+    [SerializeField] private LapInfoUI lapInfoUIPrefab;
     [SerializeField] private GameObject playerInfoListUI;
     [SerializeField] GameObject[] ControlsUI;
 
@@ -18,7 +18,6 @@ public class UI : Singleton<UI>
     {
         photonView = GetComponent<PhotonView>();
     }
-
     internal void UpdateUI(int actorNumber, string name)
     {
         photonView.RPC("UpdatePlayerNameUI", RpcTarget.AllBuffered, actorNumber, name);
@@ -33,7 +32,7 @@ public class UI : Singleton<UI>
         }
         else
         {
-            var instantiatedPlayerInfoUI = Instantiate(playerInfoUIPrefab, playerInfoListUI.transform);
+            var instantiatedPlayerInfoUI = Instantiate(lapInfoUIPrefab, playerInfoListUI.transform);
             instantiatedPlayerInfoUIs.Add(actorNumber, instantiatedPlayerInfoUI);
             instantiatedPlayerInfoUI.playerName.text = name;
         }

@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 8965122834070950472}
   - component: {fileID: -7615637054289674736}
   m_Layer: 5
-  m_Name: PlayerInfo
+  m_Name: LapInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

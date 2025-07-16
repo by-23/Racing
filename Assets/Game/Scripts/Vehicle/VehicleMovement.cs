@@ -19,6 +19,29 @@ public class VehicleMovement : MonoBehaviour
     private int _lastPassedPointIndex = 0;
     private int _currentTargetPointIndex = 1;
 
+    public float ProgressDistance
+    {
+        get
+        {
+            var path = EzPath.Instance;
+            if (path == null || path.pathPoints.Length < 2 || _currentTargetPointIndex >= path.pathPoints.Length)
+                return _lastPassedPointIndex;
+
+            Vector3 lastPointPos = path.pathPoints[_lastPassedPointIndex].pointTransform.position;
+            Vector3 currentTargetPos = path.pathPoints[_currentTargetPointIndex].pointTransform.position;
+
+            Vector3 segmentVector = currentTargetPos - lastPointPos;
+            float segmentLength = segmentVector.magnitude;
+            if (segmentLength < 0.001f)
+                return _lastPassedPointIndex;
+
+            Vector3 carVector = transform.position - lastPointPos;
+            float progressOnSegment = Mathf.Clamp01(Vector3.Dot(carVector, segmentVector.normalized) / segmentLength);
+
+            return _lastPassedPointIndex + progressOnSegment;
+        }
+    }
+
     internal float HorizontalInput { get; set; }
     internal float VerticalInput { get; set; }
     internal float NormalizedForwardSpeed => Mathf.Abs(ForwardSpeed) > 0.1f ? ForwardSpeed / maxSpeed : 0f;
@@ -128,25 +151,25 @@ public class VehicleMovement : MonoBehaviour
 
         // Получаем данные о точке, к которой будем телепортироваться
         var teleportTargetPoint = ezPath.pathPoints[targetIndex];
-        
+
         // Для этой точки всегда нужно пересчитывать угол, чтобы она смотрела на следующую.
         // Это гарантирует правильную ориентацию и после срезки, и после отката назад.
         if (targetIndex + 1 < ezPath.pathPoints.Length)
         {
             var nextPoint = ezPath.pathPoints[targetIndex + 1];
             Vector3 direction = (nextPoint.pointTransform.position - teleportTargetPoint.pointTransform.position).normalized;
-            if(direction != Vector3.zero)
+            if (direction != Vector3.zero)
                 teleportTargetPoint.angle = Quaternion.LookRotation(direction).eulerAngles.y;
         }
 
         // Выполняем телепортацию
         transform.position = teleportTargetPoint.pointTransform.position;
         transform.rotation = Quaternion.Euler(0, teleportTargetPoint.angle, 0);
-        
+
         // Обновляем индексы прогресса
         _lastPassedPointIndex = targetIndex;
         _currentTargetPointIndex = _lastPassedPointIndex + 1;
-        
+
         // Безопасная проверка на случай, если мы у последней точки пути
         if (_currentTargetPointIndex >= ezPath.pathPoints.Length)
         {
@@ -156,7 +179,7 @@ public class VehicleMovement : MonoBehaviour
         CanMove = true;
         _vehicle.healthController.Heal(100);
     }
-    
+
     private void CheckIfPassedTargetPoint()
     {
         var path = EzPath.Instance;
@@ -170,7 +193,7 @@ public class VehicleMovement : MonoBehaviour
 
         Vector3 segmentVector = currentTargetPos - lastPointPos;
         if (segmentVector.sqrMagnitude < 0.001f) return; // Отрезок слишком мал
-        
+
         // Проецируем вектор от начала отрезка до машины на сам отрезок
         Vector3 carVector = transform.position - lastPointPos;
         float projection = Vector3.Dot(carVector, segmentVector);
@@ -180,6 +203,9 @@ public class VehicleMovement : MonoBehaviour
         {
             _lastPassedPointIndex = _currentTargetPointIndex;
             _currentTargetPointIndex++;
+            
+            // Сообщаем контроллеру, что произошло событие, которое может повлиять на рейтинг
+            GameController.Instance.ReportCheckpointPassed();
         }
     }
 
