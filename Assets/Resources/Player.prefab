@@ -457,6 +457,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 256
     RaycastDist: 2
+  flipTorque: 25
+  flipCheckAngle: 1
 --- !u!114 &5085808755067491257
 MonoBehaviour:
   m_ObjectHideFlags: 0

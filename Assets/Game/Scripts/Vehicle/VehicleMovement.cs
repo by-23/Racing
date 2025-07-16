@@ -16,7 +16,8 @@ public class VehicleMovement : MonoBehaviour
     private VehicleGroundDetection _groundDetection;
     private GameController _gameController;
     internal Vehicle _vehicle;
-    private int lastClosestPathIndex;
+    private int _lastPassedPointIndex = 0;
+    private int _currentTargetPointIndex = 1;
 
     internal float HorizontalInput { get; set; }
     internal float VerticalInput { get; set; }
@@ -39,6 +40,7 @@ public class VehicleMovement : MonoBehaviour
     {
         if (!_vehicle.isLocalPlayer || !_gameController.isGameStarted) return;
 
+        CheckIfPassedTargetPoint();
         ApplyFlipTorque(HorizontalInput, VerticalInput);
         ApplyLateralFriction(groundDetection.IsGrounded);
         ApplyGravity(groundDetection.IsGrounded);
@@ -111,12 +113,74 @@ public class VehicleMovement : MonoBehaviour
     public void ResetCarPosition()
     {
         var ezPath = EzPath.Instance;
-        var pointTransform = ezPath.GetNextNearestPoint(transform);
-        transform.position = pointTransform.pointTransform.position;
-        transform.rotation = pointTransform.pointTransform.rotation;
+        if (ezPath == null || ezPath.pathPoints.Length == 0) return;
+
+        var nearestPoint = ezPath.GetNearestPoint(transform);
+        int targetIndex = nearestPoint.index;
+
+        // Если ближайшая точка находится дальше нашей текущей цели (срезали путь),
+        // или если она находится позади уже пройденной точки,
+        // то мы принудительно возвращаем игрока на последнюю пройденную точку.
+        if (targetIndex > _currentTargetPointIndex || targetIndex < _lastPassedPointIndex)
+        {
+            targetIndex = _lastPassedPointIndex;
+        }
+
+        // Получаем данные о точке, к которой будем телепортироваться
+        var teleportTargetPoint = ezPath.pathPoints[targetIndex];
+        
+        // Для этой точки всегда нужно пересчитывать угол, чтобы она смотрела на следующую.
+        // Это гарантирует правильную ориентацию и после срезки, и после отката назад.
+        if (targetIndex + 1 < ezPath.pathPoints.Length)
+        {
+            var nextPoint = ezPath.pathPoints[targetIndex + 1];
+            Vector3 direction = (nextPoint.pointTransform.position - teleportTargetPoint.pointTransform.position).normalized;
+            if(direction != Vector3.zero)
+                teleportTargetPoint.angle = Quaternion.LookRotation(direction).eulerAngles.y;
+        }
+
+        // Выполняем телепортацию
+        transform.position = teleportTargetPoint.pointTransform.position;
+        transform.rotation = Quaternion.Euler(0, teleportTargetPoint.angle, 0);
+        
+        // Обновляем индексы прогресса
+        _lastPassedPointIndex = targetIndex;
+        _currentTargetPointIndex = _lastPassedPointIndex + 1;
+        
+        // Безопасная проверка на случай, если мы у последней точки пути
+        if (_currentTargetPointIndex >= ezPath.pathPoints.Length)
+        {
+            _currentTargetPointIndex = ezPath.pathPoints.Length - 1;
+        }
 
         CanMove = true;
         _vehicle.healthController.Heal(100);
+    }
+    
+    private void CheckIfPassedTargetPoint()
+    {
+        var path = EzPath.Instance;
+        // Проверяем, есть ли смысл в проверке
+        if (path == null || path.pathPoints.Length < 2 || _currentTargetPointIndex >= path.pathPoints.Length)
+            return;
+
+        // Определяем текущий отрезок пути
+        Vector3 lastPointPos = path.pathPoints[_lastPassedPointIndex].pointTransform.position;
+        Vector3 currentTargetPos = path.pathPoints[_currentTargetPointIndex].pointTransform.position;
+
+        Vector3 segmentVector = currentTargetPos - lastPointPos;
+        if (segmentVector.sqrMagnitude < 0.001f) return; // Отрезок слишком мал
+        
+        // Проецируем вектор от начала отрезка до машины на сам отрезок
+        Vector3 carVector = transform.position - lastPointPos;
+        float projection = Vector3.Dot(carVector, segmentVector);
+
+        // Если длина проекции больше квадрата длины отрезка, значит, машина прошла целевую точку
+        if (projection > segmentVector.sqrMagnitude)
+        {
+            _lastPassedPointIndex = _currentTargetPointIndex;
+            _currentTargetPointIndex++;
+        }
     }
 
     private void OnDrawGizmosSelected() => groundDetection.OnDrawGizmosSelected(GetComponent<Vehicle>());

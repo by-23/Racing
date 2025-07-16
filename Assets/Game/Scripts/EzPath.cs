@@ -1,14 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
-
-
-[System.Serializable]
+using UnityEngine;
+[Serializable]
 public struct PathPoint
 {
     public Transform pointTransform; // Ссылка на объект-точку
     public float angle; // Угол поворота в градусах
+    public int index;
 }
 
 public class EzPath : Singleton<EzPath>
@@ -41,6 +41,7 @@ public class EzPath : Singleton<EzPath>
         {
             pathPoints[i].pointTransform = childTransforms[i];
             pathPoints[i].angle = CalculateAngle(childTransforms, i);
+            pathPoints[i].index = i;
         }
     }
 
@@ -81,18 +82,117 @@ public class EzPath : Singleton<EzPath>
 
     public PathPoint GetNextNearestPoint(Transform obj)
     {
-        // Если массив пустой, вернём "пустую" структуру (угол = 0, pointTransform = null).
+        // Если точек мало, вернём последнюю или "пустую"
+        if (pathPoints == null || pathPoints.Length < 2)
+            return pathPoints.Length > 0 ? pathPoints[0] : default;
+
+        var (closestSegmentIndex, bestT) = FindClosestSegment(obj.position);
+
+        // Если сегмент не найден, вернём последнюю точку
+        if (closestSegmentIndex == -1)
+            return pathPoints[pathPoints.Length - 1];
+
+        // Если бот находится на отрезке (не достиг его конца)
+        if (bestT < 1f)
+        {
+            // Возвращаем конечную точку этого отрезка
+            return pathPoints[closestSegmentIndex + 1];
+        }
+        else
+        {
+            // Если бот достиг или прошёл конечную точку отрезка,
+            // даём ему следующую точку (если она есть)
+            int nextIndex = closestSegmentIndex + 2;
+            if (nextIndex < pathPoints.Length)
+            {
+                return pathPoints[nextIndex];
+            }
+            else
+            {
+                // Если следующей точки нет, возвращаем последнюю
+                return pathPoints[pathPoints.Length - 1];
+            }
+        }
+    }
+
+    public PathPoint GetNearestPoint(Transform obj)
+    {
+        // Если точек нет, возвращаем "пустую" структуру
         if (pathPoints == null || pathPoints.Length == 0)
             return default;
 
-        Vector3 botPos = obj.position;
+        // Если точка всего одна, она и есть ближайшая
+        if (pathPoints.Length == 1)
+            return pathPoints[0];
+
+        var (closestSegmentIndex, _) = FindClosestSegment(obj.position);
+
+        // Если сегмент не найден, вернём последнюю точку
+        if (closestSegmentIndex == -1)
+            return pathPoints[pathPoints.Length - 1];
+
+        // Определяем точки, образующие ближайший сегмент
+        PathPoint pointA = pathPoints[closestSegmentIndex];
+        PathPoint pointB = pathPoints[closestSegmentIndex + 1];
+
+        // Вычисляем расстояние до каждой из точек
+        float distToASqr = (pointA.pointTransform.position - obj.position).sqrMagnitude;
+        float distToBSqr = (pointB.pointTransform.position - obj.position).sqrMagnitude;
+
+        // Определяем ближайшую точку и её индекс в массиве pathPoints
+        PathPoint nearestPoint;
+        int nearestPointIndex;
+
+        if (distToASqr < distToBSqr)
+        {
+            nearestPoint = pointA;
+            nearestPointIndex = closestSegmentIndex;
+        }
+        else
+        {
+            nearestPoint = pointB;
+            nearestPointIndex = closestSegmentIndex + 1;
+        }
+        
+        // Теперь вычисляем поворот по направлению к следующей точке.
+        // Если следующая точка существует...
+        if (nearestPointIndex + 1 < pathPoints.Length)
+        {
+            PathPoint nextPoint = pathPoints[nearestPointIndex + 1];
+            Vector3 directionToNext = (nextPoint.pointTransform.position - nearestPoint.pointTransform.position).normalized;
+
+            // ...и если точки не совпадают (вектор направления не нулевой)
+            if (directionToNext != Vector3.zero)
+            {
+                // Вычисляем угол поворота по оси Y
+                float newAngle = Quaternion.LookRotation(directionToNext).eulerAngles.y;
+
+                // Возвращаем новую структуру PathPoint с обновлённым углом
+                return new PathPoint
+                {
+                    pointTransform = nearestPoint.pointTransform,
+                    angle = newAngle,
+                    index = nearestPointIndex
+                };
+            }
+        }
+        
+        // Если следующей точки нет (это конец пути) или точки совпадают,
+        // возвращаем ближайшую точку с её исходным, предрасчитанным углом.
+        return nearestPoint;
+    }
+
+    private (int, float) FindClosestSegment(Vector3 position)
+    {
+        if (pathPoints == null || pathPoints.Length < 2)
+            return (-1, 0);
 
         float minDistToSegment = float.MaxValue;
         int closestSegmentIndex = -1;
         float bestT = 0f;
 
         // Перебираем все пары соседних PathPoint (i, i+1),
-        // чтобы найти ближайший к боту отрезок маршрута.
+        // чтобы найти ближайший к объекту отрезок маршрута.
         for (int i = 0; i < pathPoints.Length - 1; i++)
         {
             Vector3 A = pathPoints[i].pointTransform.position;
@@ -103,16 +203,16 @@ public class EzPath : Singleton<EzPath>
             if (abSqrMag < Mathf.Epsilon)
                 continue; // пропускаем вырожденные отрезки
 
-            // Параметр t при проекции позиции бота на отрезок [A, B].
-            // Если t в [0..1], бот "между" A и B; 
+            // Параметр t при проекции позиции объекта на отрезок [A, B].
+            // Если t в [0..1], объект "между" A и B; 
             // если t < 0, он "перед" A; если t > 1, "за" B.
-            float t = Mathf.Clamp01(Vector3.Dot(botPos - A, AB) / abSqrMag);
+            float t = Mathf.Clamp01(Vector3.Dot(position - A, AB) / abSqrMag);
 
-            // Ближайшая точка на отрезке к позиции бота
+            // Ближайшая точка на отрезке к позиции объекта
             Vector3 pointOnSegment = A + AB * t;
 
-            // Проверяем, насколько бот близко к этому отрезку
-            float distSqr = (botPos - pointOnSegment).sqrMagnitude;
+            // Проверяем, насколько объект близко к этому отрезку
+            float distSqr = (position - pointOnSegment).sqrMagnitude;
             if (distSqr < minDistToSegment)
             {
                 minDistToSegment = distSqr;
@@ -120,33 +220,9 @@ public class EzPath : Singleton<EzPath>
                 bestT = t;
             }
         }
-
-        // Если по какой-то причине не нашли сегмент, вернём последний PathPoint
-        if (closestSegmentIndex == -1)
-            return pathPoints[pathPoints.Length - 1];
-
-        // Если бот где-то "между" точками (или у начала отрезка),
-        // возвращаем следующую точку — pathPoints[closestSegmentIndex + 1].
-        if (bestT < 1f)
-        {
-            return pathPoints[closestSegmentIndex + 1];
-        }
-        else
-        {
-            // Если бот "на" точке i+1 или "за" ней, 
-            // считаем, что он её уже достиг — переходим к i+2 (если есть).
-            int nextIndex = closestSegmentIndex + 2;
-            if (nextIndex < pathPoints.Length)
-            {
-                return pathPoints[nextIndex];
-            }
-            else
-            {
-                // Если i+2 уже вне массива, возвращаем последний PathPoint
-                return pathPoints[pathPoints.Length - 1];
-            }
-        }
+        return (closestSegmentIndex, bestT);
     }
+
 
 
 // Метод для переименования всех дочерних объектов по порядку.
