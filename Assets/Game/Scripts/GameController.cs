@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviourPunCallbacks
 {
     public event Action OnRankingsChanged;
+    public event Action<Vehicle> OnVehicleFinished;
     
     #region Fields
 
@@ -15,6 +16,10 @@ public class GameController : MonoBehaviourPunCallbacks
     /// </summary>
     private static GameController instance;
     private readonly List<Vehicle> _vehicles = new List<Vehicle>();
+    private readonly HashSet<Vehicle> _finishedVehicles = new HashSet<Vehicle>();
+
+    [Header("Debug")]
+    [SerializeField] private List<Vehicle> _finishedVehiclesForInspector;
 
     #endregion
 
@@ -53,6 +58,14 @@ public class GameController : MonoBehaviourPunCallbacks
         OnRankingsChanged?.Invoke();
     }
 
+    public void VehicleFinished(Vehicle vehicle)
+    {
+        if (_finishedVehicles.Add(vehicle))
+        {
+            OnVehicleFinished?.Invoke(vehicle);
+        }
+    }
+
     public void RegisterVehicle(Vehicle vehicle)
     {
         if (!_vehicles.Contains(vehicle))
@@ -74,6 +87,16 @@ public class GameController : MonoBehaviourPunCallbacks
         // Сортируем машины по убыванию их прогресса.
         // Машины с большим ProgressDistance будут первыми в списке.
         return _vehicles.OrderByDescending(v => v.vehicleMovement.ProgressDistance).ToList();
+    }
+
+    public bool IsVehicleFinished(Vehicle vehicle)
+    {
+        return _finishedVehicles.Contains(vehicle);
+    }
+
+    public List<Vehicle> GetRacingVehicles()
+    {
+        return _vehicles.Where(v => !_finishedVehicles.Contains(v)).ToList();
     }
 
 
@@ -98,4 +121,15 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        // For debugging in the inspector, show the contents of the HashSet.
+        if (Application.isPlaying && _finishedVehicles.Count != _finishedVehiclesForInspector.Count)
+        {
+            _finishedVehiclesForInspector = _finishedVehicles.ToList();
+        }
+    }
+#endif
 }

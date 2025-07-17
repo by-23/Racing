@@ -1,11 +1,9 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target;
+    public Transform Target => target;
     [SerializeField] private float distance = 5;
     [SerializeField] private Vector3 offset = new Vector3(0f, 0, 0);
     [SerializeField] private float moveTime = 1f;
@@ -92,17 +90,22 @@ public class CameraFollow : MonoBehaviour
 
     public void SetTarget(Transform newTarget)
     {
-        this.transform.DOMove(
-                newTarget.position + Vector3.up * distance + offset,
-                moveTime
-            )
-            .SetEase(easing)
-            .OnComplete(() => SelectTarget(newTarget));
-    }
-
-    private void SelectTarget(Transform newTarget)
-    {
         target = newTarget;
-        _lastStableDirection = Vector3.ProjectOnPlane(newTarget.forward, Vector3.up).normalized;
+
+        // Мгновенный телепорт к цели
+        Vector3 basePosition = newTarget.position + Vector3.up * distance;
+        transform.position = basePosition + offset;
+
+        // Мгновенное обновление поворота
+        if (isAutoRotate)
+        {
+            _lastStableDirection = Vector3.ProjectOnPlane(newTarget.forward, Vector3.up).normalized;
+            Quaternion targetRotation = Quaternion.Euler(90f, 0, 0) * Quaternion.LookRotation(_lastStableDirection);
+            transform.rotation = targetRotation;
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(90f, savedRotation.eulerAngles.y, savedRotation.eulerAngles.z);
+        }
     }
 }

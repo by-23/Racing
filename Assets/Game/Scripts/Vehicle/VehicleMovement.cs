@@ -206,6 +206,11 @@ public class VehicleMovement : MonoBehaviour
             
             // Сообщаем контроллеру, что произошло событие, которое может повлиять на рейтинг
             GameController.Instance.ReportCheckpointPassed();
+
+            if (_currentTargetPointIndex >= path.pathPoints.Length)
+            {
+                GameController.Instance.VehicleFinished(_vehicle);
+            }
         }
     }
 

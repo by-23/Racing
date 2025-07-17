@@ -26,16 +26,8 @@ public class UI : Singleton<UI>
     [PunRPC]
     private void UpdatePlayerNameUI(int actorNumber, string name)
     {
-        if (instantiatedPlayerInfoUIs.TryGetValue(actorNumber, out var playerInfoUI))
-        {
-            playerInfoUI.playerName.text = name;
-        }
-        else
-        {
-            var instantiatedPlayerInfoUI = Instantiate(lapInfoUIPrefab, playerInfoListUI.transform);
-            instantiatedPlayerInfoUIs.Add(actorNumber, instantiatedPlayerInfoUI);
-            instantiatedPlayerInfoUI.playerName.text = name;
-        }
+        var instantiatedPlayerInfoUI = Instantiate(lapInfoUIPrefab, playerInfoListUI.transform);
+        instantiatedPlayerInfoUIs.Add(actorNumber, instantiatedPlayerInfoUI);
     }
 
     internal void ControlsUIVisibility(bool isActive)
