@@ -182,7 +182,7 @@ public class EzPath : Singleton<EzPath>
         return nearestPoint;
     }
 
-    private (int, float) FindClosestSegment(Vector3 position)
+    public (int, float) FindClosestSegment(Vector3 position)
     {
         if (pathPoints == null || pathPoints.Length < 2)
             return (-1, 0);

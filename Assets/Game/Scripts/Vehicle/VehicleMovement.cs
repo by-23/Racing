@@ -183,34 +183,41 @@ public class VehicleMovement : MonoBehaviour
     private void CheckIfPassedTargetPoint()
     {
         var path = EzPath.Instance;
-        // Проверяем, есть ли смысл в проверке
-        if (path == null || path.pathPoints.Length < 2 || _currentTargetPointIndex >= path.pathPoints.Length)
+        if (path == null || path.pathPoints.Length < 2)
             return;
 
-        // Определяем текущий отрезок пути
-        Vector3 lastPointPos = path.pathPoints[_lastPassedPointIndex].pointTransform.position;
-        Vector3 currentTargetPos = path.pathPoints[_currentTargetPointIndex].pointTransform.position;
+        // Находим ближайший сегмент пути к машине
+        var (closestSegmentIndex, t) = path.FindClosestSegment(transform.position);
 
-        Vector3 segmentVector = currentTargetPos - lastPointPos;
-        if (segmentVector.sqrMagnitude < 0.001f) return; // Отрезок слишком мал
-
-        // Проецируем вектор от начала отрезка до машины на сам отрезок
-        Vector3 carVector = transform.position - lastPointPos;
-        float projection = Vector3.Dot(carVector, segmentVector);
-
-        // Если длина проекции больше квадрата длины отрезка, значит, машина прошла целевую точку
-        if (projection > segmentVector.sqrMagnitude)
+        if (closestSegmentIndex != -1)
         {
-            _lastPassedPointIndex = _currentTargetPointIndex;
-            _currentTargetPointIndex++;
-            
-            // Сообщаем контроллеру, что произошло событие, которое может повлиять на рейтинг
-            GameController.Instance.ReportCheckpointPassed();
-
-            if (_currentTargetPointIndex >= path.pathPoints.Length)
+            // Проверяем, не перепрыгнули ли мы через несколько чекпоинтов
+            if (closestSegmentIndex >= _currentTargetPointIndex)
             {
-                CanMove = false; // Отключаем движение
-                GameController.Instance.VehicleFinished(_vehicle);
+                // Обновляем последнюю пройденную точку и целевую точку
+                _lastPassedPointIndex = closestSegmentIndex;
+                _currentTargetPointIndex = closestSegmentIndex + 1;
+                GameController.Instance.ReportCheckpointPassed();
+
+                // Проверяем финиш
+                if (_currentTargetPointIndex >= path.pathPoints.Length)
+                {
+                    CanMove = false;
+                    GameController.Instance.VehicleFinished(_vehicle);
+                }
+            }
+            // Эта логика для случая, когда машина пересекла финишную черту текущего сегмента
+            else if (closestSegmentIndex == _lastPassedPointIndex && t >= 1.0f)
+            {
+                _lastPassedPointIndex = _currentTargetPointIndex;
+                _currentTargetPointIndex++;
+                GameController.Instance.ReportCheckpointPassed();
+                
+                if (_currentTargetPointIndex >= path.pathPoints.Length)
+                {
+                    CanMove = false;
+                    GameController.Instance.VehicleFinished(_vehicle);
+                }
             }
         }
     }
