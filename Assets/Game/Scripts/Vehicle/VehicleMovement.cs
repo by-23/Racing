@@ -209,6 +209,7 @@ public class VehicleMovement : MonoBehaviour
 
             if (_currentTargetPointIndex >= path.pathPoints.Length)
             {
+                CanMove = false; // Отключаем движение
                 GameController.Instance.VehicleFinished(_vehicle);
             }
         }

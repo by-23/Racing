@@ -1,5 +1,8 @@
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target;
@@ -14,12 +17,53 @@ public class CameraFollow : MonoBehaviour
     private float _rotationSmoothVelocity;
     private const float RotationSmoothTime = 0.3f;
     private Quaternion savedRotation;
+    private Vehicle _ownerVehicle;
 
     private void Start()
     {
-        if (GetComponentInParent<Vehicle>())
-            savedRotation = GetComponentInParent<Vehicle>().transform.rotation;
+        _ownerVehicle = GetComponentInParent<Vehicle>();
+        if (_ownerVehicle != null)
+        {
+            savedRotation = _ownerVehicle.transform.rotation;
+            GameController.Instance.OnVehicleFinished += OnVehicleFinished;
+        }
     }
+    
+    private void OnDestroy()
+    {
+        if (GameController.Instance != null)
+        {
+            GameController.Instance.OnVehicleFinished -= OnVehicleFinished;
+        }
+    }
+
+    private void OnVehicleFinished(Vehicle finishedVehicle)
+    {
+        // Если финишировал владелец этой камеры, или тот, за кем мы наблюдаем
+        if (finishedVehicle == _ownerVehicle || finishedVehicle.transform == target)
+        {
+            SwitchToSpectatorCamera();
+        }
+    }
+
+    private void SwitchToSpectatorCamera()
+    {
+        var racingVehicles = GameController.Instance.GetRacingVehicles()
+            .Where(v => v != _ownerVehicle && !GameController.Instance.IsVehicleFinished(v))
+            .ToList();
+            
+        if (racingVehicles.Any())
+        {
+            Vehicle vehicleToSpectate = racingVehicles[Random.Range(0, racingVehicles.Count)];
+            SetTarget(vehicleToSpectate.transform);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+            // тут можно показать финальную таблицу
+        }
+    }
+
 
     void LateUpdate()
     {
@@ -90,6 +134,11 @@ public class CameraFollow : MonoBehaviour
 
     public void SetTarget(Transform newTarget)
     {
+        if (transform.parent != null)
+        {
+            transform.SetParent(null); // Отсоединяем камеру при первой смене цели
+        }
+        
         target = newTarget;
 
         // Мгновенный телепорт к цели
