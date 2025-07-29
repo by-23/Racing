@@ -5,9 +5,16 @@ public class VehicleMovement : MonoBehaviour
     [SerializeField] private float acceleration = 30f;
     [SerializeField] private float gravity = 20f;
     [SerializeField] private float fallGravity = 50f;
-    [Range(0, 3)] [SerializeField] internal float steeringPower = 1.5f;
+    [Range(0, 7)] [SerializeField] internal float steeringPower = 1.5f;
+    [SerializeField] private float maxAngularVelocity = 1.5f; // Максимальная угловая скорость
+    [SerializeField] private float angularVelocityDamping = 0.95f; // Коэффициент гашения
     [Range(0, 1)] [SerializeField] internal float grip = 1f;
     [SerializeField] internal VehicleGroundDetection groundDetection = new VehicleGroundDetection();
+
+    [Header("Drift Settings")]
+    [SerializeField, Range(0, 1)] private float driftGrip = 0.4f;
+    [SerializeField] private float driftSpeedThreshold = 20f;
+    
     [Header("Flip Settings")]
     [SerializeField] private float flipTorque = 15f;
     [SerializeField, Range(0, 1)] private float flipCheckAngle = 0.5f;
@@ -90,9 +97,29 @@ public class VehicleMovement : MonoBehaviour
             return;
         }
 
-        float steeringForce = Mathf.Clamp(steeringInput, -steeringPower, steeringPower);
-        float rotationTorque = steeringForce - _rb.angularVelocity.y;
-        _rb.AddRelativeTorque(0f, rotationTorque, 0f, ForceMode.VelocityChange);
+        // Вычисляем целевую угловую скорость на основе ввода.
+        float targetAngularVelocity = steeringInput * steeringPower;
+
+        // Вычисляем разницу между целевой и текущей угловой скоростью.
+        // Это создает крутящий момент, который стремится "довести" поворот до нужного значения,
+        // а не просто бесконечно его наращивать.
+        float torqueDifference = targetAngularVelocity - _rb.angularVelocity.y;
+
+        // Применяем крутящий момент, чтобы скорректировать угловую скорость.
+        _rb.AddRelativeTorque(0f, torqueDifference, 0f, ForceMode.Acceleration);
+
+        // Ограничиваем максимальную угловую скорость.
+        _rb.angularVelocity = new Vector3(
+            _rb.angularVelocity.x,
+            Mathf.Clamp(_rb.angularVelocity.y, -maxAngularVelocity, maxAngularVelocity),
+            _rb.angularVelocity.z
+        );
+
+        // Если нет ввода, плавно гасим угловую скорость.
+        if (Mathf.Abs(steeringInput) < 0.01f)
+        {
+            _rb.angularVelocity *= angularVelocityDamping;
+        }
     }
 
 
@@ -111,7 +138,16 @@ public class VehicleMovement : MonoBehaviour
     private void ApplyLateralFriction(bool isGrounded)
     {
         if (!isGrounded) return;
-        Vector3 lateralFriction = -transform.right * (Vector3.Dot(_rb.linearVelocity, transform.right) * grip);
+
+        float currentSpeed = _rb.linearVelocity.magnitude;
+        float effectiveGrip = grip;
+
+        if (currentSpeed > driftSpeedThreshold)
+        {
+            effectiveGrip = Mathf.Lerp(grip, driftGrip, Mathf.Abs(CurrentSteeringInput));
+        }
+
+        Vector3 lateralFriction = -transform.right * (Vector3.Dot(_rb.linearVelocity, transform.right) * effectiveGrip);
         _rb.AddForce(lateralFriction, ForceMode.Acceleration);
     }
 

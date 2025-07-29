@@ -10956,7 +10956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &214175018
 AudioListener:
   m_ObjectHideFlags: 0
@@ -29074,6 +29074,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1082590695895864, guid: 91f25435ba3bc40d79f6f617363886d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1082590695895864, guid: 91f25435ba3bc40d79f6f617363886d8, type: 3}
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
@@ -29103,7 +29107,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4320305326443948, guid: 91f25435ba3bc40d79f6f617363886d8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.3671668
+      value: 3.269
       objectReference: {fileID: 0}
     - target: {fileID: 4320305326443948, guid: 91f25435ba3bc40d79f6f617363886d8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -95078,12 +95082,16 @@ MonoBehaviour:
   gravity: 20
   fallGravity: 50
   steeringPower: 3
+  maxAngularVelocity: 1.5
+  angularVelocityDamping: 0.95
   grip: 1
   groundDetection:
     GroundLayers:
       serializedVersion: 2
       m_Bits: 256
     RaycastDist: 2
+  driftGrip: 0.4
+  driftSpeedThreshold: 20
   flipTorque: 15
   flipCheckAngle: 0.5
 --- !u!114 &782172332645427594
@@ -98124,12 +98132,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c792571a014b9e94e84df65ee550fc48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 5505003984462651907}
-  distance: 5
-  offset: {x: 0, y: 90, z: 0}
-  moveTime: 1
-  easing: 0
-  isAutoRotate: 0
+  target: {fileID: 0}
+  rearViewOffset: {x: 0, y: 3, z: 5}
+  rearViewTargetOffset: {x: 0, y: 1, z: 0}
+  viewMode: 0
+  followHeight: 80
 --- !u!20 &5285592621979012242
 Camera:
   m_ObjectHideFlags: 0

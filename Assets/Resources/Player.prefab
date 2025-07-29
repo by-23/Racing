@@ -419,13 +419,17 @@ MonoBehaviour:
   acceleration: 50
   gravity: 20
   fallGravity: 50
-  steeringPower: 3
+  steeringPower: 6
+  maxAngularVelocity: 1.5
+  angularVelocityDamping: 0.95
   grip: 1
   groundDetection:
     GroundLayers:
       serializedVersion: 2
       m_Bits: 256
     RaycastDist: 2
+  driftGrip: 0.4
+  driftSpeedThreshold: 10
   flipTorque: 25
   flipCheckAngle: 1
 --- !u!114 &5085808755067491257
