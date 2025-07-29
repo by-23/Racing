@@ -106,11 +106,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 5505003984607041509}
-  distance: 5
-  offset: {x: 0, y: 90, z: 0}
-  moveTime: 99999
-  easing: 0
-  isAutoRotate: 0
+  rearViewOffset: {x: 0, y: 20, z: -30}
+  rearViewTargetOffset: {x: 0, y: 1, z: 0}
+  viewMode: 0
+  followHeight: 80
 --- !u!1 &2445090919241411759
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,12 +503,16 @@ MonoBehaviour:
   gravity: 20
   fallGravity: 50
   steeringPower: 3
+  maxAngularVelocity: 1.5
+  angularVelocityDamping: 0.95
   grip: 1
   groundDetection:
     GroundLayers:
       serializedVersion: 2
       m_Bits: 256
     RaycastDist: 2
+  driftGrip: 0.4
+  driftSpeedThreshold: 20
   flipTorque: 15
   flipCheckAngle: 0.5
 --- !u!114 &-7637648645194494759
