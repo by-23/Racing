@@ -6,8 +6,16 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target;
     public Transform Target => target;
-    [SerializeField] private Vector3 offset = new Vector3(0f, 0, 0);
 
+    [Header("Настройки вида сзади")]
+    [SerializeField] private Vector3 rearViewOffset = new Vector3(0f, 20f, -30f);
+    [SerializeField] private Vector3 rearViewTargetOffset = new Vector3(0f, 1f, 0f);
+    [SerializeField] private KeyCode lookBehindKey = KeyCode.B;
+
+    [Header("Общие настройки")]
+    [SerializeField] private float followHeight = 80;
+    
+    private bool isLookingBehind;
     private Quaternion savedRotation;
     private Vehicle _ownerVehicle;
 
@@ -29,6 +37,14 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(lookBehindKey))
+        {
+            isLookingBehind = !isLookingBehind;
+        }
+    }
+
     private void OnVehicleFinished(Vehicle finishedVehicle)
     {
         // Если финишировал владелец этой камеры, или тот, за кем мы наблюдаем
@@ -47,6 +63,7 @@ public class CameraFollow : MonoBehaviour
         if (racingVehicles.Any())
         {
             Vehicle vehicleToSpectate = racingVehicles[Random.Range(0, racingVehicles.Count)];
+            isLookingBehind = false; // Отключаем вид сзади при переключении на другого игрока
             SetTarget(vehicleToSpectate.transform);
         }
         else
@@ -61,15 +78,40 @@ public class CameraFollow : MonoBehaviour
     {
         if (!target) return;
 
-        UpdateCameraPosition();
-        transform.rotation = Quaternion.Euler(90f, savedRotation.eulerAngles.y, savedRotation.eulerAngles.z);
+        if (isLookingBehind)
+        {
+            UpdateRearView();
+        }
+        else
+        {
+            UpdateNormalView();
+        }
+    }
 
+    private void UpdateNormalView()
+    {
+        Vector3 finalPosition = target.position;
+        finalPosition.y = followHeight;
+        transform.position = finalPosition;
+        transform.rotation = Quaternion.Euler(90f, savedRotation.eulerAngles.y, savedRotation.eulerAngles.z);
+    }
+
+    private void UpdateRearView()
+    {
+        // Используем TransformPoint, но скорректируем позицию по высоте, чтобы избежать проваливания
+        Vector3 desiredPosition = target.position + target.right * rearViewOffset.x + Vector3.up * rearViewOffset.y + target.forward * rearViewOffset.z;
+        
+        // Точка, на которую смотрит камера
+        Vector3 lookAtPoint = target.position + rearViewTargetOffset;
+        
+        transform.position = desiredPosition;
+        transform.LookAt(lookAtPoint);
     }
 
     private void UpdateCameraPosition()
     {
         Vector3 basePosition = target.position + Vector3.up;
-        Vector3 finalPosition = basePosition + offset;
+        Vector3 finalPosition = basePosition;
 
         transform.position = finalPosition;
     }
@@ -86,7 +128,7 @@ public class CameraFollow : MonoBehaviour
 
         // Мгновенный телепорт к цели
         Vector3 basePosition = newTarget.position + Vector3.up;
-        transform.position = basePosition + offset;
+        transform.position = basePosition;
 
        
         transform.rotation = Quaternion.Euler(90f, savedRotation.eulerAngles.y, savedRotation.eulerAngles.z);

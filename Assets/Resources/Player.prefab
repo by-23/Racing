@@ -106,9 +106,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 5505003984607041509}
-  distance: 0
-  offset: {x: 0, y: 80, z: 0}
-  moveTime: 99999
+  rearViewOffset: {x: 0, y: 30, z: -40}
+  rearViewTargetOffset: {x: 0, y: 1, z: 0}
+  lookBehindKey: 98
+  followHeight: 80
 --- !u!1 &2445090919241411759
 GameObject:
   m_ObjectHideFlags: 0
