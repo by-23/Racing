@@ -4,18 +4,21 @@ using Random = UnityEngine.Random;
 
 public class CameraFollow : MonoBehaviour
 {
+    public enum CameraViewMode { TopDown, RearView }
+
     [SerializeField] private Transform target;
     public Transform Target => target;
 
     [Header("Настройки вида сзади")]
     [SerializeField] private Vector3 rearViewOffset = new Vector3(0f, 20f, -30f);
     [SerializeField] private Vector3 rearViewTargetOffset = new Vector3(0f, 1f, 0f);
-    [SerializeField] private KeyCode lookBehindKey = KeyCode.B;
+
+    [Header("Режим камеры")]
+    [SerializeField] private CameraViewMode viewMode = CameraViewMode.TopDown;
 
     [Header("Общие настройки")]
     [SerializeField] private float followHeight = 80;
     
-    private bool isLookingBehind;
     private Quaternion savedRotation;
     private Vehicle _ownerVehicle;
 
@@ -37,14 +40,6 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(lookBehindKey))
-        {
-            isLookingBehind = !isLookingBehind;
-        }
-    }
-
     private void OnVehicleFinished(Vehicle finishedVehicle)
     {
         // Если финишировал владелец этой камеры, или тот, за кем мы наблюдаем
@@ -63,7 +58,7 @@ public class CameraFollow : MonoBehaviour
         if (racingVehicles.Any())
         {
             Vehicle vehicleToSpectate = racingVehicles[Random.Range(0, racingVehicles.Count)];
-            isLookingBehind = false; // Отключаем вид сзади при переключении на другого игрока
+            viewMode = CameraViewMode.TopDown; // Принудительно вид сверху для наблюдателя
             SetTarget(vehicleToSpectate.transform);
         }
         else
@@ -78,7 +73,7 @@ public class CameraFollow : MonoBehaviour
     {
         if (!target) return;
 
-        if (isLookingBehind)
+        if (viewMode == CameraViewMode.RearView)
         {
             UpdateRearView();
         }
@@ -98,14 +93,31 @@ public class CameraFollow : MonoBehaviour
 
     private void UpdateRearView()
     {
-        // Используем TransformPoint, но скорректируем позицию по высоте, чтобы избежать проваливания
-        Vector3 desiredPosition = target.position + target.right * rearViewOffset.x + Vector3.up * rearViewOffset.y + target.forward * rearViewOffset.z;
-        
+        // Получаем горизонтальное направление машины, игнорируя наклон
+        Vector3 horizontalForward = target.forward;
+        horizontalForward.y = 0;
+        horizontalForward.Normalize();
+
+        // Если машина смотрит вертикально вверх/вниз, используем последнее направление камеры, чтобы избежать ошибок
+        if (horizontalForward.sqrMagnitude < 0.001f)
+        {
+            horizontalForward = transform.forward;
+            horizontalForward.y = 0;
+            horizontalForward.Normalize();
+        }
+
+        // Рассчитываем позицию камеры, используя только горизонтальное направление
+        Vector3 desiredPosition = target.position +
+                                  (horizontalForward * rearViewOffset.z) +
+                                  (Vector3.Cross(Vector3.up, horizontalForward) * rearViewOffset.x) +
+                                  (Vector3.up * rearViewOffset.y);
+
         // Точка, на которую смотрит камера
         Vector3 lookAtPoint = target.position + rearViewTargetOffset;
-        
+
         transform.position = desiredPosition;
-        transform.LookAt(lookAtPoint);
+        // Смотрим на цель, сохраняя горизонт ровным (используя Vector3.up как "верх")
+        transform.LookAt(lookAtPoint, Vector3.up);
     }
 
     private void UpdateCameraPosition()

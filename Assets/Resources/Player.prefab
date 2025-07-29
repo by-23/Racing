@@ -108,7 +108,7 @@ MonoBehaviour:
   target: {fileID: 5505003984607041509}
   rearViewOffset: {x: 0, y: 30, z: -40}
   rearViewTargetOffset: {x: 0, y: 1, z: 0}
-  lookBehindKey: 98
+  viewMode: 1
   followHeight: 80
 --- !u!1 &2445090919241411759
 GameObject:
