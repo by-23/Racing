@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Photon.Pun;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviourPunCallbacks
 {
     public event Action OnRankingsChanged;
@@ -125,6 +121,8 @@ public class GameController : MonoBehaviourPunCallbacks
 #if UNITY_EDITOR
     private void Update()
     {
+        if (_finishedVehicles == null || _finishedVehiclesForInspector == null)
+         return;
         // For debugging in the inspector, show the contents of the HashSet.
         if (Application.isPlaying && _finishedVehicles.Count != _finishedVehiclesForInspector.Count)
         {
